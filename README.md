@@ -405,7 +405,34 @@ Here is a detailed explanation of how it works, especially in the context of chi
 - In the context of child and parent processes, the exit status code returned by `exit()` can be retrieved by the parent to determine the success or failure of the child.
 - `exit()` is ideal for clean and controlled termination, while `_exit()` is used for immediate termination without cleanup.
 
+---
 
+### `getcwd()`
+
+> #include <unistd.h>
+
+```c
+char *getcwd(char *buf, size_t size);
+```
+- `buf`: A pointer to a character array where the current working directory will be stored.  
+- `size`: The size of the buffer in bytes.  
+- **Returns**: A pointer to the buffer containing the current working directory on success, or `NULL` on error.  
+
+The `getcwd()` function retrieves the absolute pathname of the current working directory and stores it in the provided buffer. It is commonly used in shell implementations and file management applications to determine the current directory of a process.  
+
+#### Retrieving the Current Working Directory  
+`getcwd()` fills the buffer with the full path of the current working directory. The `size` parameter must be large enough to hold the pathname, including the null terminator. If the buffer is too small, the function returns `NULL` and sets `errno` to `ERANGE`.  
+
+### Handling Dynamic Memory Allocation  
+If `buf` is set to `NULL`, `getcwd()` dynamically allocates memory to store the pathname. The returned pointer must be freed using `free()` to avoid memory leaks.  
+
+### Error Handling  
+`getcwd()` may fail in several cases:  
+- If the buffer size is too small, it returns `NULL` with `errno` set to `ERANGE`.  
+- If the current directory is inaccessible due to permission issues, it returns `NULL` with `errno` set to `EACCES`.  
+- If the process does not have sufficient memory to allocate a buffer dynamically, it returns `NULL` with `errno` set to `ENOMEM`.  
+
+Using `getcwd()` properly ensures that a program can reliably determine and use the current working directory while handling potential errors gracefully.
 
 
 
