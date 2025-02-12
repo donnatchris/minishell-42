@@ -854,8 +854,7 @@ In **Minishell**, you will use `readdir()` to:
 
 ---
 
-### `
-closedir()
+### closedir()
 
 > #include <dirent.h>  
 ```c
