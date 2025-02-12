@@ -551,14 +551,14 @@ Using `lstat()` correctly allows a program to inspect symbolic links and files w
 
 ### `fstat()`
 
-> #include <sys/types.h>  
-> #include <sys/stat.h>  
+> #include <sys/types.h>
+> 
+> #include <sys/stat.h>
+> 
 > #include <unistd.h>  
-
 ```c
 int fstat(int fd, struct stat *buf);
 ```
-
 - `fd`: A file descriptor referring to an open file.  
 - `buf`: A pointer to a `struct stat` where the file's metadata will be stored.  
 - **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
@@ -586,6 +586,36 @@ When `fstat()` is called, it fills the `struct stat` with metadata about the fil
 - If `fd` refers to a file on an unreachable filesystem (e.g., a disconnected network drive), it returns `-1` with `errno` set to `EIO`.  
 
 Using `fstat()` correctly allows a program to inspect open files without needing their path, making it particularly useful for working with file descriptors from `open()`, `dup()`, or standard input/output streams.
+
+---
+
+### `unlink()`
+
+> #include <unistd.h>  
+```c
+int unlink(const char *pathname);
+```
+- `pathname`: A string representing the path to the file to be removed.  
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
+
+The `unlink()` function removes a **link** to a file, effectively deleting the file if no other hard links exist and no process has it open. It is commonly used in shell implementations, file management programs, and system utilities to delete files.  
+
+#### Removing a File  
+When `unlink()` is called, it **removes the specified directory entry** (link) associated with `pathname`. If this was the last link to the file and no process has it open, the file's data is deleted, and its disk space is freed. If another hard link exists, the file remains accessible under the other name(s).  
+
+#### Behavior with Open Files  
+If a file is **open by a process**, calling `unlink()` will remove its directory entry, but the file remains accessible until the last process using it closes it. At that point, the file is deleted from the filesystem. This is useful for temporary files that should disappear once no longer in use.  
+
+#### Error Handling  
+`unlink()` may fail in several cases:  
+- If `pathname` does not exist, it returns `-1` with `errno` set to `ENOENT`.  
+- If `pathname` refers to a directory, it returns `-1` with `errno` set to `EISDIR` (except on some systems where `unlink()` can remove directories).  
+- If the process lacks permission to remove the file, it returns `-1` with `errno` set to `EACCES` or `EPERM`.  
+- If the filesystem is read-only, it returns `-1` with `errno` set to `EROFS`.  
+
+Using `unlink()` correctly allows a program to manage file deletion while handling edge cases like hard links and open file descriptors.
+
+---
 
 
 
