@@ -248,8 +248,14 @@ These values can be combined using the bitwise OR operator | to check multiple p
 The function returns 0 if access is permitted.
 It returns -1 on failure, and the global variable errno is set to indicate the error.
 
-For example, you can use access to check if a file exists and is readable before opening it.
+The access function checks permissions based on the effective privileges of the current user.
+This means it considers the file's permission bits and the system's security rules (such as ACLs or capabilities).
+If the function fails, the global variable errno can be used to get information about the error.
+For example, errno might be set to EACCES if access is denied or ENOENT if the file does not exist.
 
+The access function is often used for security checks, such as ensuring a file is readable before opening it or that a directory is executable before accessing it.
+In summary, access is an essential function for checking file or directory access permissions in C, ensuring that file operations are authorized and secure.
 
+---
 
 
