@@ -573,7 +573,7 @@ void (*signal(int sig, void (*handler)(int)))(int);
 ```c
 int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact);
 ```
-- `sig`**: The signal to handle (e.g., `SIGINT`, `SIGTERM`, etc.).
+- `sig`: The signal to handle (e.g., `SIGINT`, `SIGTERM`, etc.).
 - `act`: A pointer to a `struct sigaction` that defines the new signal handler and behavior.
 - `oldact`: A pointer to a `struct sigaction` where the previous signal handler and behavior will be stored.
 - **Returns**: `0` on success, or `-1` on error.
