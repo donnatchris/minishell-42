@@ -447,7 +447,6 @@ pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage);
 >
 > #include <sys/wait.h>
 
-
 ### **1. `kill()`**
 ```c
 int kill(pid_t pid, int sig);
@@ -455,8 +454,8 @@ int kill(pid_t pid, int sig);
 - **`pid`**: The process ID (PID) of the process to send the signal to, or a special value like `0` (current process group) or `-1` (all processes).
 - **`sig`**: The signal to send (e.g., `SIGTERM` to terminate, `SIGINT` to interrupt, or `SIGKILL` to forcefully kill).
 - **Returns**: `0` on success, or `-1` on error.
+- **Purpose**: Sends a signal to a process or group of processes.
 
----
 
 ### **2. `signal()`**
 ```c
@@ -465,8 +464,8 @@ void (*signal(int sig, void (*handler)(int)))(int);
 - **`sig`**: The signal to handle (e.g., `SIGINT`, `SIGTERM`, etc.).
 - **`handler`**: A pointer to a function that will handle the signal, or `SIG_IGN` to ignore the signal, or `SIG_DFL` to use the default behavior.
 - **Returns**: A pointer to the previous signal handler, or `SIG_ERR` on error.
+- **Purpose**: Sets a custom handler for a specific signal.
 
----
 
 ### **3. `sigaction()`**
 ```c
@@ -476,8 +475,8 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oldact);
 - **`act`**: A pointer to a `struct sigaction` that defines the new signal handler and behavior.
 - **`oldact`**: A pointer to a `struct sigaction` where the previous signal handler and behavior will be stored.
 - **Returns**: `0` on success, or `-1` on error.
+- **Purpose**: Provides a more flexible way to set signal handlers and behaviors.
 
----
 
 ### **4. `sigemptyset()`**
 ```c
@@ -485,8 +484,8 @@ int sigemptyset(sigset_t *set);
 ```
 - **`set`**: A pointer to a `sigset_t` (signal set) that will be initialized to exclude all signals.
 - **Returns**: `0` on success, or `-1` on error.
+- **Purpose**: Initializes a signal set to exclude all signals.
 
----
 
 ### **5. `sigaddset()`**
 ```c
@@ -495,4 +494,4 @@ int sigaddset(sigset_t *set, int sig);
 - **`set`**: A pointer to a `sigset_t` (signal set) to which the signal will be added.
 - **`sig`**: The signal to add to the set (e.g., `SIGINT`, `SIGTERM`, etc.).
 - **Returns**: `0` on success, or `-1` on error.
-
+- **Purpose**: Adds a specific signal to a signal set.
