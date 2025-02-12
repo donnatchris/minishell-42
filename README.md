@@ -264,7 +264,11 @@ In summary, access is an essential function for checking file or directory acces
 
 
 
-### SHORT REMINDER
+# SHORT REMINDERS
+
+## Open(), close() and read()
+
+> #include <fcntl.h>
 
 ### **1. `open()`**
 ```c
@@ -294,4 +298,66 @@ int close(int fd);
 - **`fd`**: The file descriptor of the file to close.
 - **Returns**: `0` on success, or `-1` on error.
 - **Purpose**: Closes a file descriptor, freeing up system resources and ensuring the file is properly saved and closed.
+
+---
+
+### fork, wait, waitpid, wait2, wait3, wait4
+
+> #include <unistd.h>
+> 
+> #include <sys/types.h>
+> 
+ >#include <sys/wait.h>
+
+### **1. `fork()`**
+```c
+pid_t fork(void);
+```
+- **Parameters**: None.
+- **Returns**: Returns `0` to the child process, and the PID of the child process to the parent process. Returns `-1` on error.
+- **Purpose**: Creates a new process by duplicating the current process. The new process is called the child process, and the original process is called the parent process.
+
+---
+
+### **2. `wait()`**
+```c
+pid_t wait(int *status);
+```
+- **`status`**: A pointer to an integer where the status of the terminated child process will be stored.
+- **Returns**: The PID of the terminated child process, or `-1` on error.
+- **Purpose**: Suspends the calling process until one of its child processes terminates. It also retrieves the termination status of the child process.
+
+
+### **3. `waitpid()`**
+```c
+pid_t waitpid(pid_t pid, int *status, int options);
+```
+- **`pid`**: The PID of the child process to wait for, or special values like `-1` (wait for any child) or `0` (wait for any child in the same process group).
+- **`status`**: A pointer to an integer where the status of the terminated child process will be stored.
+- **`options`**: Options to control the behavior of the function, such as `WNOHANG` (return immediately if no child has exited) or `WUNTRACED` (report stopped children).
+- **Returns**: The PID of the terminated child process, `0` if no child matches the criteria, or `-1` on error.
+- **Purpose**: Provides more control over waiting for child processes, allowing you to wait for specific children or modify the behavior of the wait.
+
+
+### **4. `wait3()`**
+```c
+pid_t wait3(int *status, int options, struct rusage *rusage);
+```
+- **`status`**: A pointer to an integer where the status of the terminated child process will be stored.
+- **`options`**: Options to control the behavior of the function, similar to `waitpid()`.
+- **`rusage`**: A pointer to a `struct rusage` where resource usage information about the terminated child process will be stored.
+- **Returns**: The PID of the terminated child process, or `-1` on error.
+- **Purpose**: Waits for a child process to terminate and retrieves both the termination status and resource usage information.
+
+
+### **5. `wait4()`**
+```c
+pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage);
+```
+- **`pid`**: The PID of the child process to wait for, or special values like `-1` (wait for any child) or `0` (wait for any child in the same process group).
+- **`status`**: A pointer to an integer where the status of the terminated child process will be stored.
+- **`options`**: Options to control the behavior of the function, similar to `waitpid()`.
+- **`rusage`**: A pointer to a `struct rusage` where resource usage information about the terminated child process will be stored.
+- **Returns**: The PID of the terminated child process, `0` if no child matches the criteria, or `-1` on error.
+- **Purpose**: Combines the functionality of `waitpid()` and `wait3()`, allowing you to wait for a specific child process and retrieve both its termination status and resource usage information.
 
