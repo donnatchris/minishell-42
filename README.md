@@ -812,6 +812,91 @@ In **Minishell**, you will use `opendir()` to:
 
 ---
 
+### readdir()
+
+> #include <dirent.h>  
+```c
+struct dirent *readdir(DIR *dirp);
+```  
+- `dirp`: A pointer to the `DIR` object returned by `opendir()`, representing the directory stream to be read.  
+- **Returns**: A pointer to a `struct dirent` representing the next directory entry on success, or `NULL` when no more entries are available or an error occurs.  
+
+The `readdir()` function reads the next entry from the directory stream referred to by `dirp`. It returns a pointer to a `struct dirent` containing information about the directory entry (such as the name of the file or directory). When the end of the directory is reached, or if an error occurs, it returns `NULL`.  
+
+#### **Key Use Cases**  
+- **Directory Traversal**: `readdir()` is used to iterate through the contents of a directory that was opened with `opendir()`.  
+- **Listing Directory Entries**: It is often used in combination with `opendir()` and `closedir()` to list or process files and subdirectories within a directory.
+
+#### **How It Works**  
+After opening a directory with `opendir()`, you can call `readdir()` to get the next directory entry. Each call to `readdir()` returns the next file or directory in the directory stream. If `readdir()` reaches the end of the directory, it returns `NULL`.  
+For example:
+```c
+DIR *dir = opendir("/home/user/documents");
+if (dir) {
+    struct dirent *entry;
+    while ((entry = readdir(dir)) != NULL) {
+        printf("Found: %s\n", entry->d_name);
+    }
+    closedir(dir);
+}
+```
+
+#### **Error Handling**  
+`readdir()` may fail in several cases:  
+- If the directory stream is not valid (e.g., if the directory was not opened with `opendir()`), it returns `NULL`.  
+- If there is an error while reading the directory, it returns `NULL` and sets `errno` to an appropriate error code.
+
+#### **In Minishell**  
+In **Minishell**, you will use `readdir()` to:  
+✅ **Read the contents of a directory** after opening it with `opendir()` to list files and subdirectories.  
+✅ **Traverse directories** when implementing commands like `ls` or `find`.  
+✅ **Check for the presence of specific files** when implementing functionality like autocomplete or file searching.
+
+---
+
+### `
+closedir()
+
+> #include <dirent.h>  
+```c
+int closedir(DIR *dirp);
+```  
+- `dirp`: A pointer to the `DIR` object representing the directory stream to be closed.  
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
+
+The `closedir()` function is used to close a directory stream that was previously opened by `opendir()`. After calling `closedir()`, the directory stream is no longer valid, and it cannot be used with `readdir()` or any other directory-related function. It's important to close the directory stream after you're done reading from a directory to release system resources.
+
+#### **Key Use Cases**  
+- **Resource Management**: `closedir()` ensures that system resources allocated for the directory stream are freed after use.  
+- **Directory Cleanup**: After iterating through the entries of a directory with `readdir()`, you should call `closedir()` to close the directory stream and prevent resource leaks.
+
+#### **How It Works**  
+When you're done reading a directory using `opendir()` and `readdir()`, you should always call `closedir()` to close the directory stream. This releases any system resources associated with it.  
+For example:
+```c
+DIR *dir = opendir("/home/user/documents");
+if (dir) {
+    struct dirent *entry;
+    while ((entry = readdir(dir)) != NULL) {
+        printf("Found: %s\n", entry->d_name);
+    }
+    closedir(dir);
+}
+```
+
+#### **Error Handling**  
+`closedir()` may fail in several cases:  
+- If `dirp` is not a valid pointer to an open directory stream (e.g., if the directory was never opened or already closed), it returns `-1` and sets `errno` to `EBADF`.  
+- If there is a system error while closing the directory, it returns `-1` and sets `errno` to an appropriate error code.
+
+#### **In Minishell**  
+In **Minishell**, you will use `closedir()` to:  
+✅ **Close the directory stream** after reading directory contents with `readdir()` to release system resources.  
+✅ **Prevent resource leaks** when dealing with multiple directories during operations like listing files or navigating the filesystem.  
+✅ **Ensure proper cleanup** after directory operations to maintain efficient resource management.
+
+---
+---
 
 # SHORT REMINDERS
 Of functions we have seen in previous projects
