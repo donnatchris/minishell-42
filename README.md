@@ -259,3 +259,39 @@ In summary, access is an essential function for checking file or directory acces
 ---
 
 
+
+
+
+
+
+### SHORT REMINDER
+
+### **1. `open()`**
+```c
+int open(const char *pathname, int flags);
+```
+- **`pathname`**: The path to the file you want to open.
+- **`flags`**: Specifies the mode, such as `O_RDONLY` (read-only), `O_WRONLY` (write-only), or `O_RDWR` (read/write).
+- **Returns**: A file descriptor (an integer) if successful, or `-1` on error.
+- **Purpose**: Opens a file and returns a file descriptor for reading, writing, or both.
+
+
+### **2. `read()`**
+```c
+ssize_t read(int fd, void *buf, size_t count);
+```
+- **`fd`**: The file descriptor of the file to read from.
+- **`buf`**: A pointer to a buffer where the data will be stored.
+- **`count`**: The maximum number of bytes to read.
+- **Returns**: The number of bytes read, `0` if the end of the file is reached, or `-1` on error.
+- **Purpose**: Reads data from a file descriptor into a buffer.
+
+
+### **3. `close()`**
+```c
+int close(int fd);
+```
+- **`fd`**: The file descriptor of the file to close.
+- **Returns**: `0` on success, or `-1` on error.
+- **Purpose**: Closes a file descriptor, freeing up system resources and ensuring the file is properly saved and closed.
+
