@@ -67,10 +67,9 @@ Install libreadline if needed (Macos)
 > #include <readline/readline.h>
 >
 > #include <readline/history.h>
-
-	char *readline(const char *prompt);
-
-
+```c
+char *readline(const char *prompt);
+```
 The readline() function is part of the GNU Readline library and is used to read a line of text from standard input with advanced editing features.
 It waits for user input until they press Enter.
 The function provides line-editing capabilities, allowing navigation and modification of text using keyboard shortcuts such as arrow keys, Ctrl+A, and Ctrl+E.
@@ -93,9 +92,9 @@ Additionally, signal handling (SIGINT, SIGQUIT) should be implemented to maintai
 > #include <readline/readline.h>
 >
 > #include <readline/history.h>
-
-	void rl_clear_history(void);
-
+```c
+void rl_clear_history(void);
+```
 The rl_clear_history() function is part of the GNU Readline library and is used to completely erase the stored command history from memory.
 It removes all entries from the history list, making subsequent calls to history_list() return an empty list.
 
@@ -112,9 +111,9 @@ For better memory management, clear_history() can be used as an alias for rl_cle
 > #include <readline/readline.h>
 >
 > #include <readline/history.h>
-
-	void (*rl_on_new_line_hook)(void);
-
+```c
+void (*rl_on_new_line_hook)(void);
+```
 The rl_on_new_line function is used in the context of the GNU Readline library, which allows for interactive user input management in command-line programs.
 This function is typically used to define custom behavior when the user presses the Enter key in a Readline-based interface.
 It is a hook function that gets automatically called by Readline when the Enter key is pressed.
@@ -129,9 +128,9 @@ Overall, rl_on_new_line is a powerful tool for customizing Readline behavior whe
 #### How to use it
 
 You can assign your own custom function to the rl_on_new_line hook using this syntax:
-
-	rl_on_new_line_hook = my_own_on_newline_function;
- 
+```c
+rl_on_new_line_hook = my_own_on_newline_function;
+```
 This allows you to define custom behavior that will be executed every time the user presses the Enter key.
 Make sure your custom function follows the expected prototype:
 
@@ -146,9 +145,9 @@ This ensures that the function takes no arguments and returns nothing, as requir
 > #include <readline/readline.h>
 >
 > #include <readline/history.h>
-
-	void rl_replace_line(const char *text, int cursor_pos);
-
+```c
+void rl_replace_line(const char *text, int cursor_pos);
+```
 The rl_replace_line function is part of the GNU Readline library, which allows for interactive user input management in command-line programs.
 This function replaces the content of the current input line with a new string.
 It is useful for dynamically modifying what the user sees in the command line, such as correcting input, displaying suggestions, or updating the display based on user actions.
@@ -173,9 +172,9 @@ enabling richer and more interactive command-line experiences.
 > #include <readline/readline.h>
 >
 > #include <readline/history.h>
-
-	void rl_redisplay(void);
-
+```c
+void rl_redisplay(void);
+```
 The rl_redisplay function is part of the GNU Readline library, which allows for interactive user input management in command-line programs.
 This function refreshes or redisplays the current input line in the user interface.
 It is useful when you want to update the display of the input line after making adjustments or modifications, without having to replace the entire content of the line.
@@ -199,9 +198,9 @@ Overall, rl_redisplay is an essential function for keeping the input line displa
 > #include <readline/readline.h>
 >
 > #include <readline/history.h>
-
-	void add_history(const char *string);
-
+```c
+void add_history(const char *string);
+```
 The add_history function is part of the GNU Readline library, which allows for managing command history in command-line interfaces.
 This function is used to add a user input entry to the command history, enabling the system to keep track of previous commands for later reuse.
 
