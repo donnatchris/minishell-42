@@ -49,10 +49,8 @@ However, at the end of the DOCUMENTATION section, you will find a SHORT REMINDER
 The GNU Readline library is a powerful tool that provides line-editing and command history capabilities for interactive programs,
 making it a fundamental component in many Unix-like command-line interfaces, including bash and gdb.
 It allows users to edit input efficiently using keyboard shortcuts, recall previous commands, and navigate through text seamlessly.
-To use readline() in a C program, the required headers are <readline/readline.h> and <readline/history.h>.
-When compiling, the program must be linked with -lreadline, and in some cases, -lncurses is also needed.
-The compilation command is: gcc minishell.c -o minishell -lreadline -lncurses.
-If the library is not installed, it can be added using sudo apt-get install libreadline-dev on Debian-based systems or brew install readline on macOS.
+To use readline in a C program, the required headers are <readline/readline.h> and <readline/history.h>.
+When compiling, the program must be linked with `-lreadline`, and in some cases, `-lncurses` is also needed.
 
 Compile with the library:
 
