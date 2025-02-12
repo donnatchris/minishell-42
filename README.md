@@ -617,6 +617,85 @@ Using `unlink()` correctly allows a program to manage file deletion while handli
 
 ---
 
+### `execve()`
+
+> #include <unistd.h>  
+>  
+> #include <sys/types.h>  
+```c
+int execve(const char *pathname, char *const argv[], char *const envp[]);
+```
+- `pathname`: A string representing the absolute or relative path to the executable file to be run.  
+- `argv`: An array of pointers to arguments for the program, where `argv[0]` is typically the program name, and the last element must be `NULL`.  
+- `envp`: An array of pointers to environment variables for the new program, terminated by `NULL`.  
+- **Returns**: Does not return on success (the current process is replaced). Returns `-1` on error, with `errno` set accordingly.  
+
+The `execve()` function replaces the calling process's memory image with a **new program** specified by `pathname`. Unlike `fork()`, it does **not create a new process** but transforms the existing process into the new program while keeping the **same PID**.  
+
+#### Executing a New Program  
+When `execve()` is called, the current process is **completely replaced** by the target program. The new program inherits some characteristics of the original process, such as **open file descriptors**, but it **does not retain the previous stack, heap, or code segments**.  
+
+- **`argv` (program arguments)**: Used to pass command-line arguments to the executed program, similar to running a command in a terminal.  
+- **`envp` (environment variables)**: Defines a custom environment for the process, useful for modifying the program's behavior.  
+
+#### Difference from Other `exec` Functions  
+- `execve()` is the **lowest-level function** in the `exec` family, directly interacting with the system.  
+- `execl()` and `execv()` are simpler variants that do not include `envp`.  
+- `execle()` and `execve()` allow specifying a custom environment.  
+
+#### Error Handling  
+`execve()` fails and returns `-1` in several cases:  
+- If the file does not exist (`ENOENT`).  
+- If the file is not executable (`EACCES`).  
+- If the program exceeds system memory limits (`ENOMEM`).  
+- If `argv` or `envp` is malformed (`EFAULT`).  
+
+The `execve()` function is essential for implementing a shell (such as `minishell`), as it allows executing external commands by replacing the shell process with the requested command.
+
+In **Minishell**, you call `execve()` to:  
+✅ Execute an external command (e.g., `ls -l`)  
+✅ Search for the command in `$PATH` if it is not an absolute path  
+✅ Launch a child process with `fork()` to avoid replacing Minishell  
+✅ Handle pipes and redirections before executing the command
+
+---
+
+### `dup()`  
+
+> #include <unistd.h>  
+```c
+int dup(int oldfd);
+```  
+- `oldfd`: A file descriptor referring to an open file.  
+- **Returns**: A new file descriptor that refers to the same file as `oldfd`, or `-1` on error with `errno` set accordingly.  
+
+The `dup()` function creates a duplicate of the file descriptor `oldfd` and returns the lowest available file descriptor. The new descriptor refers to the **same file** as `oldfd`, meaning they share the same file offset and file status flags.  
+
+#### **Duplicating File Descriptors**  
+When `dup()` is called, it finds the lowest available file descriptor and assigns it to the duplicate. The new file descriptor and the original one can be used interchangeably to read from or write to the file.  
+
+#### **Example Usage**  
+One common use case for `dup()` is redirecting standard input, output, or error. For example, duplicating `stdout` to another descriptor allows modifying where the output is written while preserving the original output stream.  
+
+#### **Difference Between `dup()` and `dup2()`**  
+- `dup()` **always returns the lowest available file descriptor**.  
+- `dup2(int oldfd, int newfd)` allows specifying the exact number for the new file descriptor, closing `newfd` first if necessary.  
+
+#### **Error Handling**  
+`dup()` may fail in several cases:  
+- If `oldfd` is not a valid file descriptor, it returns `-1` with `errno` set to `EBADF`.  
+- If the system runs out of file descriptors, it returns `-1` with `errno` set to `EMFILE`.  
+
+Using `dup()` is useful in **Minishell** when handling **I/O redirections**, allowing commands to read from or write to files instead of the standard input/output.
+
+In **Minishell**, you will use `dup()` to:  
+✅ **Save and restore `stdin` and `stdout`** when handling redirections (`>`, `<`)  
+✅ **Manage pipes (`|`)** by properly redirecting process input/output  
+✅ **Prevent permanent redirection issues** by restoring original file descriptors after execution  
+
+Without `dup()`, your redirections and pipes could interfere with your shell's display and execution!
+
+---
 
 
 
