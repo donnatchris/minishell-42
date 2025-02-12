@@ -226,8 +226,9 @@ Overall, add_history is an essential function for managing command history in a 
 ### access()
 
 > #include <unistd.h>
-
-	int access(const char *pathname, int mode);
+```c
+int access(const char *pathname, int mode);
+```
 
 The access function in C is used to check the access permissions of a file or directory.
 It allows you to determine if the current user has permission to read, write, or execute a specific file.
