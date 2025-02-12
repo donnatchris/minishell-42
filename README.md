@@ -44,28 +44,29 @@ When compiling, the program must be linked with -lreadline, and in some cases, -
 The compilation command is: gcc minishell.c -o minishell -lreadline -lncurses.
 If the library is not installed, it can be added using sudo apt-get install libreadline-dev on Debian-based systems or brew install readline on macOS.
 
-compile with the library:
+Compile with the library:
 
 	gcc minishell.c -o minishell -lreadline
 
-compile with the library and -lncurses if needed
+Compile with the library and -lncurses if needed
 
 	gcc minishell.c -o minishell -lreadline -lncurses
 
-install libreadline if needed (linux)
+Install libreadline if needed (linux)
 
 	sudo apt-get install libreadline-dev
 
- install libreadlin if needed (Macos)
+Install libreadline if needed (Macos)
 
  	brew install readline
 
+---
 
 ### readline()
 
 > #include <readline/readline.h>
 >
-> #include <readline/history.h>  // Pour gérer l'historique des commandes
+> #include <readline/history.h>
 
 	char *readline(const char *prompt);
 
@@ -84,5 +85,53 @@ For the Minishell project, readline() is essential for handling interactive user
 It can be integrated with command history using add_history().
 Proper memory management is required, ensuring that allocated strings are freed when no longer needed.
 Additionally, signal handling (SIGINT, SIGQUIT) should be implemented to maintain a clean and responsive shell experience.
+
+---
+
+### rl_clear_history()
+
+> #include <readline/readline.h>
+>
+> #include <readline/history.h>
+
+	void rl_clear_history(void);
+
+The rl_clear_history() function is part of the GNU Readline library and is used to completely erase the stored command history from memory.
+It removes all entries from the history list, making subsequent calls to history_list() return an empty list.
+This function is useful when you want to reset the history without closing the program, such as after a certain number of commands or when requested by the user.
+However, rl_clear_history() does not free the memory allocated for previous entries; it only clears the list.
+For better memory management, clear_history() can be used as an alias for rl_clear_history().
+
+---
+
+### rl_on_new_line()
+
+> #include <readline/readline.h>
+>
+> #include <readline/history.h>
+
+	void (*rl_on_new_line_hook)(void);
+
+The rl_on_new_line function is used in the context of the GNU Readline library, which allows for interactive user input management in command-line programs.
+This function is typically used to define custom behavior when the user presses the Enter key in a Readline-based interface.
+It is a hook function that gets automatically called by Readline when the Enter key is pressed.
+The function takes no arguments and returns nothing.
+To use it, you define a custom function and assign it to the rl_on_new_line hook.
+This allows you to execute specific actions, such as validating input, logging, or modifying the input before it is processed by the program.
+Readline also supports other hooks for different events, and you can disable rl_on_new_line by setting it to NULL.
+Overall, rl_on_new_line is a powerful tool for customizing Readline behavior when the user presses Enter, enabling richer and more controlled command-line interactions.
+
+#### how to use it
+
+You can assign your own custom function to the rl_on_new_line hook using this syntax:
+
+	rl_on_new_line_hook = my_own_on_newline_function;
+ 
+This allows you to define custom behavior that will be executed every time the user presses the Enter key.
+Make sure your custom function follows the expected prototype:
+
+	void my_own_on_newline_function(void);
+
+This ensures that the function takes no arguments and returns nothing, as required by Readline.
 
 
