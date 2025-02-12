@@ -322,7 +322,7 @@ pid_t fork(void);
 ```c
 pid_t wait(int *status);
 ```
-- **`status`**: A pointer to an integer where the status of the terminated child process will be stored.
+- **`status`**: A pointer to an integer where the status of the terminated child process will be stored (can be NULL if you don't want to staore anything).
 - **Returns**: The PID of the terminated child process, or `-1` on error.
 - **Purpose**: Suspends the calling process until one of its child processes terminates. It also retrieves the termination status of the child process.
 
