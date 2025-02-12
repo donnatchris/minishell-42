@@ -258,6 +258,80 @@ In summary, access is an essential function for checking file or directory acces
 
 ---
 
+### wait3()
+
+> #include <sys/types.h>
+>
+> #include <sys/wait.h>
+>
+> #include <sys/resource.h>
+
+```c
+pid_t wait3(int *status, int options, struct rusage *rusage);
+```
+- **`status`**: A pointer to an integer where the termination status of the child process will be stored.
+- **`options`**: An integer representing behavior options (e.g., `WNOHANG` or `WUNTRACED`).
+- **`rusage`**: A pointer to a `struct rusage` where resource usage information will be stored.
+- **Returns**: The PID of the terminated child process, or `-1` on error.
+
+
+The `wait3()` function extends the functionality of `wait()` by allowing you to retrieve detailed information about the resource usage of a terminated child process. Here’s what `wait3()` offers:
+
+#### **1. Retrieving Termination Status**
+Like `wait()`, `wait3()` allows you to retrieve the termination status of the child process via a pointer to an integer (`int *status`). This includes information such as:
+- The exit code of the child process.
+- Whether the process was terminated by a signal, and if so, which signal.
+
+#### **2. Retrieving Resource Usage Information**
+Unlike `wait()`, `wait3()` also allows you to retrieve detailed information about the resource usage of the terminated child process. This includes metrics such as:
+- CPU time used (user and system time).
+- Memory usage.
+- Number of page faults.
+- Number of disk reads/writes.
+- Other resource-related statistics.
+
+This information is stored in a `struct rusage`, which you pass as the third argument to `wait3()`.
+
+#### **3. Additional Options**
+Like `waitpid()`, `wait3()` accepts a second argument (`int options`) to control its behavior. For example:
+- `WNOHANG`: If this option is specified, `wait3()` returns immediately if no child process has exited.
+- `WUNTRACED`: If this option is specified, `wait3()` also reports stopped child processes (e.g., those stopped by `SIGSTOP`).
+
+---
+
+### wait4()
+
+> #include <sys/types.h>
+>
+> #include <sys/wait.h>
+>
+> #include <sys/resource.h>
+```c
+pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage);
+```
+- **`pid`**: The PID of the child process to wait for. You can use special values like:
+  - `-1`: Wait for any child process.
+  - `0`: Wait for any child process in the same process group as the caller.
+  - A positive value: Wait for a specific child process with the given PID.
+- **`status`**: A pointer to an integer where the termination status of the child process will be stored.
+- **`options`**: An integer representing behavior options (e.g., `WNOHANG` or `WUNTRACED`).
+- **`rusage`**: A pointer to a `struct rusage` where resource usage information will be stored.
+- **Returns**: The PID of the terminated child process, `0` if no child matches the criteria, or `-1` on error.
+The `wait4()` function is essentially the same as `wait3()`, but it adds one additional feature: **the ability to wait for a specific child process**. This is done by passing the PID of the child process as the first argument.
+
+#### **Summary of `wait3()` vs `wait4()`**
+- **`wait3()`**: Waits for **any child process** to terminate and retrieves its termination status and resource usage information.
+- **`wait4()`**: Allows you to wait for a **specific child process** (or any child process, depending on the `pid` argument) and retrieves the same information as `wait3()`.
+
+Both functions are more powerful than `wait()` because they provide detailed resource usage information and support additional options like `WNOHANG` and `WUNTRACED`.
+
+---
+
+
+
+
+
+
 
 
 
