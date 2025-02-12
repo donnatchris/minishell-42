@@ -652,6 +652,7 @@ When `execve()` is called, the current process is **completely replaced** by the
 
 The `execve()` function is essential for implementing a shell (such as `minishell`), as it allows executing external commands by replacing the shell process with the requested command.
 
+#### **In Minishell**  
 In **Minishell**, you call `execve()` to:  
 ✅ Execute an external command (e.g., `ls -l`)  
 ✅ Search for the command in `$PATH` if it is not an absolute path  
@@ -688,6 +689,7 @@ One common use case for `dup()` is redirecting standard input, output, or error.
 
 Using `dup()` is useful in **Minishell** when handling **I/O redirections**, allowing commands to read from or write to files instead of the standard input/output.
 
+#### **In Minishell**  
 In **Minishell**, you will use `dup()` to:  
 ✅ **Save and restore `stdin` and `stdout`** when handling redirections (`>`, `<`)  
 ✅ **Manage pipes (`|`)** by properly redirecting process input/output  
@@ -696,6 +698,41 @@ In **Minishell**, you will use `dup()` to:
 Without `dup()`, your redirections and pipes could interfere with your shell's display and execution!
 
 ---
+
+### `dup2()`  
+
+> #include <unistd.h>  
+```c
+int dup2(int oldfd, int newfd);
+```  
+- `oldfd`: The file descriptor to be duplicated.  
+- `newfd`: The file descriptor to be replaced. If `newfd` is already open, it will be closed before being reused.  
+- **Returns**: The new file descriptor (`newfd`), or `-1` on error with `errno` set accordingly.  
+
+The `dup2()` function duplicates the file descriptor `oldfd` to `newfd`. If `newfd` is already open, it is closed first before being replaced by `oldfd`. Both file descriptors then refer to the same file, meaning they share the same file offset and file status flags.
+
+#### **Key Use Cases**  
+- **Redirection**: `dup2()` is commonly used for **I/O redirection**, such as redirecting `stdout` or `stderr` to a file or pipe. By specifying `STDOUT_FILENO` (1) as the `newfd`, you can redirect output to a file.
+- **Controlling File Descriptors**: It is useful when you need to control or manage which file descriptor a process uses, especially in child processes (e.g., with `fork()`).
+
+#### **Difference Between `dup()` and `dup2()`**  
+- `dup2()` allows you to specify the exact number for the new file descriptor (`newfd`).  
+- `dup()` always returns the **lowest available file descriptor**.
+
+#### **Error Handling**  
+`dup2()` may fail in several cases:  
+- If `oldfd` is not a valid file descriptor, it returns `-1` with `errno` set to `EBADF`.  
+- If the process runs out of file descriptors, it returns `-1` with `errno` set to `EMFILE`.  
+
+#### **In Minishell**  
+In **Minishell**, you will use `dup2()` to:  
+✅ **Redirect input/output** for handling redirections (`>`, `<`) and pipes (`|`)  
+✅ **Redirect `stdout` to a file** when implementing output redirection  
+✅ **Redirect `stdin`** from a file when implementing input redirection  
+✅ **Avoid file descriptor leaks** by managing file descriptors correctly when handling pipes and redirections
+
+---
+
 
 
 
