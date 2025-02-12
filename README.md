@@ -337,6 +337,71 @@ Both functions are more powerful than `wait()` because they provide detailed res
 
 ---
 
+### exit()
+
+> #include <stdlib.h>
+```c
+void exit(int status);
+```
+- **`status`**: An integer representing the exit status code of the program. By convention:
+  - `0` or `EXIT_SUCCESS`: Indicates that the program terminated successfully.
+  - Any other value (or `EXIT_FAILURE`): Indicates an error or failure.
+
+The `exit()` function in C is used to terminate a program normally.
+It allows you to specify an **exit status code** that can be retrieved by the parent process or used to indicate the success or failure of the program.
+Here is a detailed explanation of how it works, especially in the context of child and parent processes, and what it cleans up.
+
+#### **How `exit()` Works**
+1. **Program Termination**:
+   - The `exit()` function immediately terminates the currently running program.
+   - It never returns to the caller.
+
+2. **Resource Cleanup**:
+   - Before terminating the program, `exit()` performs cleanup of dynamically allocated resources:
+     - **Output Buffers**: The stdout and stderr buffers are flushed, ensuring that all pending data is written.
+     - **Functions Registered with `atexit()`**: These functions are called in reverse order of their registration, allowing custom cleanup tasks to be executed.
+     - **Temporary Files**: Files created with `tmpfile()` or `tmpnam()` are closed and deleted.
+
+3. **Exit Status Code**:
+   - The exit status code (`status`) is returned to the operating system and can be retrieved by the parent process using functions like `wait()`, `waitpid()`, or `wait3()`.
+
+#### **Behavior in Child and Parent Processes**
+- **Child Process**:
+  - When a child process calls `exit()`, it terminates immediately and returns the exit status code to the parent process.
+  - The parent process can retrieve this code using functions like `wait()`, `waitpid()`, or `wait3()`.
+  - For example, if a child process executes `exit(42)`, the parent can check this code to determine if the child terminated successfully or with an error.
+
+- **Parent Process**:
+  - If the parent process calls `exit()`, it terminates as well, along with any child processes that are not running in the background (background child processes may continue running).
+  - The parent's exit status code can be used by the operating system or another process to determine the success or failure of the program.
+
+#### **What `exit()` Cleans Up**
+1. **Output Buffers**:
+   - The stdout and stderr buffers are flushed, ensuring that all pending data is written before the program terminates.
+
+2. **Functions Registered with `atexit()`**:
+   - Functions registered with `atexit()` are called in reverse order of their registration, allowing custom cleanup tasks to be executed.
+
+3. **Temporary Files**:
+   - Temporary files created with `tmpfile()` or `tmpnam()` are closed and deleted.
+
+4. **System Resources**:
+   - Dynamically allocated resources (e.g., memory) are released by the operating system.
+
+#### **Difference Between `exit()` and `_exit()`**
+- **`exit()`**:
+  - Performs a full cleanup (flushes buffers, calls `atexit()` functions, etc.).
+  - Used for normal program termination.
+
+- **`_exit()`**:
+  - Terminates the program immediately without performing cleanup (buffers are not flushed, `atexit()` functions are not called).
+  - Used in cases where cleanup is not necessary or desired (e.g., in a child process after a critical error).
+
+#### **Summary**
+- `exit()` terminates a program normally and performs cleanup of resources (flushes buffers, calls `atexit()` functions, etc.).
+- In the context of child and parent processes, the exit status code returned by `exit()` can be retrieved by the parent to determine the success or failure of the child.
+- `exit()` is ideal for clean and controlled termination, while `_exit()` is used for immediate termination without cleanup.
+
 
 
 
