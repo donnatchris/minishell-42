@@ -266,7 +266,7 @@ In summary, access is an essential function for checking file or directory acces
 
 # SHORT REMINDERS
 
-## Open(), close() and read()
+## open(), close() and read()
 
 > #include <fcntl.h>
 
@@ -301,7 +301,7 @@ int close(int fd);
 
 ---
 
-### fork, wait, waitpid, wait2, wait3, wait4
+## fork(), wait(), waitpid(), wait2(), wait3() and wait4()
 
 > #include <unistd.h>
 > 
