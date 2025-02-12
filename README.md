@@ -434,7 +434,38 @@ The returned pointer must be freed using `free()` to avoid memory leaks.
 
 Using `getcwd()` properly ensures that a program can reliably determine and use the current working directory while handling potential errors gracefully.
 
+---
 
+### chdir()
+
+> #include <unistd.h>
+```c
+int chdir(const char *path);
+```
+- `path`: A string representing the absolute or relative path to the new working directory.  
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
+
+The `chdir()` function changes the current working directory of the calling process to the directory specified by `path`.
+It is commonly used in shell implementations and file management applications to navigate through the filesystem.  
+
+#### Changing the Current Working Directory  
+When `chdir()` is called, the process's working directory is updated to the specified `path`.
+Any subsequent file operations that use relative paths will be based on this new directory.  
+
+#### Permissions and Accessibility  
+The process must have **execute (`X`) permissions** on the target directory.
+If the directory does not exist or is inaccessible, the function fails and returns `-1`, setting `errno` to indicate the error.  
+
+#### Error Handling  
+`chdir()` may fail in several cases:  
+- If `path` does not exist, it returns `-1` with `errno` set to `ENOENT`.  
+- If `path` is not a directory, it returns `-1` with `errno` set to `ENOTDIR`.  
+- If the process lacks the necessary permissions, it returns `-1` with `errno` set to `EACCES`.  
+- If the system encounters a resource limitation, it returns `-1` with `errno` set to `ENOMEM` or `EIO`.  
+
+Properly handling `chdir()` ensures that a program can reliably navigate directories while avoiding permission issues and other potential errors.
+
+---
 
 
 
