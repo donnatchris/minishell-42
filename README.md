@@ -34,8 +34,14 @@ execute the program
 
 ## DOCUMENTATION:
 
-For explanations on functions and concepts already used in previous projects, refer to the README files of my other projects.
+For explanations on functions and concepts already used in previous projects, refer to the README files of my other projects:
+
+https://github.com/donnatchris/philosophers
+https://github.com/donnatchris/minitalk
+
 However, at the end of the DOCUMENTATION section, you will find a SHORT REMINDER section with a summary of all the previously covered functions.
+
+---
 
 ### GNU readline library
 
