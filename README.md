@@ -139,7 +139,7 @@ Make sure your custom function follows the expected prototype:
 
 This ensures that the function takes no arguments and returns nothing, as required by Readline.
 
---
+---
 
 ### rl_replace_line()
 
