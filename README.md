@@ -769,6 +769,48 @@ In **Minishell**, you will use `pipe()` to:
 
 ---
 
+### `opendir()`  
+
+> #include <dirent.h>  
+```c
+DIR *opendir(const char *dirname);
+```  
+- `dirname`: A string representing the path of the directory to open.  
+- **Returns**: A pointer to a `DIR` object on success, or `NULL` on error with `errno` set accordingly.  
+
+The `opendir()` function is used to open a directory stream corresponding to the directory specified by `dirname`. It returns a pointer to a `DIR` object, which can be used with other directory-related functions like `readdir()` and `closedir()` to read the contents of the directory or close the directory when finished. The returned `DIR` pointer represents the directory stream and is used to interact with the directory’s entries.
+
+#### **Key Use Cases**  
+- **Directory Traversal**: `opendir()` is commonly used in file management applications to traverse or list the files within a directory.  
+- **Reading Directory Contents**: After opening a directory with `opendir()`, you can use `readdir()` to iterate through the entries of the directory.
+
+#### **How It Works**  
+Once a directory is successfully opened using `opendir()`, you can read its contents by calling `readdir()`, which returns a pointer to a `struct dirent` representing each entry (e.g., file or subdirectory). To close the directory stream, you use `closedir()`.  
+For example:
+```c
+DIR *dir = opendir("/home/user/documents");
+if (dir) {
+    struct dirent *entry;
+    while ((entry = readdir(dir)) != NULL) {
+        printf("Found: %s\n", entry->d_name);
+    }
+    closedir(dir);
+}
+```
+
+#### **Error Handling**  
+`opendir()` may fail in several cases:  
+- If the directory does not exist, it returns `NULL` with `errno` set to `ENOENT`.  
+- If the user lacks permission to read the directory, it returns `NULL` with `errno` set to `EACCES`.  
+- If there is a system resource error, it returns `NULL` with `errno` set to `EMFILE`.
+
+#### **In Minishell**  
+In **Minishell**, you will use `opendir()` to:  
+✅ **Open directories** when implementing commands like `ls` or `cd` to list or navigate directories.  
+✅ **Read directory contents** to retrieve the files and subdirectories within a specified path.  
+✅ **Facilitate directory exploration** in your shell, providing functionality for users to browse and interact with the filesystem.
+
+---
 
 
 # SHORT REMINDERS
