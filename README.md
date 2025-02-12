@@ -517,6 +517,10 @@ Using `stat()` correctly allows a program to inspect files and directories effic
 
 # SHORT REMINDERS
 
+Of functions we have seen in previous projects
+
+---
+
 ## open(), close() and read()
 
 > #include <fcntl.h>
