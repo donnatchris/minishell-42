@@ -388,6 +388,9 @@ Here is a detailed explanation of how it works, especially in the context of chi
 4. **System Resources**:
    - Dynamically allocated resources (e.g., memory) are released by the operating system.
 
+5. **Closure of all file descriptors opened by the process.**
+
+
 #### **Difference Between `exit()` and `_exit()`**
 - **`exit()`**:
   - Performs a full cleanup (flushes buffers, calls `atexit()` functions, etc.).
