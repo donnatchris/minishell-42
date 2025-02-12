@@ -549,7 +549,43 @@ Using `lstat()` correctly allows a program to inspect symbolic links and files w
 
 ---
 
+### `fstat()`
 
+> #include <sys/types.h>  
+> #include <sys/stat.h>  
+> #include <unistd.h>  
+
+```c
+int fstat(int fd, struct stat *buf);
+```
+
+- `fd`: A file descriptor referring to an open file.  
+- `buf`: A pointer to a `struct stat` where the file's metadata will be stored.  
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
+
+The `fstat()` function retrieves metadata about an **open file descriptor** and stores it in the provided `struct stat`. Unlike `stat()`, which operates on a file path, `fstat()` works with a file descriptor, making it useful when dealing with already-opened files.  
+
+#### Retrieving File Information  
+When `fstat()` is called, it fills the `struct stat` with metadata about the file associated with `fd`, including:  
+- **File type** (regular file, directory, symbolic link, etc.).  
+- **Permissions** (read, write, execute for user, group, and others).  
+- **File size** (in bytes).  
+- **Number of hard links** to the file.  
+- **Timestamps** (last access, modification, and status change).  
+- **Owner and group ID** of the file.  
+
+#### Difference Between `fstat()`, `stat()`, and `lstat()`  
+- `stat()` retrieves metadata using a **file path** and follows symbolic links.  
+- `lstat()` retrieves metadata using a **file path** but does **not** follow symbolic links.  
+- `fstat()` retrieves metadata using a **file descriptor**, making it useful for files that are already open.  
+
+#### Error Handling  
+`fstat()` may fail in several cases:  
+- If `fd` is not a valid open file descriptor, it returns `-1` with `errno` set to `EBADF`.  
+- If `buf` is an invalid pointer, it returns `-1` with `errno` set to `EFAULT`.  
+- If `fd` refers to a file on an unreachable filesystem (e.g., a disconnected network drive), it returns `-1` with `errno` set to `EIO`.  
+
+Using `fstat()` correctly allows a program to inspect open files without needing their path, making it particularly useful for working with file descriptors from `open()`, `dup()`, or standard input/output streams.
 
 
 
