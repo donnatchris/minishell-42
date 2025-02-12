@@ -317,7 +317,6 @@ pid_t fork(void);
 - **Returns**: Returns `0` to the child process, and the PID of the child process to the parent process. Returns `-1` on error.
 - **Purpose**: Creates a new process by duplicating the current process. The new process is called the child process, and the original process is called the parent process.
 
----
 
 ### **2. `wait()`**
 ```c
