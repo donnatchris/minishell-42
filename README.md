@@ -508,7 +508,46 @@ Using `stat()` correctly allows a program to inspect files and directories effic
 
 ---
 
+### lstat()
 
+> #include <sys/types.h>
+> 
+> #include <sys/stat.h>
+> 
+> #include <unistd.h>
+```c
+int lstat(const char *pathname, struct stat *buf);
+```
+- `pathname`: A string representing the path to the file or symbolic link whose information is to be retrieved.  
+- `buf`: A pointer to a `struct stat` where the file's metadata will be stored.  
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
+
+The `lstat()` function retrieves metadata about a file, similar to `stat()`, but **does not follow symbolic links**. Instead, if the specified path is a symbolic link, `lstat()` returns information about the link itself rather than the target file. It is commonly used in file management applications and shell implementations to differentiate between symbolic links and regular files.  
+
+#### Retrieving File and Link Information  
+When `lstat()` is called, it fills the `struct stat` with metadata about the specified file or link, including:  
+- **File type** (regular file, directory, symbolic link, etc.).  
+- **Permissions** (read, write, execute for user, group, and others).  
+- **File size** (in bytes).  
+- **Number of hard links** to the file.  
+- **Timestamps** (last access, modification, and status change).  
+- **Owner and group ID** of the file or link.  
+
+If `pathname` is a **symbolic link**, `lstat()` provides information about the link itself, including its size (the length of the path it points to) and permissions, rather than the target file's attributes.  
+
+#### Difference Between `lstat()` and `stat()`  
+- `lstat()` **does not follow** symbolic links and retrieves information about the link itself.  
+- `stat()` **follows** symbolic links and returns information about the target file.  
+
+#### Error Handling  
+`lstat()` may fail in several cases:  
+- If `pathname` does not exist, it returns `-1` with `errno` set to `ENOENT`.  
+- If the process lacks permission to access the file, it returns `-1` with `errno` set to `EACCES`.  
+- If `buf` is an invalid pointer, it returns `-1` with `errno` set to `EFAULT`.  
+
+Using `lstat()` correctly allows a program to inspect symbolic links and files while handling potential errors gracefully.
+
+---
 
 
 
@@ -516,10 +555,7 @@ Using `stat()` correctly allows a program to inspect files and directories effic
 
 
 # SHORT REMINDERS
-
 Of functions we have seen in previous projects
-
----
 
 ## open(), close() and read()
 
