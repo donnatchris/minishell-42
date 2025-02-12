@@ -467,6 +467,47 @@ Properly handling `chdir()` ensures that a program can reliably navigate directo
 
 ---
 
+### stat()
+
+> #include <sys/types.h>
+>
+> #include <sys/stat.h>
+> 
+> #include <unistd.h>
+```c
+int stat(const char *pathname, struct stat *buf);
+```
+- `pathname`: A string representing the path to the file or directory whose information is to be retrieved.  
+- `buf`: A pointer to a `struct stat` where the file's metadata will be stored.  
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
+
+The `stat()` function retrieves detailed information about a file or directory and stores it in the provided `struct stat`.
+It is commonly used in shell implementations, file management applications, and system monitoring tools to check file attributes such as size, permissions, and timestamps.  
+
+#### Retrieving File Information  
+When `stat()` is called, it fills the `struct stat` with metadata about the specified file, including:  
+- **File type** (regular file, directory, symbolic link, etc.).  
+- **Permissions** (read, write, execute for user, group, and others).  
+- **File size** (in bytes).  
+- **Number of hard links** to the file.  
+- **Timestamps** (last access, modification, and status change).  
+- **Owner and group ID** of the file.  
+
+#### Difference Between `stat()` and `lstat()`
+- `stat()` follows symbolic links and returns information about the target file.
+- `lstat()` does **not** follow symbolic links and returns information about the link itself.
+
+#### Error Handling
+`stat()` may fail in several cases:  
+- If `pathname` does not exist, it returns `-1` with `errno` set to `ENOENT`.  
+- If `pathname` is a symbolic link pointing to a non-existent file, it returns `-1` with `errno` set to `ENOENT`.  
+- If the process lacks permission to access the file, it returns `-1` with `errno` set to `EACCES`.  
+- If `buf` is an invalid pointer, it returns `-1` with `errno` set to `EFAULT`.  
+
+Using `stat()` correctly allows a program to inspect files and directories efficiently while handling potential errors gracefully.
+
+---
+
 
 
 
