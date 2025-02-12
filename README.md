@@ -733,6 +733,41 @@ In **Minishell**, you will use `dup2()` to:
 
 ---
 
+### `pipe()`  
+
+> #include <unistd.h>  
+```c
+int pipe(int pipefd[2]);
+```  
+- `pipefd`: An array of two integers. The first element (`pipefd[0]`) is the read end of the pipe, and the second element (`pipefd[1]`) is the write end.  
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
+
+The `pipe()` function creates a pipe, a unidirectional communication channel used to transfer data between processes. It sets up two file descriptors: one for reading from the pipe and another for writing to it. After calling `pipe()`, data written to `pipefd[1]` can be read from `pipefd[0]`.
+
+#### **Key Use Cases**  
+- **Inter-process communication (IPC)**: Pipes are commonly used in a shell to redirect the output of one command to the input of another (e.g., with the `|` operator).  
+- **Data transfer between processes**: They allow the output of one process to be passed directly into another, without using temporary files.  
+
+#### **How It Works**  
+After calling `pipe()`, the file descriptors `pipefd[0]` and `pipefd[1]` can be used just like any other file descriptors. The write end (`pipefd[1]`) can be used to send data, while the read end (`pipefd[0]`) can be used to receive data. You typically use `dup2()` to redirect the standard input or output of a process to or from the pipe.  
+For example, in a shell, when a user enters a command like:  
+```sh
+ls | grep ".c"
+```
+`pipe()` will be used to connect the output of `ls` (via `pipefd[1]`) to the input of `grep` (via `pipefd[0]`).
+
+#### **Error Handling**  
+`pipe()` may fail in several cases:  
+- If the system runs out of file descriptors, it returns `-1` with `errno` set to `EMFILE`.  
+- If there is a problem creating the pipe due to a system limitation, it returns `-1` with `errno` set to `ENFILE`.  
+
+#### **In Minishell**  
+In **Minishell**, you will use `pipe()` to:  
+✅ **Create a communication channel** between processes when implementing pipes (`|`)  
+✅ **Connect the output of one command** to the input of another, allowing for chaining commands  
+✅ **Facilitate efficient inter-process communication** without writing to temporary files
+
+---
 
 
 
