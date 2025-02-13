@@ -1,1 +1,0 @@
-Je suis gauchiste et j'aime la pipe
