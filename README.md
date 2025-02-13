@@ -116,7 +116,7 @@ Install libreadline if needed (Macos)
 char *readline(const char *prompt);
 ```
 - `prompt`: A string displayed as a prompt before reading user input.
-- **Returns**: Nothing.
+- **Returns**: The string fetched from the input.
 
 The `readline()` function is part of the GNU Readline library and is used to read a line of text from standard input with advanced editing features.
 It waits for user input until they press Enter.
