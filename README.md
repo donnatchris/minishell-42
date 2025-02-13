@@ -72,9 +72,9 @@ git push origin <name_of_the_branch>
 ```bash
 git checkout main
 
-git merge origin <name_of_the_branch>
-
 git pull origin main #needed to fetch
+
+git merge origin <name_of_the_branch>
 
 git push origin main
 ```
