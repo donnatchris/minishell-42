@@ -49,17 +49,17 @@ However, at the end of the DOCUMENTATION section, you will find a SHORT REMINDER
 Here are the main commands to wotk with multiples branches:
 
 
-#### create a new branch and switch to that branch
+#### Create a new branch and switch to that branch
 ```bash
 git checkout -b <name_of_the_branch>
 ```
 
-#### switch to a branch
+#### Switch to a branch
 ```bash
 git checkout <name_of_the_branch>
 ```
 
-#### push your work on your branch
+#### Push your work on your branch
 ```bash
 git add <name_of_file1> <name_of_file2> <...>
 
@@ -68,7 +68,7 @@ git commit -m "your_message"
 git push origin <name_of_the_branch>
 ```
 
-#### merge your branch with main
+#### Merge your branch with main
 ```bash
 git checkout main
 
