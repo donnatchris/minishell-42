@@ -68,6 +68,17 @@ git commit -m "your_message"
 git push origin <name_of_the_branch>
 ```
 
+#### merge your branch with main
+```bash
+git checkout main
+
+git merge origin <name_of_the_branch>
+
+git pull origin main #needed to fetch
+
+git push origin main
+```
+
 ---
 
 ### GNU readline library
