@@ -50,24 +50,23 @@ Here are the main commands to wotk with multiples branches:
 
 
 #### create a new branch and switch to that branch
-'''c
+```bash
 git checkout -b <name_of_the_branch>
-'''
+```
 
 #### switch to a branch
-'''c
+```bash
 git checkout <name_of_the_branch>
-'''
+```
 
 #### push your work on your branch
-#### create a new branch and switch to that branch:
-'''c
+```bash
 git add <name_of_file1> <name_of_file2> <...>
 
 git commit -m "your_message"
 
 git push origin <name_of_the_branch>
-'''
+```
 
 ---
 
