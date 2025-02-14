@@ -128,14 +128,14 @@ To ensure **correct execution** of commands, the **parsing and processing** of u
 - Identify the **type** of each token (command, argument, operator, etc.).  
 
 **Example:**  
-Input:  
-```shell
-echo "Hello; world" > output.txt
-```
-Tokens:  
-```plaintext
-[echo] ["Hello; world"] [>] [output.txt]
-```
+> Input:  
+> ```shell
+> echo "Hello; world" > output.txt
+> ```
+> Tokens:  
+> ```plaintext
+> [echo] ["Hello; world"] [>] [output.txt]
+> ```
 At this stage, **do not** interpret anything—just split and classify.
 
 ### **2. Handle Quoting & Escaping**
