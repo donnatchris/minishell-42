@@ -92,10 +92,10 @@ If the user types a command that **is not a builtin**, Minishell must:
 - **Execute the command via `execve()`**.
 - **Handle errors (`command not found`, permissions, etc.).**  
 
-Examples:  
-- `ls -l`  
-- `/bin/echo "Hello"`  
-- `grep "text" file.txt`
+**Examples:**  
+> - `ls -l`  
+> - `/bin/echo "Hello"`  
+> - `grep "text" file.txt`
 
 ### **4. Signal Handling (`Ctrl + Keys`)**  
 Minishell must **catch certain signals** for proper behavior:  
@@ -143,72 +143,70 @@ At this stage, **do not** interpret anything—just split and classify.
 - **Process escape characters** (`\` to escape special symbols).  
 
 **Example:**  
-Input:  
-```shell
-echo "Hello; world"
-```
-Should be **one argument**, not split at `;`:  
-```plaintext
-[echo] ["Hello; world"]
-```
+> Input:  
+> ```shell
+> echo "Hello; world"
+> ```
+> Should be **one argument**, not split at `;`:  
+> ```plaintext
+> [echo] ["Hello; world"]
+> ```
 
 ### **3. Syntax Parsing & Syntax Error Detection**
 - Check for **syntax errors** before executing anything.
 - Detect **unmatched quotes, missing arguments**, or invalid syntax.  
+If an error is found, **stop execution immediately**.
 
 **Example Errors to Catch Early:**  
-- `echo "Hello` (missing closing quote)  
-- `| ls` (pipe at the start without a command before)  
-- `cat <` (missing file after `<`)  
-
-If an error is found, **stop execution immediately**.
+> - `echo "Hello` (missing closing quote)  
+> - `| ls` (pipe at the start without a command before)  
+> - `cat <` (missing file after `<`)  
 
 ### **4. Handle Logical Operators (`&&`, `||`)**
 - **Process** `&&` and `||` before anything else.
 - These determine **which commands should run** based on success/failure.  
 
 **Example:**  
-```shell
-mkdir test && cd test || echo "Failed"
-```
-- `mkdir test` **runs**  
-- If it **succeeds**, `cd test` **executes**  
-- If `cd test` **fails**, then `echo "Failed"` runs  
+> ```shell
+> mkdir test && cd test || echo "Failed"
+> ```
+> - `mkdir test` **runs**  
+> - If it **succeeds**, `cd test` **executes**  
+> - If `cd test` **fails**, then `echo "Failed"` runs  
 
 ### **5. Handle Command Grouping (`( )`, `{ }`)**
 - **If parentheses are used**, they create a **subshell**.
 - **If `{ }` is used**, commands execute in the **current shell**.  
 
 **Example:**  
-```shell
-(cd /tmp && ls) > output.txt
-```
-- **Subshell ensures `cd` does not affect the main shell**  
-- **Entire group output is redirected**  
+> ```shell
+> (cd /tmp && ls) > output.txt
+> ```
+> - **Subshell ensures `cd` does not affect the main shell**  
+> - **Entire group output is redirected**  
 
 ### **6. Handle Pipes (`|`)**
 - **Split commands** based on `|` and set up **pipes**.
 - Ensure **input/output redirection** between commands works.  
+At this stage, commands are **not yet executed**, just structured into a pipeline.
 
 **Example:**  
-```shell
-cat file.txt | grep "hello" | wc -l
-```
-- `cat` sends output to `grep`  
-- `grep` filters lines and sends output to `wc -l`  
-- `wc -l` counts the lines  
-
-At this stage, commands are **not yet executed**, just structured into a pipeline.
+> ```shell
+> cat file.txt | grep "hello" | wc -l
+> ```
+> - `cat` sends output to `grep`  
+> - `grep` filters lines and sends output to `wc -l`  
+> - `wc -l` counts the lines  
 
 ### **7. Handle Redirections (`>`, `>>`, `<`, `<<`)**
 - **Before executing commands**, set up file descriptors.
 - **Check for file errors** (non-existent file, permission issues).  
 
 **Example:**  
-```shell
-echo "Hello" > output.txt
-```
-- Open `output.txt` **before** running `echo`.  
+> ```shell
+> echo "Hello" > output.txt
+> ```
+> - Open `output.txt` **before** running `echo`.  
 
 ### **8. Handle Variable Expansion (`$VAR`, `$?`)**
 - **Expand environment variables** **before execution**.
@@ -216,31 +214,31 @@ echo "Hello" > output.txt
 - **Expand `$?`** to the **last exit status**.  
 
 **Examples:**  
-```shell
-echo $HOME
-```
-If `$HOME=/Users/user`, then command becomes:  
-```shell
-echo /Users/user
-```
-```shell
-ls nonexistent_folder; echo $?
-```
-If `ls` fails (`exit status 2`), then:  
-```shell
-echo 2
-```
+> ```shell
+> echo $HOME
+> ```
+> If `$HOME=/Users/user`, then command becomes:  
+> ```shell
+> echo /Users/user
+> ```
+> ```shell
+> ls nonexistent_folder; echo $?
+> ```
+> If `ls` fails (`exit status 2`), then:  
+> ```shell
+> echo 2
+> ```
 
 ### **9. Execute Builtin Commands (`cd`, `exit`, etc.)**
 - **Before searching in `$PATH`**, check if the command is a **builtin**.
 - If it's a builtin, **execute it without `execve()`**.  
 
 **Example:**  
-```shell
-cd /tmp
-```
-- `cd` is a **builtin**, so it must be executed **directly** inside Minishell.  
-- It does **not** create a new process.
+> ```shell
+> cd /tmp
+> ```
+> - `cd` is a **builtin**, so it must be executed **directly** inside Minishell.  
+> - It does **not** create a new process.
 
 ### **10. Execute External Commands (via `execve()`)**
 - **Search for the command in `$PATH`**.
@@ -248,29 +246,28 @@ cd /tmp
 - **If not found, print an error message (`command not found`)**.  
 
 **Example:**  
-```shell
-ls -l /home
-```
-- Minishell **searches for `ls` in `$PATH`**.  
-- If found (`/bin/ls`), it **executes it using `execve()`**.  
-
+> ```shell
+> ls -l /home
+> ```
+> - Minishell **searches for `ls` in `$PATH`**.  
+> - If found (`/bin/ls`), it **executes it using `execve()`**.  
 
 ### **11. Handle Background Execution (`&`)**
 *(Optional, not required for Minishell, but can be handled for extra functionality)*  
-- If `&` is detected, run the command in the **background**.  
+If `&` is detected, run the command in the **background**.  
 
 **Example:**  
-```shell
-sleep 5 &
-```
-- The shell **does not wait** for `sleep 5` to finish.  
-- The process runs in the **background**.  
+> ```shell
+> sleep 5 &
+> ```
+> - The shell **does not wait** for `sleep 5` to finish.  
+> - The process runs in the **background**.  
 
 ### **12. Signal Handling (`Ctrl + C`, `Ctrl + D`, `Ctrl + \`)**
-- **After forking child processes**, handle signals properly.  
-	- `Ctrl + C` → Should **interrupt** running commands but **not Minishell itself**.  
-	- `Ctrl + D` → If the user presses `EOF` on an **empty line**, **exit the shell**.  
-	- `Ctrl + \` → Ignore unless handling a **child process**.  
+**After forking child processes**, handle signals properly.  
+- `Ctrl + C` → Should **interrupt** running commands but **not Minishell itself**.  
+- `Ctrl + D` → If the user presses `EOF` on an **empty line**, **exit the shell**.  
+- `Ctrl + \` → Ignore unless handling a **child process**.  
 
 ### **Final Summary: Order of Execution**  
 1️⃣ **Tokenize input** (split into words, classify tokens)  
