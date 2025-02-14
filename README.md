@@ -32,6 +32,94 @@ execute the program
 - Makefile (with rules: make bonus clean fclean re)
 - readme.md for quick explanation and main commands of the project
 
+## MINISHELL INPUT HANDLING LIST
+
+## **1️⃣ Special Characters to Parse and Handle**  
+These characters have a special meaning and must be properly **tokenized and interpreted**.  
+
+### **📌 Command Separators**  
+- `;` → Separates multiple commands executed sequentially.  
+
+### **📌 Logical Operators**  
+- `&&` → Executes the next command **only if** the previous one succeeds.  
+- `||` → Executes the next command **only if** the previous one fails.  
+
+### **📌 Redirections**  
+- `>`  → Output redirection (overwrites the file).  
+- `>>` → Output redirection (appends to the file).  
+- `<`  → Input redirection (reads from a file).  
+- `<<` → **Heredoc** (reads multiple lines until a delimiter).  
+
+### **📌 Pipeline Operators**  
+- `|` → Redirects the output of one command to the input of another (**pipe**).  
+
+### **📌 Expansion and Substitution**  
+- `$VAR` → Expands environment variables.  
+- `$?` → Expands the exit status of the last command.  
+- `` `cmd` `` or `$(cmd)` → Executes a command and replaces it with the output.  
+
+### **📌 Quoting and Escaping**  
+- `'...'` → Prevents any expansion.  
+- `"..."` → Allows expansion (`$VAR` works inside).  
+- `\` → Escapes a special character (`\n`, `\$`, etc.).  
+
+### **📌 Grouping and Subshells**  
+- `(cmds)` → Runs the commands in a **subshell**.  
+- `{ cmds ; }` → Runs the commands in the **current shell**.  
+
+### **📌 Metacharacters and Wildcards**  
+- `*` → Matches any file (`ls *.c`).  
+- `?` → Matches a single character (`file?.txt`).  
+- `[abc]` → Matches one of the listed characters.  
+
+### **📌 Others**  
+- `&` → Runs a command in the background (**not required in Minishell**).  
+
+## **2️⃣ Builtin Commands to Implement**  
+Builtins are **internal commands** that must be implemented **without `execve()`**.  
+
+- `echo` → Prints text (handle `-n` to remove the newline).  
+- `cd` → Changes the current directory (`cd /path`, `cd ..`, `cd ~`).  
+- `pwd` → Prints the current directory.  
+- `export` → Sets an environment variable (`export VAR=value`).  
+- `unset` → Unsets an environment variable (`unset VAR`).  
+- `env` → Displays environment variables.  
+- `exit` → Exits the shell (`exit`, `exit 42`).  
+
+## **3️⃣ External Commands (Using `execve()`)**  
+If the user types a command that **is not a builtin**, Minishell must:  
+✅ **Search for the command in `$PATH`** (e.g., `/bin/ls`).  
+✅ **Execute the command via `execve()`**.  
+✅ **Handle errors (`command not found`, permissions, etc.).**  
+
+Examples:  
+- `ls -l`  
+- `/bin/echo "Hello"`  
+- `grep "text" file.txt`
+
+## **4️⃣ Signal Handling (`Ctrl + Keys`)**  
+Minishell must **catch certain signals** for proper behavior:  
+
+- **`Ctrl + C` (`SIGINT`)** → Interrupts the current command (but not the shell).  
+- **`Ctrl + D` (`EOF`)** → Exits the shell if entered on an empty line.  
+- **`Ctrl + \` (`SIGQUIT`)** → Ignored except for child processes.  
+
+## **5️⃣ Special Cases to Handle**  
+✅ **Empty command** (`""`, multiple spaces) → Should do nothing.  
+✅ **Invalid commands** (`xyzxyz`) → Print `command not found`.  
+✅ **Non-executable files (`chmod -x file`)** → Print `Permission denied`.  
+✅ **Non-existing files in redirections (`< file` with `file` missing)**.  
+✅ **Heredoc (`<< limiter`)** → Read until the `limiter` is reached.  
+✅ **Variable expansion in arguments** (`echo $USER`).  
+
+## **Summary**  
+In **Minishell**, you must handle:  
+✔ **All special characters** (redirections, pipes, expansions...).  
+✔ **All builtin commands** (`cd`, `echo`, `exit`, etc.).  
+✔ **All external commands** via `execve()`.  
+✔ **Signals (`Ctrl + C`, `Ctrl + D`, `Ctrl + \`)**.  
+✔ **Errors and edge cases** (invalid commands, permissions, etc.).  
+
 ## DOCUMENTATION:
 
 For explanations on functions and concepts already used in previous projects, refer to the README files of my other projects:
