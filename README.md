@@ -32,6 +32,7 @@ execute the program
 - Makefile (with rules: make bonus clean fclean re)
 - readme.md for quick explanation and main commands of the project
 
+
 ## MINISHELL INPUT HANDLING LIST
 
 ### **1. Special Characters to Parse and Handle**  
@@ -119,6 +120,7 @@ In **Minishell**, you must handle:
 ✔ **All external commands** via `execve()`.  
 ✔ **Signals (`Ctrl + C`, `Ctrl + D`, `Ctrl + \`)**.  
 ✔ **Errors and edge cases** (invalid commands, permissions, etc.).
+
 
 ## ORDER OF PRIORITY FOR HANDLING USER INPUT IN MINISHELL
 To ensure **correct execution** of commands, the **parsing and processing** of user input should follow a structured approach. Here’s the recommended order:
