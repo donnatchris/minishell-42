@@ -360,550 +360,1017 @@ Install libreadline if needed (Macos)
 
 ---
 
-### readline()
+### `readline()`  
 
-> #include <readline/readline.h>
->
-> #include <readline/history.h>
+> #include <readline/readline.h>  
 ```c
 char *readline(const char *prompt);
+```  
+
+- `prompt`: A string that is displayed to the user before waiting for input. It can be used to guide or prompt the user for specific input.  
+
+- **Returns**: A pointer to the string containing the user input. The input is allocated dynamically, and it's the responsibility of the caller to `free()` the returned string when done.
+
+The `readline()` function is part of the GNU Readline library, which provides a way to read a line of input from the user, allowing for advanced line-editing features like command history, input completion, and more.
+
+#### **Key Use Cases**  
+- **Interactive shell programs**: `readline()` is commonly used to implement interactive shell programs, where the user enters commands, and the shell reads and processes the input.
+- **Command-line applications**: It is used to gather user input with advanced editing features, such as cursor movement, history recall, and autocompletion.
+
+#### **How It Works**  
+When `readline()` is called, the program:
+1. Displays the prompt string to the user.
+2. Waits for the user to input a line of text (terminated by pressing Enter).
+3. Processes the input, including handling any backspace or arrow key presses for editing the text.
+4. Returns the input as a dynamically allocated string.
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <readline/readline.h>
+
+int main(void)
+{
+    char *input = readline("Enter command: ");
+    
+    if (input)
+    {
+        printf("You entered: %s\n", input);
+        free(input);  // Don't forget to free the memory!
+    }
+    
+    return 0;
+}
 ```
-- `prompt`: A string displayed as a prompt before reading user input.
-- **Returns**: The string fetched from the input.
 
-The `readline()` function is part of the GNU Readline library and is used to read a line of text from standard input with advanced editing features.
-It waits for user input until they press Enter.
-The function provides line-editing capabilities, allowing navigation and modification of text using keyboard shortcuts such as arrow keys, Ctrl+A, and Ctrl+E.
-It also supports command history, enabling users to recall previous inputs.
+#### **Error Handling**  
+- If `readline()` encounters an error or the input is incomplete, it may return `NULL`. This can happen if there are issues with input buffering or memory allocation.
+- If the user presses Ctrl+D (end of input), `readline()` returns `NULL`, which can be handled by checking for `NULL` to detect when the user ends the session.
 
-It returns a dynamically allocated string containing the entered line, without the newline character.
-This string must be freed using `free()` after use.
-
-For the Minishell project, `readline()` is essential for handling interactive user input.
-It can be integrated with command history using `add_history()`.
-Proper memory management is required, ensuring that allocated strings are freed when no longer needed.
-Additionally, signal handling (`SIGINT`, `SIGQUIT`) should be implemented to maintain a clean and responsive shell experience.
+#### **In Minishell**  
+In **Minishell**, you will use `readline()` to:  
+✅ **Prompt the user for commands** interactively and capture the input.  
+✅ **Read and edit user input** with line-editing features (e.g., backspace, history, and autocompletion).  
+✅ **Handle user input gracefully** with proper error detection (e.g., `NULL` return value) and freeing of the allocated memory.
 
 ---
 
-### rl_clear_history()
+### `rl_clear_history()`  
 
-> #include <readline/readline.h>
->
-> #include <readline/history.h>
+> #include <readline/readline.h>  
 ```c
 void rl_clear_history(void);
+```  
+
+- **Returns**: None.
+
+The `rl_clear_history()` function is part of the GNU Readline library and is used to clear the history list that is maintained during the session. The history list contains previously entered commands or inputs and is used to facilitate features like history navigation, autocompletion, and repeating commands.
+
+#### **Key Use Cases**  
+- **Clear command history**: Useful when you want to clear all the history entries, perhaps before starting a new session or after certain commands that you don’t want to persist in the history.
+- **Privacy and security**: In scenarios where sensitive or private commands should not be retained in the history, this function ensures the history is erased.
+
+#### **How It Works**  
+When `rl_clear_history()` is called:
+1. It deletes all entries in the history list.
+2. Any previously entered commands or inputs are removed, effectively resetting the history tracking.
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+int main(void)
+{
+    // Simulate adding a command to history
+    add_history("echo Hello, World!");
+    add_history("ls -l");
+    
+    // Clear the history
+    rl_clear_history();
+    
+    // Confirm clearing the history
+    if (history_length == 0)
+    {
+        printf("History cleared successfully.\n");
+    }
+    else
+    {
+        printf("History still contains %d entries.\n", history_length);
+    }
+
+    return 0;
+}
 ```
-- The function takes no arguments and returns nothing.
 
-The `rl_clear_history()` function is part of the GNU Readline library and is used to completely erase the stored command history from memory.
-It removes all entries from the history list, making subsequent calls to `history_list()` return an empty list.
+#### **Error Handling**  
+- This function doesn't typically encounter errors in usage. However, if the history was not previously initialized, calling `rl_clear_history()` will simply not have any effect.
 
-This function is useful when you want to reset the history without closing the program, such as after a certain number of commands or when requested by the user.
-However, `rl_clear_history()` does not free the memory allocated for previous entries; it only clears the list.
-For better memory management, `clear_history()` can be used as an alias for `rl_clear_history()`.
+#### **In Minishell**  
+In **Minishell**, you will use `rl_clear_history()` to:  
+✅ **Clear the history** when starting a new session or when specific commands (e.g., clearing sensitive data) require the history to be erased.  
+✅ **Ensure privacy** by removing stored commands from the history before exiting or after certain actions are completed.  
+✅ **Maintain a clean session** by removing any irrelevant or outdated commands from the history.
 
 ---
 
-### rl_on_new_line()
+### `rl_on_newline()`  
 
-> #include <readline/readline.h>
->
-> #include <readline/history.h>
+> #include <readline/readline.h>  
 ```c
-void (*rl_on_new_line_hook)(void);
-```
-- The function takes no arguments and returns nothing.
+void rl_on_newline(void);
+```  
 
-The `rl_on_new_line()` function is used in the context of the GNU Readline library, which allows for interactive user input management in command-line programs.
-This function is typically used to define custom behavior when the user presses the Enter key in a Readline-based interface.
-It is a hook function that gets automatically called by Readline when the Enter key is pressed.
+- **Returns**: None.
 
-To use it, you define a custom function and assign it to the `rl_on_new_line hook`.
-This allows you to execute specific actions, such as validating input, logging, or modifying the input before it is processed by the program.
-Readline also supports other hooks for different events, and you can disable rl_on_new_line by setting it to `NULL`.
-Overall, `rl_on_new_line()` is a powerful tool for customizing Readline behavior when the user presses Enter, enabling richer and more controlled command-line interactions.
+The `rl_on_newline()` function is part of the GNU Readline library and is used to instruct the Readline library that the user has pressed the Enter (newline) key. This can be useful in scenarios where Readline needs to perform an action or respond to the user after receiving a newline, such as processing the input or triggering certain behaviors in the command-line interface.
 
-#### How to use it
+#### **Key Use Cases**  
+- **Explicit newline handling**: In some applications, when processing commands or input, you may want to manually signal to Readline that a newline has been encountered, especially if you're manually handling input processing.
+- **Trigger action after new line**: Useful when implementing custom behaviors that need to occur immediately after the user presses Enter, such as executing a command or cleaning up input buffers.
 
-You can assign your own custom function to the `rl_on_new_line hook` using this syntax:
+#### **How It Works**  
+When `rl_on_newline()` is called:
+1. It sets an internal flag indicating that the user has pressed Enter.
+2. This flag can be used by Readline's internal mechanisms to trigger any necessary actions that would be handled after a newline input.
+
+#### **Example Usage**
 ```c
-rl_on_new_line_hook = my_own_on_newline_function;
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+int main(void)
+{
+    char *input = readline("Enter a command: ");
+    if (input)
+    {
+        // Simulate processing after newline
+        rl_on_newline();  // Trigger action after Enter is pressed
+        printf("You entered: %s\n", input);
+        free(input);
+    }
+
+    return 0;
+}
 ```
-This allows you to define custom behavior that will be executed every time the user presses the Enter key.
-Make sure your custom function follows the expected prototype:
 
-	void my_own_on_newline_function(void);
+#### **Error Handling**  
+- This function doesn’t generally encounter errors but relies on the correct internal state of the Readline library. If the library is not initialized properly, it may not have the desired effect.
 
-This ensures that the function takes no arguments and returns nothing, as required by Readline.
+#### **In Minishell**  
+In **Minishell**, you will use `rl_on_newline()` to:  
+✅ **Trigger actions after the user presses Enter** during command input, such as executing the command or processing input.  
+✅ **Enable proper handling** of newlines when working with the Readline library, especially when customizing the behavior after receiving user input.  
+✅ **Coordinate with other input handling functions** to ensure smooth user interactions, especially for custom readline configurations.
 
 ---
 
-### rl_replace_line()
+### `rl_replace_line()`  
 
-> #include <readline/readline.h>
->
-> #include <readline/history.h>
+> #include <readline/readline.h>  
 ```c
-void rl_replace_line(const char *text, int cursor_pos);
+void rl_replace_line(const char *text, int clear_undo);
+```  
+
+- `text`: The new string that will replace the current line in the Readline buffer.
+- `clear_undo`: A flag indicating whether to clear the undo history. If set to a non-zero value, the undo history will be cleared. If set to `0`, the undo history is preserved.
+
+- **Returns**: None.
+
+The `rl_replace_line()` function replaces the current line of input in the Readline buffer with the specified string (`text`). This function is typically used when you need to modify the current line being edited, such as in the case of completing a command or updating the prompt.
+
+#### **Key Use Cases**  
+- **Line modification**: You might use `rl_replace_line()` if you want to change or update the line that the user is editing in the command prompt, without requiring the user to manually retype it.
+- **Implementing command completion**: When implementing auto-completion or other features where a part of the user's input needs to be replaced or modified.
+- **Interactive editing**: It can be useful for modifying the line after the user has input some text, but before they press Enter.
+
+#### **How It Works**  
+When `rl_replace_line()` is called:
+1. It replaces the current content of the line buffer with the string `text`.
+2. If `clear_undo` is set to `1`, it clears the undo history, meaning that any previous states of the line can no longer be undone.
+3. If `clear_undo` is set to `0`, the previous states of the line are retained in the undo history, allowing the user to undo the replacement.
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+int main(void)
+{
+    char *input = readline("Enter a command: ");
+    if (input)
+    {
+        // Replace the current line with a modified version
+        rl_replace_line("Modified command", 0);  // Line replaced, undo history preserved
+        printf("Modified input: %s\n", input);
+        free(input);
+    }
+
+    return 0;
+}
 ```
-- `text`: The new string to replace the current line,
-- `cursor_pos`: is the position of the cursor in the new line (if cursor_pos is negative, the cursor is placed at the end of the line).
 
-The `rl_replace_line()` function is part of the GNU Readline library, which allows for interactive user input management in command-line programs.
-This function replaces the content of the current input line with a new string.
-It is useful for dynamically modifying what the user sees in the command line, such as correcting input, displaying suggestions, or updating the display based on user actions.
+#### **Error Handling**  
+- There are no common error conditions for this function, but it requires proper initialization of the Readline library. If the Readline library isn't set up or the input line is invalid, unexpected behavior may occur.
 
-The function updates the display of the input line in the user interface.
-Common use cases include automatic correction, dynamic suggestions, updating the interface based on user actions, and replacing text.
-For example, you can use it to correct a misspelled command, display autocomplete suggestions, or insert a file path.
-An example of its usage is `rl_replace_line("New input line", -1)`, which replaces the current input line with "New input line" and places the cursor at the end.
-The cursor position is important as it determines where the user can continue typing
-Overall, `rl_replace_line()` is a powerful function for dynamically manipulating the input line in a Readline-based interface,
-enabling richer and more interactive command-line experiences.
+#### **In Minishell**  
+In **Minishell**, you will use `rl_replace_line()` to:  
+✅ **Modify the current line** being edited in response to auto-completion, command corrections, or other interactive features.  
+✅ **Update the user input buffer** without requiring the user to retype commands or responses.  
+✅ **Control the undo history** for fine-grained management of changes made to the line while editing.
 
 ---
 
-### rl_redisplay()
+### `rl_redisplay()`  
 
-> #include <readline/readline.h>
->
-> #include <readline/history.h>
+> #include <readline/readline.h>  
 ```c
 void rl_redisplay(void);
-```
-- The function takes no arguments and returns nothing.
+```  
 
-The `rl_redisplay()` function is part of the GNU Readline library, which allows for interactive user input management in command-line programs.
-This function refreshes or redisplays the current input line in the user interface.
-It is useful when you want to update the display of the input line after making adjustments or modifications, without having to replace the entire content of the line.
+- **Returns**: None.
 
-When `rl_redisplay()` is called, it refreshes the display of the current input line based on its current state,
-including the cursor position, content, and any other display parameters.
-This function is often used after modifications to the input line, such as insertions, deletions, or cursor movements, to ensure the display is up to date.
-Common use cases include updating the display after modifying the input line content, refreshing the display after programmatically moving the cursor,
-and correcting the display if it becomes incorrect or misaligned.
-For example, you can use `rl_redisplay()` after inserting or deleting text, moving the cursor with functions like `rl_beginning_of_line` or `rl_end_of_line`,
-or adjusting the display due to changes in the terminal size.
-An example of its usage is `rl_redisplay()`, which refreshes the input line display after modifying its content.
-The function ensures that the display is consistent and up to date, which is important for maintaining a smooth and responsive user experience.
-Overall, `rl_redisplay()` is an essential function for keeping the input line display consistent and up to date in a Readline-based interface, enabling more fluid and interactive command-line interactions.
+The `rl_redisplay()` function forces Readline to re-render the current line of input, effectively redisplaying the current buffer to the terminal. This function is useful when the line needs to be updated or redrawn after changes have been made, such as after modifying the line with `rl_replace_line()`, or to handle cases where the screen has been cleared or resized.
 
----
+#### **Key Use Cases**  
+- **Line updates**: If you modify the current line using `rl_replace_line()`, you may need to call `rl_redisplay()` to reflect those changes on the terminal.
+- **Terminal resizing**: When the terminal is resized, or the screen is cleared, `rl_redisplay()` ensures that the line is re-rendered correctly at the new position.
+- **Prompt updating**: After updating the prompt dynamically, `rl_redisplay()` can be called to immediately display the changes to the user.
+- **Interactive shell behavior**: In shells, this is useful for keeping the user interface responsive, especially when interacting with the command prompt or implementing real-time features.
 
-### add_history()
+#### **How It Works**  
+After `rl_redisplay()` is called:
+1. The current line in the Readline buffer is redrawn on the terminal.
+2. It ensures that any changes to the line or prompt are immediately visible to the user, making the shell interface more responsive and user-friendly.
 
-> #include <readline/readline.h>
->
-> #include <readline/history.h>
+#### **Example Usage**
 ```c
-void add_history(const char *string);
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+int main(void)
+{
+    char *input = readline("Enter a command: ");
+    if (input)
+    {
+        rl_replace_line("Modified command", 0);  // Modify the line
+        rl_redisplay();  // Redisplay the updated line
+        free(input);
+    }
+
+    return 0;
+}
 ```
-- `string`: A character string representing the command or user input to be added to the history.
-- **Returns**: Nothing.
 
-The `add_history()` function is part of the GNU Readline library, which allows for managing command history in command-line interfaces.
-This function is used to add a user input entry to the command history, enabling the system to keep track of previous commands for later reuse.
+#### **Error Handling**  
+- There are no common error conditions for `rl_redisplay()`. However, it is important that Readline is properly initialized before using this function, as it depends on the internal state of the Readline library to function correctly.
 
-When `add_history()` is called, the string passed as an argument is added to the command history.
-The history is an ordered list of previous commands, and each new entry is appended to the end of this list.
-The history can be accessed and reused by the user using navigation keys (such as the up/down arrows) or specific Readline commands.
-Common use cases include preserving user-entered commands for later reuse, customizing the history by adding specific commands or suggestions,
-and dynamically adding commands to the history based on user actions.
-For example, you can use `add_history()` to save commands entered by the user, add frequently used commands to the history for quick access,
-or dynamically generate and add commands to the history in an interactive interface.
-
-An example of its usage is `add_history(input)`, which adds the user input to the command history after it is entered.
-The function ensures that commands are saved and can be reused, which is important for providing a smooth and efficient user experience.
-Additionally, Readline can be configured to save the history to a file, allowing it to persist across sessions.
-Users can navigate the command history using navigation keys or specific Readline commands.
-Overall, add_history is an essential function for managing command history in a Readline-based interface, enabling more fluid and efficient command-line interactions.
+#### **In Minishell**  
+In **Minishell**, you will use `rl_redisplay()` to:  
+✅ **Update and redraw the current command line** after modifying it, ensuring the user sees the latest changes.  
+✅ **Handle screen updates** efficiently when the terminal is resized or when dynamic prompts are used.  
+✅ **Ensure the terminal display remains consistent** during command-line editing, improving the user experience.
 
 ---
 
-### access()
+### `add_history()`  
 
-> #include <unistd.h>
+> #include <readline/readline.h>  
 ```c
-int access(const char *pathname, int mode);
-```
-- `pathname`: A string representing the path of the file or directory whose permissions you want to check.
-- `mode`: An integer specifying the type of permission to check.
-- **Returns**: `0` if access is permitted, `-1` on failure, and the global variable errno is set to indicate the error.
+int add_history(const char *line);
+```  
 
-The `access()` function in C is used to check the access permissions of a file or directory.
-It allows you to determine if the current user has permission to read, write, or execute a specific file.
-This function is particularly useful for performing security checks or ensuring that file operations are permitted before executing them.
+- **`line`**: A string representing the line to be added to the history list.  
+- **Returns**: `0` on success, or `-1` on error.
 
-Possible values for mode are:
-- `F_OK`: Checks if the file exists.
-- `R_OK`: Checks if the file is readable.
-- `W_OK`: Checks if the file is writable.
-- `X_OK`: Checks if the file is executable.
+The `add_history()` function adds a new line of text to the Readline history list, allowing it to be recalled in subsequent shell sessions or during command-line navigation (e.g., using the up and down arrow keys). This history list is maintained in memory and can be saved or loaded from a file using other Readline functions.
 
-These values can be combined using the bitwise OR operator | to check multiple permissions at once (e.g., `R_OK` | `W_OK`).
+#### **Key Use Cases**  
+- **Command history**: Keeps track of commands that the user has entered, enabling the ability to recall previous commands for convenience.
+- **Shell history navigation**: Enables shell users to navigate through past commands by pressing the up and down arrow keys.
+- **Persistent history**: When combined with functions like `read_history()` and `write_history()`, `add_history()` allows for persistent command history across sessions.
 
-The access function checks permissions based on the effective privileges of the current user.
-This means it considers the file's permission bits and the system's security rules (such as ACLs or capabilities).
-If the function fails, the global variable errno can be used to get information about the error.
-For example, errno might be set to `EACCES` if access is denied or `ENOENT` if the file does not exist.
+#### **How It Works**  
+When `add_history()` is called:
+1. The provided `line` is added to the history list stored in the Readline library.
+2. The history list is then available for navigation through Readline's built-in line-editing features (such as using the arrow keys to recall previous commands).
+3. The history list can be saved to or loaded from a file using `write_history()` and `read_history()`, respectively, to ensure history persists across sessions.
 
-The access function is often used for security checks, such as ensuring a file is readable before opening it or that a directory is executable before accessing it.
-In summary, access is an essential function for checking file or directory access permissions in C, ensuring that file operations are authorized and secure.
-
----
-
-### wait3()
-
-> #include <sys/types.h>
->
-> #include <sys/wait.h>
->
-> #include <sys/resource.h>
-
+#### **Example Usage**
 ```c
-pid_t wait3(int *status, int options, struct rusage *rusage);
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+int main(void)
+{
+    char *input = readline("Enter a command: ");
+    if (input)
+    {
+        add_history(input);  // Add the entered command to history
+        free(input);
+    }
+
+    return 0;
+}
 ```
-- `status`: A pointer to an integer where the termination status of the child process will be stored.
-- `options`: An integer representing behavior options (e.g., `WNOHANG` or `WUNTRACED`).
-- `rusage`: A pointer to a `struct rusage` where resource usage information will be stored.
-- **Returns**: The PID of the terminated child process, or `-1` on error.
 
+#### **Error Handling**  
+- If the `line` is `NULL` or invalid, the function will return `-1`.  
+- If there is an issue with memory allocation or managing the history list internally, it will return `-1` as well.
 
-The `wait3()` function extends the functionality of `wait()` by allowing you to retrieve detailed information about the resource usage of a terminated child process. Here’s what `wait3()` offers:
-
-#### **1. Retrieving Termination Status**
-Like `wait()`, `wait3()` allows you to retrieve the termination status of the child process via a pointer to an integer (`int *status`). This includes information such as:
-- The exit code of the child process.
-- Whether the process was terminated by a signal, and if so, which signal.
-
-#### **2. Retrieving Resource Usage Information**
-Unlike `wait()`, `wait3()` also allows you to retrieve detailed information about the resource usage of the terminated child process. This includes metrics such as:
-- CPU time used (user and system time).
-- Memory usage.
-- Number of page faults.
-- Number of disk reads/writes.
-- Other resource-related statistics.
-
-This information is stored in a `struct rusage`, which you pass as the third argument to `wait3()`.
-
-#### **3. Additional Options**
-Like `waitpid()`, `wait3()` accepts a second argument (`int options`) to control its behavior. For example:
-- `WNOHANG`: If this option is specified, `wait3()` returns immediately if no child process has exited.
-- `WUNTRACED`: If this option is specified, `wait3()` also reports stopped child processes (e.g., those stopped by `SIGSTOP`).
+#### **In Minishell**  
+In **Minishell**, you will use `add_history()` to:  
+✅ **Add the user's commands** to the history list, allowing easy recall of past commands in future sessions.  
+✅ **Enhance user experience** by enabling seamless navigation through previously entered commands using the up and down arrow keys.  
+✅ **Store history** that can be persisted across shell sessions by saving to or loading from a file.
 
 ---
 
-### wait4()
+### `access()`  
 
-> #include <sys/types.h>
->
-> #include <sys/wait.h>
->
-> #include <sys/resource.h>
-```c
-pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage);
-```
-- `pid`: The PID of the child process to wait for. You can use special values like:
-  - `-1`: Wait for any child process.
-  - `0`: Wait for any child process in the same process group as the caller.
-  - A positive value: Wait for a specific child process with the given PID.
-- `status`: A pointer to an integer where the termination status of the child process will be stored.
-- `options`: An integer representing behavior options (e.g., `WNOHANG` or `WUNTRACED`).
-- `rusage`: A pointer to a `struct rusage` where resource usage information will be stored.
-- **Returns**: The PID of the terminated child process, `0` if no child matches the criteria, or `-1` on error.
-The `wait4()` function is essentially the same as `wait3()`, but it adds one additional feature: **the ability to wait for a specific child process**. This is done by passing the PID of the child process as the first argument.
-
-#### **Summary of `wait3()` vs `wait4()`**
-- `wait3()`: Waits for **any child process** to terminate and retrieves its termination status and resource usage information.
-- `wait4()`: Allows you to wait for a **specific child process** (or any child process, depending on the `pid` argument) and retrieves the same information as `wait3()`.
-
-Both functions are more powerful than `wait()` because they provide detailed resource usage information and support additional options like `WNOHANG` and `WUNTRACED`.
-
----
-
-### exit()
-
-> #include <stdlib.h>
-```c
-void exit(int status);
-```
-- `status`: An integer representing the exit status code of the program. By convention:
-  - `0` or `EXIT_SUCCESS`: Indicates that the program terminated successfully.
-  - Any other value (or `EXIT_FAILURE`): Indicates an error or failure.
-- **Returns**: Nothing.
-
-The `exit()` function in C is used to terminate a program normally.
-It allows you to specify an **exit status code** that can be retrieved by the parent process or used to indicate the success or failure of the program.
-Here is a detailed explanation of how it works, especially in the context of child and parent processes, and what it cleans up.
-
-#### **How `exit()` Works**
-1. **Program Termination**:
-   - The `exit()` function immediately terminates the currently running program.
-   - It never returns to the caller.
-
-2. **Resource Cleanup**:
-   - Before terminating the program, `exit()` performs cleanup of dynamically allocated resources:
-     - **Output Buffers**: The stdout and stderr buffers are flushed, ensuring that all pending data is written.
-     - **Functions Registered with `atexit()`**: These functions are called in reverse order of their registration, allowing custom cleanup tasks to be executed.
-     - **Temporary Files**: Files created with `tmpfile()` or `tmpnam()` are closed and deleted.
-
-3. **Exit Status Code**:
-   - The exit status code (`status`) is returned to the operating system and can be retrieved by the parent process using functions like `wait()`, `waitpid()`, or `wait3()`.
-
-#### **Behavior in Child and Parent Processes**
-- **Child Process**:
-  - When a child process calls `exit()`, it terminates immediately and returns the exit status code to the parent process.
-  - The parent process can retrieve this code using functions like `wait()`, `waitpid()`, or `wait3()`.
-  - For example, if a child process executes `exit(42)`, the parent can check this code to determine if the child terminated successfully or with an error.
-
-- **Parent Process**:
-  - If the parent process calls `exit()`, it terminates as well, along with any child processes that are not running in the background (background child processes may continue running).
-  - The parent's exit status code can be used by the operating system or another process to determine the success or failure of the program.
-
-#### **What `exit()` Cleans Up**
-1. **Output Buffers**:
-   - The stdout and stderr buffers are flushed, ensuring that all pending data is written before the program terminates.
-
-2. **Functions Registered with `atexit()`**:
-   - Functions registered with `atexit()` are called in reverse order of their registration, allowing custom cleanup tasks to be executed.
-
-3. **Temporary Files**:
-   - Temporary files created with `tmpfile()` or `tmpnam()` are closed and deleted.
-
-4. **System Resources**:
-   - Dynamically allocated resources (e.g., memory) are released by the operating system.
-
-5. **Closure of all file descriptors opened by the process.**
-
-
-#### **Difference Between `exit()` and `_exit()`**
-- **`exit()`**:
-  - Performs a full cleanup (flushes buffers, calls `atexit()` functions, etc.).
-  - Used for normal program termination.
-
-- **`_exit()`**:
-  - Terminates the program immediately without performing cleanup (buffers are not flushed, `atexit()` functions are not called).
-  - Used in cases where cleanup is not necessary or desired (e.g., in a child process after a critical error).
-
-#### **Summary**
-- `exit()` terminates a program normally and performs cleanup of resources (flushes buffers, calls `atexit()` functions, etc.).
-- In the context of child and parent processes, the exit status code returned by `exit()` can be retrieved by the parent to determine the success or failure of the child.
-- `exit()` is ideal for clean and controlled termination, while `_exit()` is used for immediate termination without cleanup.
-
----
-
-### `getcwd()`
-
-> #include <unistd.h>
-
-```c
-char *getcwd(char *buf, size_t size);
-```
-- `buf`: A pointer to a character array where the current working directory will be stored.  
-- `size`: The size of the buffer in bytes.  
-- **Returns**: A pointer to the buffer containing the current working directory on success, or `NULL` on error.  
-
-The `getcwd()` function retrieves the absolute pathname of the current working directory and stores it in the provided buffer.
-It is commonly used in shell implementations and file management applications to determine the current directory of a process.  
-
-#### Retrieving the Current Working Directory  
-`getcwd()` fills the buffer with the full path of the current working directory.
-The `size` parameter must be large enough to hold the pathname, including the null terminator.
-If the buffer is too small, the function returns `NULL` and sets `errno` to `ERANGE`.  
-
-#### Handling Dynamic Memory Allocation  
-If `buf` is set to `NULL`, `getcwd()` dynamically allocates memory to store the pathname.
-The returned pointer must be freed using `free()` to avoid memory leaks.  
-
-#### Error Handling  
-`getcwd()` may fail in several cases:  
-- If the buffer size is too small, it returns `NULL` with `errno` set to `ERANGE`.  
-- If the current directory is inaccessible due to permission issues, it returns `NULL` with `errno` set to `EACCES`.  
-- If the process does not have sufficient memory to allocate a buffer dynamically, it returns `NULL` with `errno` set to `ENOMEM`.  
-
-Using `getcwd()` properly ensures that a program can reliably determine and use the current working directory while handling potential errors gracefully.
-
----
-
-### chdir()
-
-> #include <unistd.h>
-```c
-int chdir(const char *path);
-```
-- `path`: A string representing the absolute or relative path to the new working directory.  
-- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
-
-The `chdir()` function changes the current working directory of the calling process to the directory specified by `path`.
-It is commonly used in shell implementations and file management applications to navigate through the filesystem.  
-
-#### Changing the Current Working Directory  
-When `chdir()` is called, the process's working directory is updated to the specified `path`.
-Any subsequent file operations that use relative paths will be based on this new directory.  
-
-#### Permissions and Accessibility  
-The process must have **execute (`X`) permissions** on the target directory.
-If the directory does not exist or is inaccessible, the function fails and returns `-1`, setting `errno` to indicate the error.  
-
-#### Error Handling  
-`chdir()` may fail in several cases:  
-- If `path` does not exist, it returns `-1` with `errno` set to `ENOENT`.  
-- If `path` is not a directory, it returns `-1` with `errno` set to `ENOTDIR`.  
-- If the process lacks the necessary permissions, it returns `-1` with `errno` set to `EACCES`.  
-- If the system encounters a resource limitation, it returns `-1` with `errno` set to `ENOMEM` or `EIO`.  
-
-Properly handling `chdir()` ensures that a program can reliably navigate directories while avoiding permission issues and other potential errors.
-
----
-
-### stat()
-
-> #include <sys/types.h>
->
-> #include <sys/stat.h>
-> 
-> #include <unistd.h>
-```c
-int stat(const char *pathname, struct stat *buf);
-```
-- `pathname`: A string representing the path to the file or directory whose information is to be retrieved.  
-- `buf`: A pointer to a `struct stat` where the file's metadata will be stored.  
-- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
-
-The `stat()` function retrieves detailed information about a file or directory and stores it in the provided `struct stat`.
-It is commonly used in shell implementations, file management applications, and system monitoring tools to check file attributes such as size, permissions, and timestamps.  
-
-#### Retrieving File Information  
-When `stat()` is called, it fills the `struct stat` with metadata about the specified file, including:  
-- **File type** (regular file, directory, symbolic link, etc.).  
-- **Permissions** (read, write, execute for user, group, and others).  
-- **File size** (in bytes).  
-- **Number of hard links** to the file.  
-- **Timestamps** (last access, modification, and status change).  
-- **Owner and group ID** of the file.  
-
-#### Difference Between `stat()` and `lstat()`
-- `stat()` follows symbolic links and returns information about the target file.
-- `lstat()` does **not** follow symbolic links and returns information about the link itself.
-
-#### Error Handling
-`stat()` may fail in several cases:  
-- If `pathname` does not exist, it returns `-1` with `errno` set to `ENOENT`.  
-- If `pathname` is a symbolic link pointing to a non-existent file, it returns `-1` with `errno` set to `ENOENT`.  
-- If the process lacks permission to access the file, it returns `-1` with `errno` set to `EACCES`.  
-- If `buf` is an invalid pointer, it returns `-1` with `errno` set to `EFAULT`.  
-
-Using `stat()` correctly allows a program to inspect files and directories efficiently while handling potential errors gracefully.
-
----
-
-### lstat()
-
-> #include <sys/types.h>
-> 
-> #include <sys/stat.h>
-> 
-> #include <unistd.h>
-```c
-int lstat(const char *pathname, struct stat *buf);
-```
-- `pathname`: A string representing the path to the file or symbolic link whose information is to be retrieved.  
-- `buf`: A pointer to a `struct stat` where the file's metadata will be stored.  
-- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
-
-The `lstat()` function retrieves metadata about a file, similar to `stat()`, but **does not follow symbolic links**. Instead, if the specified path is a symbolic link, `lstat()` returns information about the link itself rather than the target file. It is commonly used in file management applications and shell implementations to differentiate between symbolic links and regular files.  
-
-#### Retrieving File and Link Information  
-When `lstat()` is called, it fills the `struct stat` with metadata about the specified file or link, including:  
-- **File type** (regular file, directory, symbolic link, etc.).  
-- **Permissions** (read, write, execute for user, group, and others).  
-- **File size** (in bytes).  
-- **Number of hard links** to the file.  
-- **Timestamps** (last access, modification, and status change).  
-- **Owner and group ID** of the file or link.  
-
-If `pathname` is a **symbolic link**, `lstat()` provides information about the link itself, including its size (the length of the path it points to) and permissions, rather than the target file's attributes.  
-
-#### Difference Between `lstat()` and `stat()`  
-- `lstat()` **does not follow** symbolic links and retrieves information about the link itself.  
-- `stat()` **follows** symbolic links and returns information about the target file.  
-
-#### Error Handling  
-`lstat()` may fail in several cases:  
-- If `pathname` does not exist, it returns `-1` with `errno` set to `ENOENT`.  
-- If the process lacks permission to access the file, it returns `-1` with `errno` set to `EACCES`.  
-- If `buf` is an invalid pointer, it returns `-1` with `errno` set to `EFAULT`.  
-
-Using `lstat()` correctly allows a program to inspect symbolic links and files while handling potential errors gracefully.
-
----
-
-### `fstat()`
-
-> #include <sys/types.h>
-> 
-> #include <sys/stat.h>
-> 
 > #include <unistd.h>  
 ```c
-int fstat(int fd, struct stat *buf);
+int access(const char *pathname, int mode);
+```  
+
+- **`pathname`**: The path to the file or directory to be checked.  
+- **`mode`**: A bitmask that specifies the checks to be performed. It can be one or more of the following values:
+  - `R_OK`: Check if the file is readable.
+  - `W_OK`: Check if the file is writable.
+  - `X_OK`: Check if the file is executable.
+  - `F_OK`: Check if the file exists.
+- **Returns**: `0` if the specified file exists and the requested access is permitted, or `-1` on error with `errno` set accordingly.
+
+The `access()` function checks the accessibility of a file or directory. It checks whether the current process has the required permissions (read, write, execute) for the specified file. It can also verify the existence of the file, based on the mode flags passed.
+
+#### **Key Use Cases**  
+- **Permission checks**: Determine if a file is readable, writable, or executable before attempting operations on it.
+- **File existence check**: Check if a file or directory exists without attempting to open it.
+- **Pre-checking file accessibility**: Prevent errors by checking access permissions before performing actions like opening or executing a file.
+
+#### **How It Works**  
+`access()` checks the file specified by `pathname` based on the access mode passed in `mode`.  
+- If the check is successful, `access()` returns `0`, indicating the file exists and the required access is allowed.
+- If the check fails (e.g., the file does not exist or the user does not have permission), `access()` returns `-1` and sets `errno` to the appropriate error code (e.g., `ENOENT` for "No such file or directory").
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <unistd.h>
+
+int main(void)
+{
+    if (access("/path/to/file.txt", F_OK) == 0)
+    {
+        printf("File exists!\n");
+    }
+    else
+    {
+        perror("File check failed");
+    }
+
+    return 0;
+}
 ```
-- `fd`: A file descriptor referring to an open file.  
-- `buf`: A pointer to a `struct stat` where the file's metadata will be stored.  
-- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
 
-The `fstat()` function retrieves metadata about an **open file descriptor** and stores it in the provided `struct stat`. Unlike `stat()`, which operates on a file path, `fstat()` works with a file descriptor, making it useful when dealing with already-opened files.  
+#### **Error Handling**  
+- If `pathname` is `NULL`, or if the file cannot be accessed due to invalid arguments, `access()` will return `-1` and set `errno`.
+- The following error codes may be set:
+  - `ENOENT`: The file does not exist.
+  - `EACCES`: Permission denied for the requested access mode.
+  - `ENOTDIR`: A component of the pathname is not a directory.
 
-#### Retrieving File Information  
-When `fstat()` is called, it fills the `struct stat` with metadata about the file associated with `fd`, including:  
-- **File type** (regular file, directory, symbolic link, etc.).  
-- **Permissions** (read, write, execute for user, group, and others).  
-- **File size** (in bytes).  
-- **Number of hard links** to the file.  
-- **Timestamps** (last access, modification, and status change).  
-- **Owner and group ID** of the file.  
-
-#### Difference Between `fstat()`, `stat()`, and `lstat()`  
-- `stat()` retrieves metadata using a **file path** and follows symbolic links.  
-- `lstat()` retrieves metadata using a **file path** but does **not** follow symbolic links.  
-- `fstat()` retrieves metadata using a **file descriptor**, making it useful for files that are already open.  
-
-#### Error Handling  
-`fstat()` may fail in several cases:  
-- If `fd` is not a valid open file descriptor, it returns `-1` with `errno` set to `EBADF`.  
-- If `buf` is an invalid pointer, it returns `-1` with `errno` set to `EFAULT`.  
-- If `fd` refers to a file on an unreachable filesystem (e.g., a disconnected network drive), it returns `-1` with `errno` set to `EIO`.  
-
-Using `fstat()` correctly allows a program to inspect open files without needing their path, making it particularly useful for working with file descriptors from `open()`, `dup()`, or standard input/output streams.
+#### **In Minishell**  
+In **Minishell**, you will use `access()` to:  
+✅ **Check file existence** before attempting to execute or open it, preventing errors.  
+✅ **Verify the accessibility** of files to ensure the current user has the appropriate permissions to read, write, or execute.  
+✅ **Enhance user experience** by allowing conditional checks on file permissions before running commands or manipulating files.
 
 ---
 
-### `unlink()`
+### `wait3()`  
+
+> #include <sys/wait.h>  
+```c
+pid_t wait3(int *status, int options, struct rusage *rusage);
+```  
+
+- **`status`**: A pointer to an integer where the exit status of the child process will be stored. The value pointed to by `status` can be used with macros like `WIFEXITED`, `WEXITSTATUS`, `WIFSIGNALED`, etc., to analyze the child process’s termination state.  
+- **`options`**: A bitmask of options that affect how `wait3()` behaves. It can include flags such as `WNOHANG` (do not block if no child has exited), `WUNTRACED` (also wait for stopped child processes), or `WCONTINUED` (wait for continued child processes).  
+- **`rusage`**: A pointer to a `struct rusage` where resource usage information for the child process will be stored. This can include information like CPU time consumed, memory usage, etc. If `rusage` is `NULL`, no resource usage information is returned.  
+- **Returns**: The process ID of the child that terminated, or `-1` on error with `errno` set accordingly.
+
+`wait3()` is used by a parent process to wait for a child process to terminate. It behaves similarly to `wait()`, but in addition to returning the child’s termination status, it also allows you to retrieve resource usage information for the child process.
+
+#### **Key Use Cases**  
+- **Child process termination monitoring**: Used when you want to track when a child process finishes and optionally retrieve information about how it terminated.  
+- **Resource usage tracking**: Useful for monitoring how much CPU time or memory a child process consumed during execution.  
+- **Advanced process management**: `wait3()` provides more detailed information than `wait()`, especially in terms of resource usage.
+
+#### **How It Works**  
+The function `wait3()` waits for the termination of any child process. If one or more children have terminated, it returns immediately with the process ID of the child.  
+- If `rusage` is provided, `wait3()` will also fill in the `struct rusage` with the resource usage data for the child process.
+- If the `options` flag is set to `WNOHANG`, `wait3()` will return immediately if no child has terminated, instead of blocking.
+
+#### **Difference with `wait()`**  
+- **`wait()`**: Waits for the termination of a child process and returns its exit status. It doesn’t provide resource usage information.
+- **`wait3()`**: Like `wait()`, but also allows retrieval of resource usage data for the terminated child process through the `rusage` argument.
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <sys/resource.h>
+
+int main(void)
+{
+    pid_t pid;
+    int status;
+    struct rusage usage;
+
+    pid = fork();
+    if (pid == 0)
+    {
+        // Child process
+        printf("Child process executing\n");
+        _exit(0);
+    }
+    else
+    {
+        // Parent process
+        pid_t child_pid = wait3(&status, 0, &usage);
+        if (child_pid > 0)
+        {
+            printf("Child %d terminated\n", child_pid);
+            printf("CPU Time Used: %ld.%06ld seconds\n", usage.ru_utime.tv_sec, usage.ru_utime.tv_usec);
+        }
+        else
+        {
+            perror("wait3 failed");
+        }
+    }
+
+    return 0;
+}
+```
+
+#### **Error Handling**  
+- If `status` is `NULL`, `wait3()` will fail and return `-1` with `errno` set to `EFAULT`.
+- If `rusage` is invalid, `wait3()` may fail, returning `-1` and setting `errno`.
+- Other errors can be due to child processes not terminating or `wait3()` being unable to retrieve information.
+
+#### **In Minishell**  
+In **Minishell**, you will use `wait3()` to:  
+✅ **Wait for child processes to finish** and get detailed status information.  
+✅ **Monitor resource usage** of child processes (e.g., CPU and memory usage), which is useful for debugging or optimizing resource consumption.  
+✅ **Enhance process management** by providing a more advanced version of `wait()` that gives access to both exit status and resource usage details for child processes.
+
+---
+
+### `wait4()`  
+
+> #include <sys/wait.h>  
+```c
+pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage);
+```  
+
+- **`pid`**: The process ID of the child to wait for. If it is `-1`, `wait4()` waits for any child process to terminate. If it is `0`, it waits for any child process in the same process group. Otherwise, it waits for the specified process ID.  
+- **`status`**: A pointer to an integer where the exit status of the child process will be stored. The value pointed to by `status` can be used with macros like `WIFEXITED`, `WEXITSTATUS`, `WIFSIGNALED`, etc., to analyze the child process’s termination state.  
+- **`options`**: A bitmask of options that affect how `wait4()` behaves. It can include flags such as `WNOHANG` (do not block if no child has exited), `WUNTRACED` (also wait for stopped child processes), or `WCONTINUED` (wait for continued child processes).  
+- **`rusage`**: A pointer to a `struct rusage` where resource usage information for the child process will be stored. This can include information like CPU time consumed, memory usage, etc. If `rusage` is `NULL`, no resource usage information is returned.  
+- **Returns**: The process ID of the child that terminated, or `-1` on error with `errno` set accordingly.
+
+`wait4()` is similar to `wait3()`, but it offers more flexibility in selecting the child process to wait for. It is used to wait for the termination of a specific child process (or any child process if `pid == -1`), with the added benefit of collecting resource usage information.
+
+#### **Key Use Cases**  
+- **Child process termination monitoring**: Used when you want to track when a specific child process finishes and optionally retrieve information about how it terminated.  
+- **Resource usage tracking**: Useful for monitoring how much CPU time or memory a child process consumed during execution.  
+- **Advanced process management**: `wait4()` provides detailed information about a specified child process or any child process, with more fine-grained control than `wait()`.
+
+#### **How It Works**  
+The function `wait4()` behaves similarly to `wait()` and `wait3()`, but it allows you to:
+- Wait for a specific child process by passing its `pid`.
+- Retrieve resource usage information by providing a `struct rusage`.
+- Customize the behavior using the `options` argument (e.g., `WNOHANG` for non-blocking behavior).
+
+#### **Difference with `wait()` and `wait3()`**  
+- **`wait()`**: Waits for the termination of any child process and returns its exit status. It doesn’t allow for specifying which child process to wait for or retrieving resource usage data.
+- **`wait3()`**: Like `wait()`, but it allows retrieving resource usage information for the terminated child process.
+- **`wait4()`**: Allows for even more control over which child process to wait for (via the `pid` argument), while still providing resource usage details, like `wait3()`.  
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <sys/resource.h>
+
+int main(void)
+{
+    pid_t pid;
+    int status;
+    struct rusage usage;
+
+    pid = fork();
+    if (pid == 0)
+    {
+        // Child process
+        printf("Child process executing\n");
+        _exit(0);
+    }
+    else
+    {
+        // Parent process
+        pid_t child_pid = wait4(pid, &status, 0, &usage);
+        if (child_pid > 0)
+        {
+            printf("Child %d terminated\n", child_pid);
+            printf("CPU Time Used: %ld.%06ld seconds\n", usage.ru_utime.tv_sec, usage.ru_utime.tv_usec);
+        }
+        else
+        {
+            perror("wait4 failed");
+        }
+    }
+
+    return 0;
+}
+```
+
+#### **Error Handling**  
+- If `status` is `NULL`, `wait4()` will fail and return `-1` with `errno` set to `EFAULT`.
+- If `rusage` is invalid, `wait4()` may fail, returning `-1` and setting `errno`.
+- Other errors can be due to child processes not terminating or `wait4()` being unable to retrieve information.
+
+#### **In Minishell**  
+In **Minishell**, you will use `wait4()` to:  
+✅ **Wait for specific child processes to finish** and retrieve detailed status information.  
+✅ **Monitor resource usage** of child processes (e.g., CPU and memory usage), which is useful for debugging or optimizing resource consumption.  
+✅ **Enhance process management** by providing more control over which child process to wait for, and access to both exit status and resource usage details for the terminated child process.
+
+---
+
+### `exit()`  
+
+> #include <stdlib.h>  
+```c
+void exit(int status);
+```  
+
+- `status`: An integer status code. A `status` of `0` generally indicates success, while a non-zero value indicates an error or abnormal termination.  
+
+- **Returns**: This function does not return; it terminates the program.
+
+The `exit()` function is used to terminate a program. It performs a clean-up process before the program ends, ensuring that resources are released properly. The status code passed to `exit()` is returned to the environment, often used to indicate whether the program ended successfully or encountered an error.
+
+#### **Key Use Cases**  
+- **Graceful program termination**: Used when a program has completed its execution, or if it encounters an error that prevents further execution.
+- **Returning status code**: The status code can be used by the operating system or parent process to determine the result of the program execution.
+
+#### **How It Works**  
+When `exit()` is called, the following happens:
+1. The program begins the exit process.
+2. Functions registered via `atexit()` are called in reverse order.
+3. All open files are closed (similar to calling `fclose()`).
+4. Memory allocated dynamically via `malloc()`, `calloc()`, etc., is not automatically freed, but may be cleaned up by the operating system.
+5. The program returns the exit status code to the operating system.
+
+#### **Clean-Up Performed by `exit()`**
+Before the program terminates, `exit()` performs the following clean-up tasks:
+- **Closes all open file descriptors**: Files, sockets, etc., that were opened during the program's execution are closed. This prevents file descriptor leaks and ensures any changes to files are written back.
+- **Calls registered exit functions**: Any functions registered using `atexit()` are called in reverse order of registration. This allows users to perform final clean-up tasks (e.g., freeing dynamically allocated memory).
+- **Flushes output buffers**: Any buffered output that has not yet been written (e.g., in `stdout` or `stderr`) is flushed to ensure all data is output.
+- **Releases system resources**: The operating system may reclaim any resources (like memory and locks) used by the program.
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+    // Some code
+
+    if (/* some error condition */)
+    {
+        fprintf(stderr, "An error occurred!\n");
+        exit(1);  // Exit with status 1 indicating an error
+    }
+
+    // Normal program termination
+    exit(0);  // Exit with status 0 indicating success
+}
+```
+
+#### **Error Handling**  
+- If `exit()` is called without first performing necessary clean-up or freeing resources, some memory or file handles may be leaked.
+- The status code passed to `exit()` can provide information about how the program ended (e.g., `exit(0)` for success, `exit(1)` for error).
+
+#### **In Minishell**  
+In **Minishell**, you will use `exit()` to:  
+✅ **Terminate the shell** gracefully after executing commands or when an error occurs.  
+✅ **Return a status code** that indicates success or failure to the operating system or parent process.  
+✅ **Ensure resources are cleaned up** properly, such as closing file descriptors and calling exit functions for user-defined clean-up tasks.
+
+---
+
+### `getcwd()`  
+
+> #include <unistd.h>  
+```c
+char *getcwd(char *buf, size_t size);
+```  
+
+- **`buf`**: A pointer to a buffer where the absolute pathname of the current working directory will be stored. If `buf` is `NULL`, the function will allocate memory for the pathname dynamically (if `size` is large enough).
+- **`size`**: The size of the buffer `buf` in bytes. If the size is too small to store the full pathname, `getcwd()` will return `NULL` and set `errno` to `ERANGE`.  
+- **Returns**: A pointer to the `buf` on success, or `NULL` on error with `errno` set accordingly.
+
+The `getcwd()` function is used to retrieve the absolute pathname of the current working directory. It can either store the result in an existing buffer or allocate memory dynamically if necessary. 
+
+#### **Key Use Cases**  
+- **Get the current working directory**: Useful when you need to know the current directory where your program is running, especially before performing operations like changing directories or manipulating file paths.  
+- **Relative vs. Absolute Path**: When dealing with file paths, knowing the current working directory can help you construct absolute paths from relative ones.
+
+#### **How It Works**  
+`getcwd()` retrieves the current working directory and stores it in the buffer provided by the user. If the buffer is too small to hold the directory, it will fail and return `NULL`, with `errno` set to `ERANGE`. If `buf` is `NULL`, a dynamically allocated buffer will be used to store the result. You can later use `free()` to release that buffer if `buf` was `NULL`.
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+int main(void)
+{
+    char *cwd = getcwd(NULL, 0);
+    if (cwd)
+    {
+        printf("Current working directory: %s\n", cwd);
+        free(cwd);  // Free the dynamically allocated buffer
+    }
+    else
+    {
+        perror("getcwd failed");
+    }
+
+    return 0;
+}
+```
+
+#### **Error Handling**  
+- If `getcwd()` fails, it returns `NULL` and sets `errno` accordingly:
+  - `ENOMEM`: There was not enough memory to allocate a buffer.
+  - `ERANGE`: The buffer provided was too small to store the full path.
+  - `EINVAL`: The current directory is not valid (e.g., it was deleted after the process started).
+  - `EACCES`: The process does not have permission to access the current directory.
+
+#### **In Minishell**  
+In **Minishell**, you will use `getcwd()` to:  
+✅ **Get the current working directory** to show the user or to construct paths for commands  
+✅ **Verify the current directory** before performing operations like changing directories (`cd`)  
+✅ **Manage relative and absolute paths** when dealing with file operations in the shell
+
+---
+
+### `chdir()`  
+
+> #include <unistd.h>  
+```c
+int chdir(const char *path);
+```  
+
+- **`path`**: A string representing the path to the directory to which you want to change. This path can be either absolute or relative.
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.
+
+The `chdir()` function is used to change the current working directory of the calling process to the specified directory. This function updates the process's internal working directory, which will affect relative path resolutions (e.g., for file operations). It does not modify the actual file system but simply updates the process's state.
+
+#### **Key Use Cases**  
+- **Navigating directories**: It is used to change the process's working directory before executing commands that rely on relative paths.  
+- **Filesystem operations**: Useful when you want to programmatically change the current directory before performing file or directory operations in the shell or other programs.
+
+#### **How It Works**  
+When `chdir()` is called, the process's working directory is changed to the specified path. If the path is absolute, it starts from the root directory (`/`), while if it is relative, it is relative to the current working directory.
+
+The function does not affect the parent process's working directory and only changes the current directory of the calling process.
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <unistd.h>
+
+int main(void)
+{
+    if (chdir("/home/user") == 0)
+        printf("Changed directory successfully!\n");
+    else
+        perror("chdir failed");
+
+    return 0;
+}
+```
+
+#### **Error Handling**  
+- If `chdir()` fails, it returns `-1` and sets `errno`:
+  - `ENOENT`: The directory does not exist.
+  - `ENOTDIR`: A component of the path is not a directory.
+  - `EACCES`: Permission to access the directory is denied.
+  - `EINVAL`: The path provided is invalid.
+  - `ENOMEM`: Not enough memory to process the request.
+
+#### **In Minishell**  
+In **Minishell**, you will use `chdir()` to:  
+✅ **Change the current working directory** when executing the `cd` command.  
+✅ **Navigate to directories** based on user input (absolute or relative paths).  
+✅ **Handle errors gracefully** if the directory does not exist, is not accessible, or if other errors occur during navigation.
+
+---
+
+### `stat()`  
+
+> #include <sys/stat.h>  
+```c
+int stat(const char *path, struct stat *statbuf);
+```  
+
+- **`path`**: A string representing the path of the file or directory whose status you want to retrieve.
+- **`statbuf`**: A pointer to a `struct stat` where the file's status information will be stored.
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.
+
+The `stat()` function retrieves information about a file or directory and stores it in a `struct stat`. This structure contains various metadata about the file, such as its size, permissions, and timestamps.
+
+#### **Key Use Cases**  
+- **File Metadata**: `stat()` is used to retrieve detailed information about files, such as their size, permissions, and modification times.
+- **File Existence Check**: It can be used to check if a file or directory exists and to gather information about it.
+- **Directory and File Management**: Often used in shell scripts or system utilities to analyze files or determine file types (regular file, directory, symlink, etc.).
+
+#### **How It Works**  
+When `stat()` is called, it populates the `struct stat` with the following information:
+- **File type** (e.g., regular file, directory, symbolic link).
+- **File size** (in bytes).
+- **Permissions** (read/write/execute).
+- **Timestamps** (e.g., last access time, last modification time).
+- **File inode** (unique identifier within the file system).
+
+The `statbuf` structure is defined as:
+```c
+struct stat {
+    dev_t     st_dev;     // Device ID
+    ino_t     st_ino;     // Inode number
+    mode_t    st_mode;    // File mode (permissions)
+    nlink_t   st_nlink;   // Number of hard links
+    uid_t     st_uid;     // User ID of the file owner
+    gid_t     st_gid;     // Group ID of the file owner
+    dev_t     st_rdev;    // Device ID (for special files)
+    off_t     st_size;    // Total size in bytes
+    blksize_t st_blksize; // Block size for file system I/O
+    blkcnt_t  st_blocks;  // Number of 512-byte blocks allocated
+    time_t    st_atime;   // Last access time
+    time_t    st_mtime;   // Last modification time
+    time_t    st_ctime;   // Last status change time
+};
+```
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <sys/stat.h>
+
+int main(void)
+{
+    struct stat sb;
+    if (stat("/path/to/file", &sb) == 0) {
+        printf("File size: %ld bytes\n", sb.st_size);
+        printf("File permissions: %o\n", sb.st_mode & 0777);
+    } else {
+        perror("stat failed");
+    }
+    return 0;
+}
+```
+
+#### **Error Handling**  
+- If `stat()` fails, it returns `-1` and sets `errno`:
+  - `ENOENT`: The file or directory does not exist.
+  - `ENOTDIR`: A component of the path is not a directory.
+  - `EACCES`: Permission to access the file or directory is denied.
+  - `EINVAL`: The provided path is invalid.
+  - `ENOMEM`: Not enough memory to retrieve file information.
+
+#### **In Minishell**  
+In **Minishell**, you will use `stat()` to:  
+✅ **Retrieve file metadata** (size, permissions, timestamps) when handling commands like `ls` or checking file existence.  
+✅ **Check file type** (regular file, directory, symlink) to properly handle commands that depend on the type of the file.  
+✅ **Handle errors** gracefully when files or directories do not exist or cannot be accessed.
+
+---
+
+### `lstat()`  
+
+> #include <sys/stat.h>  
+```c
+int lstat(const char *path, struct stat *statbuf);
+```  
+
+- **`path`**: A string representing the path of the file or directory whose status you want to retrieve.
+- **`statbuf`**: A pointer to a `struct stat` where the file's status information will be stored.
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.
+
+The `lstat()` function retrieves information about a file or directory, similar to `stat()`, but with one key difference: if the file is a symbolic link, `lstat()` will return the information about the symbolic link itself, not the file it points to. If the file is not a symbolic link, it behaves just like `stat()`.
+
+#### **Key Differences Between `stat()` and `lstat()`**
+- **`stat()`**: Retrieves information about the file or directory that the provided `path` refers to, following symbolic links. If `path` is a symbolic link, `stat()` will return the information for the target file (the file the link points to).
+- **`lstat()`**: Retrieves information about the symbolic link itself, not its target. If `path` is a symbolic link, `lstat()` will provide the metadata for the link, not the file it points to.
+
+#### **Key Use Cases**  
+- **File Metadata**: Like `stat()`, `lstat()` is used to retrieve information about files, including file size, permissions, and timestamps.
+- **Symbolic Link Handling**: `lstat()` is used when you need to check the properties of a symbolic link itself, rather than the target file.
+- **File Existence Check**: `lstat()` can be used to check if a symbolic link exists and to gather information about it, without following the link.
+
+#### **How It Works**  
+When `lstat()` is called, it populates the `struct stat` with the following information, similar to `stat()`:
+- **File type** (e.g., regular file, directory, symbolic link).
+- **File size** (in bytes).
+- **Permissions** (read/write/execute).
+- **Timestamps** (e.g., last access time, last modification time).
+- **File inode** (unique identifier within the file system).
+
+The `statbuf` structure is populated with the same fields as with `stat()`, but `lstat()` will not follow symbolic links. Instead, it provides information about the link itself.
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <sys/stat.h>
+
+int main(void)
+{
+    struct stat sb;
+    if (lstat("/path/to/file", &sb) == 0) {
+        printf("File size: %ld bytes\n", sb.st_size);
+        printf("File permissions: %o\n", sb.st_mode & 0777);
+    } else {
+        perror("lstat failed");
+    }
+    return 0;
+}
+```
+
+#### **Error Handling**  
+- If `lstat()` fails, it returns `-1` and sets `errno`:
+  - `ENOENT`: The file or directory does not exist.
+  - `ENOTDIR`: A component of the path is not a directory.
+  - `EACCES`: Permission to access the file or directory is denied.
+  - `EINVAL`: The provided path is invalid.
+  - `ENOMEM`: Not enough memory to retrieve file information.
+
+#### **In Minishell**  
+In **Minishell**, you will use `lstat()` to:  
+✅ **Handle symbolic links** by retrieving information about the link itself, without following it.  
+✅ **Check file type** and **permissions** for symbolic links, directories, and regular files.  
+✅ **Differentiate symbolic links** from regular files when processing paths in commands like `ls -l`, or when you need to examine the link rather than the file it points to.  
+
+---
+
+### `fstat()`  
+
+> #include <sys/stat.h>  
+```c
+int fstat(int fd, struct stat *statbuf);
+```  
+
+- **`fd`**: A file descriptor referring to an open file or socket.
+- **`statbuf`**: A pointer to a `struct stat` where the file's status information will be stored.
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.
+
+The `fstat()` function retrieves information about the file associated with the given file descriptor. It behaves similarly to `stat()` but operates on an open file, socket, or other file descriptors, rather than on a file specified by a path.
+
+#### **Key Differences Between `fstat()`, `stat()`, and `lstat()`**
+- **`stat()`**: Retrieves information about a file based on its path, following symbolic links to the file's target.
+- **`lstat()`**: Retrieves information about a file or directory, but does not follow symbolic links, instead returning the information about the link itself.
+- **`fstat()`**: Retrieves file information from an open file descriptor, which can be a regular file, directory, or socket. It does not need a path, unlike `stat()` and `lstat()`.
+
+#### **Key Use Cases**  
+- **File Metadata from Open File**: `fstat()` is useful when you already have an open file descriptor and want to retrieve information about the corresponding file, without needing to reopen it with `stat()` or `lstat()`.
+- **File Size and Type**: You can use `fstat()` to get the size of an open file, check its type (e.g., regular file, directory), and examine its permissions.
+- **Sockets and Pipes**: `fstat()` can be used to retrieve information about open sockets, pipes, and devices.
+
+#### **How It Works**  
+When `fstat()` is called, it populates the `struct stat` with information about the file or device associated with the file descriptor:
+- **File type** (e.g., regular file, directory, symbolic link, socket).
+- **File size** (in bytes).
+- **Permissions** (read/write/execute).
+- **Timestamps** (e.g., last access time, last modification time).
+- **Inode** (unique identifier within the file system).
+
+The `statbuf` structure is populated in the same way as with `stat()` or `lstat()`, but `fstat()` works with an open file descriptor rather than a path.
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+int main(void)
+{
+    int fd = open("file.txt", O_RDONLY);
+    if (fd == -1) {
+        perror("open failed");
+        return 1;
+    }
+
+    struct stat sb;
+    if (fstat(fd, &sb) == 0) {
+        printf("File size: %ld bytes\n", sb.st_size);
+        printf("File permissions: %o\n", sb.st_mode & 0777);
+    } else {
+        perror("fstat failed");
+    }
+
+    close(fd);
+    return 0;
+}
+```
+
+#### **Error Handling**  
+- If `fstat()` fails, it returns `-1` and sets `errno`:
+  - `EBADF`: The file descriptor is not valid or does not refer to an open file.
+  - `EINVAL`: The file descriptor is not associated with a file.
+  - `ENOMEM`: Not enough memory to retrieve file information.
+  - Other errors may include issues with the file system or permissions.
+
+#### **In Minishell**  
+In **Minishell**, you will use `fstat()` to:  
+✅ **Obtain file information** from open file descriptors, such as checking file size, type, and permissions.  
+✅ **Work with file descriptors** in shell commands, for example when manipulating files with redirection or pipes.  
+✅ **Handle sockets and special files** that are open and need metadata for processing without needing a file path.  
+
+---
+
+### `unlink()`  
 
 > #include <unistd.h>  
 ```c
 int unlink(const char *pathname);
+```  
+
+- **`pathname`**: The path of the file to be removed.
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.
+
+The `unlink()` function removes a file from the filesystem. It deletes the directory entry for the specified file, which makes the file no longer accessible by its name. If there are no remaining references to the file (i.e., no open file descriptors or hard links), the file is actually deleted from the disk.
+
+#### **Key Use Cases**
+- **Deleting Files**: `unlink()` is used to remove files from the filesystem, freeing up space.
+- **Removing Unnecessary Links**: If multiple hard links to a file exist, `unlink()` removes a single link. The file itself is only deleted when the last link is removed.
+- **Temporary File Removal**: Commonly used in shell scripts and programs to clean up temporary files that are no longer needed.
+
+#### **How It Works**
+When you call `unlink()` on a file:
+- The filesystem removes the directory entry for the file.
+- If there are no remaining links to the file and no processes have it open, the file is deleted, and the disk space is freed.
+- If there are still other hard links to the file or it is open by any process, the file remains on disk and is deleted only when the last link or open file descriptor is closed.
+
+#### **Key Notes**
+- `unlink()` only works on regular files. It does not work on directories (for that, you would use `rmdir()`).
+- If the file is open when `unlink()` is called, it is deleted only when it is closed, but the file descriptor still allows access to its content until it is closed.
+- `unlink()` does not require the file to be closed before it is removed, although the file content may still be accessible until the last file descriptor is closed.
+
+#### **Example Usage**
+```c
+#include <stdio.h>
+#include <unistd.h>
+
+int main(void)
+{
+    const char *filename = "test.txt";
+
+    if (unlink(filename) == 0) {
+        printf("File %s successfully deleted.\n", filename);
+    } else {
+        perror("unlink failed");
+    }
+
+    return 0;
+}
 ```
-- `pathname`: A string representing the path to the file to be removed.  
-- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
 
-The `unlink()` function removes a **link** to a file, effectively deleting the file if no other hard links exist and no process has it open. It is commonly used in shell implementations, file management programs, and system utilities to delete files.  
+#### **Error Handling**  
+`unlink()` may fail and return `-1`, with `errno` set to indicate the error:
+- `ENOENT`: The file does not exist.
+- `EACCES`: The caller does not have permission to delete the file.
+- `EPERM`: The caller lacks the required privileges to unlink the file.
+- `ENOTDIR`: A component of the path is not a directory.
+- `EBUSY`: The file is being used by a process.
 
-#### Removing a File  
-When `unlink()` is called, it **removes the specified directory entry** (link) associated with `pathname`. If this was the last link to the file and no process has it open, the file's data is deleted, and its disk space is freed. If another hard link exists, the file remains accessible under the other name(s).  
-
-#### Behavior with Open Files  
-If a file is **open by a process**, calling `unlink()` will remove its directory entry, but the file remains accessible until the last process using it closes it. At that point, the file is deleted from the filesystem. This is useful for temporary files that should disappear once no longer in use.  
-
-#### Error Handling  
-`unlink()` may fail in several cases:  
-- If `pathname` does not exist, it returns `-1` with `errno` set to `ENOENT`.  
-- If `pathname` refers to a directory, it returns `-1` with `errno` set to `EISDIR` (except on some systems where `unlink()` can remove directories).  
-- If the process lacks permission to remove the file, it returns `-1` with `errno` set to `EACCES` or `EPERM`.  
-- If the filesystem is read-only, it returns `-1` with `errno` set to `EROFS`.  
-
-Using `unlink()` correctly allows a program to manage file deletion while handling edge cases like hard links and open file descriptors.
+#### **In Minishell**  
+In **Minishell**, you will use `unlink()` to:  
+✅ **Remove temporary files** created during shell execution.  
+✅ **Handle file deletion** when processing commands that involve removing files or cleaning up after processes.  
+✅ **Delete files specified by the user**, especially in cases of file redirection or output manipulation.  
 
 ---
 
@@ -1185,6 +1652,758 @@ In **Minishell**, you will use `closedir()` to:
 ✅ **Ensure proper cleanup** after directory operations to maintain efficient resource management.
 
 ---
+
+### `isatty()`  
+
+> #include <unistd.h>  
+
+```c
+int isatty(int fd);
+```  
+
+- `fd`: A file descriptor, typically `STDIN_FILENO`, `STDOUT_FILENO`, or `STDERR_FILENO`.  
+- **Returns**: `1` if `fd` refers to a terminal, or `0` if it does not. On error, it returns `0` and sets `errno`.  
+
+The `isatty()` function checks whether the given file descriptor corresponds to a terminal (TTY). It is commonly used to determine if a program is running interactively in a shell or if its input/output is redirected (e.g., to a file or a pipe).  
+
+#### **Key Use Cases**  
+- **Detecting interactive mode**: Many programs, including shells, use `isatty(STDIN_FILENO)` to check if they are receiving input from a user or a file.  
+- **Adjusting output format**: Programs like `ls` use `isatty(STDOUT_FILENO)` to decide whether to display output in columns (interactive terminal) or in a plain list (when redirected to a file).  
+- **Handling redirections properly**: Scripts or commands can adapt their behavior based on whether they are interacting with a user or another program.  
+
+#### **How It Works**  
+`isatty(fd)` internally checks if the file descriptor refers to a character device (a terminal). It is often used in combination with `ttyname()` to retrieve the name of the terminal.  
+
+For example, in a shell:  
+```sh
+echo "hello" | cat  
+```
+Here, `isatty(STDIN_FILENO)` inside `cat` would return `0`, indicating that input is coming from a pipe rather than a terminal.  
+
+#### **Error Handling**  
+- If `fd` is invalid or closed, `isatty()` returns `0` and sets `errno` to `EBADF`.  
+- If `fd` refers to a file, socket, or pipe, it also returns `0`, without setting `errno` (since this is not an error).  
+
+#### **In Minishell**  
+In **Minishell**, you will use `isatty()` to:  
+✅ **Check if the shell is running in an interactive terminal** to decide whether to display prompts  
+✅ **Determine if input is coming from a user or a script** to handle interactive vs. non-interactive modes  
+✅ **Adapt behavior based on whether output is redirected**, such as formatting differences in commands like `ls`
+
+---
+
+### `ttyname()`  
+
+> #include <unistd.h>  
+
+```c
+char *ttyname(int fd);
+```  
+
+- `fd`: A file descriptor, typically `STDIN_FILENO`, `STDOUT_FILENO`, or `STDERR_FILENO`.  
+- **Returns**: A pointer to a string containing the file name of the terminal associated with `fd`, or `NULL` on error with `errno` set accordingly.  
+
+The `ttyname()` function retrieves the name of the terminal device associated with the given file descriptor. It is useful for identifying which terminal a process is connected to.  
+
+#### **Key Use Cases**  
+- **Finding the terminal device**: Helps determine which `/dev/tty*` file corresponds to the process's terminal.  
+- **Debugging and logging**: Some programs log which terminal they are interacting with.  
+- **Ensuring interactive execution**: Can be used to confirm that input/output is linked to an actual terminal.  
+
+#### **How It Works**  
+`ttyname(fd)` checks if `fd` is a terminal (using `isatty(fd)`) and, if so, retrieves the associated terminal device path (e.g., `/dev/pts/0` on Linux).  
+
+Example usage in C:  
+```c
+#include <stdio.h>
+#include <unistd.h>
+
+int main(void)
+{
+    printf("Terminal: %s\n", ttyname(STDIN_FILENO));
+    return 0;
+}
+```
+If run in a terminal, this might output:  
+```
+Terminal: /dev/pts/1
+```
+If input is redirected, `ttyname(STDIN_FILENO)` returns `NULL`.  
+
+#### **Error Handling**  
+- If `fd` is invalid or not a terminal, `ttyname()` returns `NULL` and sets `errno` to `EBADF` or `ENOTTY`.  
+
+#### **In Minishell**  
+In **Minishell**, you will use `ttyname()` to:  
+✅ **Identify the terminal device** when handling job control or debugging  
+✅ **Check if the shell is attached to a terminal** for interactive mode features  
+✅ **Display terminal information** when executing built-in commands like `tty`
+
+---
+
+### `ttyslot()`  
+
+> #include <unistd.h>  
+
+```c
+int ttyslot(void);
+```  
+
+- **Returns**: The index of the current terminal in `/etc/ttys`, or `0` on failure.  
+
+The `ttyslot()` function finds the slot number of the current terminal in the system’s terminal list. It is useful for identifying which entry in `/etc/ttys` corresponds to the process's controlling terminal.  
+
+#### **Key Use Cases**  
+- **Determining the terminal slot**: Helps locate the terminal's position in system databases.  
+- **Managing session tracking**: Can be useful for multi-user session handling.  
+- **Logging and process monitoring**: Allows logging systems to associate user sessions with terminal entries.  
+
+#### **How It Works**  
+The function searches `/etc/ttys` (or the system’s internal terminal list) for the controlling terminal of the process and returns its index. This index is useful for accessing related system information.  
+
+Example usage in C:  
+```c
+#include <stdio.h>
+#include <unistd.h>
+
+int main(void)
+{
+    printf("Terminal slot: %d\n", ttyslot());
+    return 0;
+}
+```
+If the process is connected to a terminal, `ttyslot()` returns a positive integer representing its position in the terminal list. If not, it returns `0`.  
+
+#### **Error Handling**  
+- Returns `0` if no associated terminal is found.  
+
+#### **In Minishell**  
+In **Minishell**, you will use `ttyslot()` to:  
+✅ **Determine the slot number** of the terminal for session management  
+✅ **Integrate with logging or job control** by identifying the active terminal  
+✅ **Enhance debugging** by retrieving the terminal’s position in the system list
+
+---
+
+### `ioctl()`  
+
+> #include <sys/ioctl.h>  
+>  
+> #include <unistd.h>  
+
+```c
+int ioctl(int fd, unsigned long request, ...);
+```  
+
+- `fd`: The file descriptor of the device or terminal to control.  
+- `request`: A command specifying the operation to perform.  
+- `...`: An optional third argument, depending on the `request`.  
+- **Returns**: `0` on success, `-1` on failure with `errno` set accordingly.  
+
+The `ioctl()` function is a system call that provides a way to send device-specific control commands to file descriptors. It is widely used for configuring terminal settings, network devices, and other hardware-related operations.  
+
+#### **Key Use Cases**  
+- **Terminal control**: Modify terminal attributes like window size (`TIOCGWINSZ`).  
+- **Hardware interaction**: Communicate with device drivers (e.g., disk, network, or sound drivers).  
+- **Socket and network settings**: Retrieve or modify network interface parameters.  
+
+#### **How It Works**  
+`ioctl()` takes a file descriptor, a request code, and an optional argument. The request determines the action performed on the file descriptor. Common examples include:  
+
+- **Getting terminal window size**:  
+  ```c
+  #include <sys/ioctl.h>
+  #include <stdio.h>
+  #include <unistd.h>
+
+  int main(void)
+  {
+      struct winsize w;
+      if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0)
+          printf("Terminal size: %d rows × %d cols\n", w.ws_row, w.ws_col);
+      else
+          perror("ioctl");
+      return 0;
+  }
+  ```
+  Here, `TIOCGWINSZ` retrieves the terminal’s dimensions.  
+
+- **Controlling a network interface**:  
+  ```c
+  struct ifreq ifr;
+  int sock = socket(AF_INET, SOCK_DGRAM, 0);
+  strcpy(ifr.ifr_name, "eth0");
+  ioctl(sock, SIOCGIFADDR, &ifr);
+  ```
+
+#### **Error Handling**  
+- Returns `-1` if the `fd` is invalid or does not support `ioctl()`.  
+- `errno` is set accordingly (e.g., `ENOTTY` if the file descriptor is not a terminal).  
+
+#### **In Minishell**  
+In **Minishell**, you will use `ioctl()` to:  
+✅ **Retrieve terminal window size** dynamically (`TIOCGWINSZ`)  
+✅ **Modify terminal settings** when implementing features like raw mode input  
+✅ **Manage special file descriptors** that require direct control
+
+---
+
+### `getenv()`  
+
+> #include <stdlib.h>  
+
+```c
+char *getenv(const char *name);
+```  
+
+- `name`: The name of the environment variable to retrieve.  
+- **Returns**: A pointer to the value of the environment variable, or `NULL` if it is not found.  
+
+The `getenv()` function retrieves the value of an environment variable by searching the `environ` global variable, which holds the environment for the current process.  
+
+#### **Key Use Cases**  
+- **Accessing environment variables**: Retrieve paths (`PATH`), user details (`HOME`, `USER`), and system settings.  
+- **Configuring program behavior**: Check `SHELL`, `LANG`, or `TERM` to adapt execution.  
+- **Interacting with external programs**: Scripts and applications often rely on environment variables for configuration.  
+
+#### **How It Works**  
+`getenv()` searches the environment for the given variable name and returns a pointer to its value. The returned pointer should **not** be modified or freed, as it directly references the process's environment memory.  
+
+Example usage:  
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+    char *path = getenv("PATH");
+    if (path)
+        printf("PATH: %s\n", path);
+    else
+        printf("PATH variable not found.\n");
+    return 0;
+}
+```  
+
+#### **Error Handling**  
+- If `name` is `NULL`, the behavior is undefined.  
+- If the variable is not found, `getenv()` returns `NULL`.  
+
+#### **In Minishell**  
+In **Minishell**, you will use `getenv()` to:  
+✅ **Retrieve environment variables** like `PATH` to locate executable commands  
+✅ **Access user-related variables** (`HOME`, `PWD`, etc.) for built-in commands (`cd`, `echo`)  
+✅ **Customize shell behavior** by adapting to `SHELL`, `TERM`, and other settings  
+
+---
+
+### `tcsetattr()`  
+
+> #include <termios.h>  
+```c
+int tcsetattr(int fd, int optional_actions, const struct termios *termios_p);
+```  
+
+- `fd`: File descriptor of the terminal (usually `STDIN_FILENO`).  
+- `optional_actions`: Specifies when the changes take effect (`TCSANOW`, `TCSADRAIN`, or `TCSAFLUSH`).  
+- `termios_p`: Pointer to a `struct termios` containing the new terminal attributes.  
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
+
+The `tcsetattr()` function sets the attributes of a terminal device, modifying its behavior regarding input and output processing.  
+
+#### **Key Use Cases**  
+- **Disabling canonical mode**: Allows reading input character-by-character instead of line-by-line.  
+- **Modifying echo settings**: Controls whether user input (e.g., passwords) is displayed.  
+- **Configuring special control characters**: Adjusts behavior for signals like `Ctrl+C` or `Ctrl+Z`.  
+
+#### **How It Works**  
+To change terminal settings, retrieve the current attributes using `tcgetattr()`, modify them, and apply them with `tcsetattr()`.  
+
+Example: Disable echoing user input (useful for password prompts).  
+```c
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
+
+int main(void)
+{
+    struct termios term;
+    
+    tcgetattr(STDIN_FILENO, &term); // Get current settings  
+    term.c_lflag &= ~ECHO;          // Disable echo  
+    tcsetattr(STDIN_FILENO, TCSANOW, &term); // Apply changes  
+
+    printf("Enter something: ");
+    char input[100];
+    fgets(input, sizeof(input), stdin);
+    printf("\nYou entered: %s\n", input);
+
+    term.c_lflag |= ECHO; // Re-enable echo  
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);  
+    return 0;
+}
+```  
+
+#### **Error Handling**  
+- Returns `-1` if `fd` is not associated with a terminal.  
+- `errno` can be set to `EINVAL` (invalid argument) or `ENOTTY` (not a terminal).  
+
+#### **In Minishell**  
+In **Minishell**, you will use `tcsetattr()` to:  
+✅ **Configure terminal behavior** dynamically when handling raw input modes  
+✅ **Disable echoing** for secure input (e.g., password entry)  
+✅ **Modify terminal attributes** to customize shell interaction
+
+---
+
+### `tcgetattr()`  
+
+> #include <termios.h>  
+```c
+int tcgetattr(int fd, struct termios *termios_p);
+```  
+
+- `fd`: File descriptor of the terminal (usually `STDIN_FILENO`).  
+- `termios_p`: Pointer to a `struct termios` where the current terminal attributes will be stored.  
+- **Returns**: `0` on success, or `-1` on error with `errno` set accordingly.  
+
+The `tcgetattr()` function retrieves the current settings of a terminal device and stores them in a `struct termios`, which can later be modified and applied using `tcsetattr()`.  
+
+#### **Key Use Cases**  
+- **Reading current terminal settings** before making modifications.  
+- **Saving and restoring terminal state** to maintain user experience.  
+- **Checking if the terminal is in canonical mode** or if echoing is enabled.  
+
+#### **How It Works**  
+This function is typically used before modifying terminal settings:  
+1. Call `tcgetattr()` to retrieve the current settings.  
+2. Modify the `struct termios` fields as needed.  
+3. Apply the new settings with `tcsetattr()`.  
+
+Example: Retrieve and display terminal settings.  
+```c
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
+
+int main(void)
+{
+    struct termios term;
+
+    if (tcgetattr(STDIN_FILENO, &term) == -1)
+    {
+        perror("tcgetattr");
+        return 1;
+    }
+
+    printf("Terminal settings retrieved successfully!\n");
+
+    return 0;
+}
+```  
+
+#### **Error Handling**  
+- Returns `-1` if `fd` is not associated with a terminal.  
+- `errno` can be set to `EINVAL` (invalid argument) or `ENOTTY` (not a terminal).  
+
+#### **In Minishell**  
+In **Minishell**, you will use `tcgetattr()` to:  
+✅ **Retrieve the current terminal settings** before modifying them  
+✅ **Check terminal modes** to determine if input should be processed differently  
+✅ **Ensure that modifications using `tcsetattr()`** are based on the actual current state
+
+---
+
+### `tgetent()`  
+
+> #include <curses.h>  
+>  
+> #include <term.h>  
+```c
+int tgetent(char *bp, const char *termtype);
+```  
+
+- `bp`: A buffer to store the terminal description (typically set to `NULL` when using modern terminfo-based systems).  
+- `termtype`: A string specifying the terminal type (e.g., `"xterm"`, `"vt100"`).  
+- **Returns**: `1` on success, `0` if the terminal type is not found, or `-1` if the termcap database cannot be accessed.  
+
+The `tgetent()` function initializes the terminal capabilities database for the given `termtype`. It loads the corresponding termcap entry, allowing subsequent calls to `tgetstr()`, `tgetnum()`, and `tgetflag()` to retrieve terminal-specific capabilities.  
+
+#### **Key Use Cases**  
+- **Initializing terminal capabilities** based on the user's environment.  
+- **Determining if a terminal supports specific features** (e.g., colors, cursor movement).  
+- **Retrieving escape sequences** to control terminal behavior.  
+
+#### **How It Works**  
+1. The function searches for the terminal type in the termcap database (`/etc/termcap` or terminfo).  
+2. If found, it loads the corresponding capabilities into memory.  
+3. Other `tget*()` functions can then retrieve specific attributes.  
+
+Example: Initialize terminal capabilities and check if the terminal supports colors.  
+```c
+#include <stdio.h>
+#include <curses.h>
+#include <term.h>
+
+int main(void)
+{
+    int ret;
+
+    ret = tgetent(NULL, getenv("TERM"));
+    if (ret == -1)
+    {
+        fprintf(stderr, "Could not access the termcap database.\n");
+        return 1;
+    }
+    if (ret == 0)
+    {
+        fprintf(stderr, "Terminal type not found.\n");
+        return 1;
+    }
+
+    printf("Terminal initialized successfully!\n");
+    return 0;
+}
+```  
+
+#### **Error Handling**  
+- Returns `-1` if the termcap database is inaccessible.  
+- Returns `0` if the specified terminal type is unknown.  
+
+#### **In Minishell**  
+In **Minishell**, you will use `tgetent()` to:  
+✅ **Initialize terminal capabilities** to determine available features  
+✅ **Check if the terminal supports specific behaviors**, such as colors or cursor movement  
+✅ **Ensure compatibility with various terminal types** for better user experience
+
+---
+
+### `tgetflag()`  
+
+> #include <curses.h>  
+>  
+> #include <term.h>  
+```c
+int tgetflag(const char *id);
+```  
+
+- `id`: A two-character string representing the terminal capability flag (e.g., `"bs"` for backspace capability).  
+- **Returns**: `1` if the flag is set, `0` if it is not, or `-1` if the capability is unknown.  
+
+The `tgetflag()` function checks whether a given boolean capability is supported by the terminal. It is used after calling `tgetent()` to retrieve boolean values from the termcap database.  
+
+#### **Key Use Cases**  
+- **Checking if the terminal supports backspacing (`"bs"`)**.  
+- **Determining whether auto-margins (`"am"`) or hardware tabs (`"pt"`) are enabled**.  
+- **Verifying terminal capabilities before using them** in cursor movement or text formatting.  
+
+#### **How It Works**  
+1. Call `tgetent()` to initialize the terminal database.  
+2. Use `tgetflag("id")` to check for specific boolean capabilities.  
+
+Example: Check if the terminal supports backspace (`"bs"`) and auto-wrap (`"am"`).  
+```c
+#include <stdio.h>
+#include <curses.h>
+#include <term.h>
+
+int main(void)
+{
+    if (tgetent(NULL, getenv("TERM")) <= 0)
+    {
+        fprintf(stderr, "Could not initialize terminal.\n");
+        return 1;
+    }
+
+    if (tgetflag("bs"))
+        printf("Terminal supports backspace.\n");
+    else
+        printf("No backspace support.\n");
+
+    if (tgetflag("am"))
+        printf("Terminal has automatic margins.\n");
+    else
+        printf("No auto-wrap support.\n");
+
+    return 0;
+}
+```  
+
+#### **Error Handling**  
+- If the terminal type is not initialized with `tgetent()`, results may be unreliable.  
+- Returns `-1` if the requested capability does not exist.  
+
+#### **In Minishell**  
+In **Minishell**, you will use `tgetflag()` to:  
+✅ **Check terminal capabilities** before applying certain behaviors  
+✅ **Determine if the terminal supports features like backspace (`"bs"`)**  
+✅ **Ensure better compatibility** with different terminal types
+
+---
+
+### `tgetnum()`  
+
+> #include <curses.h>  
+>  
+> #include <term.h>  
+```c
+int tgetnum(const char *id);
+```  
+
+- `id`: A two-character string representing the terminal capability name (e.g., `"co"` for the number of columns).  
+- **Returns**: The numeric value of the capability if it exists, `-1` if the capability is unknown.  
+
+The `tgetnum()` function retrieves numeric terminal capabilities from the termcap database. It is used after calling `tgetent()` to obtain values such as the number of columns, lines, or padding specifications.  
+
+#### **Key Use Cases**  
+- **Getting the number of columns (`"co"`) in the terminal** to adjust text wrapping.  
+- **Retrieving the number of lines (`"li"`)** to determine scrolling limits.  
+- **Checking padding-related values (`"pb"`, `"it"`)** to optimize output formatting.  
+
+#### **How It Works**  
+1. Call `tgetent()` to initialize the terminal database.  
+2. Use `tgetnum("id")` to get a numeric terminal attribute.  
+
+Example: Retrieve the number of columns and lines in the terminal.  
+```c
+#include <stdio.h>
+#include <curses.h>
+#include <term.h>
+
+int main(void)
+{
+    if (tgetent(NULL, getenv("TERM")) <= 0)
+    {
+        fprintf(stderr, "Could not initialize terminal.\n");
+        return 1;
+    }
+
+    int columns = tgetnum("co");
+    int lines = tgetnum("li");
+
+    if (columns != -1)
+        printf("Terminal width: %d columns\n", columns);
+    else
+        printf("Could not retrieve terminal width.\n");
+
+    if (lines != -1)
+        printf("Terminal height: %d lines\n", lines);
+    else
+        printf("Could not retrieve terminal height.\n");
+
+    return 0;
+}
+```  
+
+#### **Error Handling**  
+- If `tgetent()` is not called first, `tgetnum()` may return unreliable values.  
+- Returns `-1` if the requested capability does not exist in the termcap database.  
+
+#### **In Minishell**  
+In **Minishell**, you will use `tgetnum()` to:  
+✅ **Retrieve the terminal size dynamically** (columns and rows)  
+✅ **Ensure proper text formatting and positioning**  
+✅ **Improve terminal compatibility** by adapting to different environments
+
+---
+
+### `tgetstr()`  
+
+> #include <curses.h>  
+>  
+> #include <term.h>  
+```c
+char *tgetstr(const char *id, char **area);
+```  
+
+- `id`: A two-character string representing the terminal capability name (e.g., `"cm"` for cursor motion).  
+- `area`: A pointer to a memory area that `tgetstr()` can use to store the retrieved string. If `NULL`, `tgetstr()` allocates memory and returns a pointer to it.  
+- **Returns**: A pointer to the terminal capability string or `NULL` if the capability is not found.  
+
+The `tgetstr()` function retrieves a string-type terminal capability from the termcap database. It is useful for capabilities such as cursor movement (`"cm"`) or terminal control sequences (`"cl"` for clear screen).  
+
+#### **Key Use Cases**  
+- **Retrieving terminal control sequences** (e.g., `"cm"` for cursor movement, `"cl"` for clearing the screen).  
+- **Handling special terminal output** like setting text attributes or clearing lines.  
+- **Dynamically managing terminal behavior** based on the environment.  
+
+#### **How It Works**  
+1. Call `tgetent()` to initialize the terminal database.  
+2. Use `tgetstr("id", &area)` to retrieve a string capability.  
+3. The string returned may contain special control characters that are interpreted by the terminal.  
+
+Example: Retrieve the clear screen command (`"cl"`) from the termcap database.  
+```c
+#include <stdio.h>
+#include <curses.h>
+#include <term.h>
+
+int main(void)
+{
+    if (tgetent(NULL, getenv("TERM")) <= 0)
+    {
+        fprintf(stderr, "Could not initialize terminal.\n");
+        return 1;
+    }
+
+    char *clear_screen = tgetstr("cl", NULL);
+    if (clear_screen)
+    {
+        printf("Clear screen command: %s\n", clear_screen);
+    }
+    else
+    {
+        printf("Could not retrieve clear screen command.\n");
+    }
+
+    return 0;
+}
+```  
+
+#### **Error Handling**  
+- Returns `NULL` if the requested capability (`id`) is not found in the termcap database.  
+- If `area` is `NULL`, `tgetstr()` will allocate memory, which needs to be freed later to avoid memory leaks.  
+
+#### **In Minishell**  
+In **Minishell**, you will use `tgetstr()` to:  
+✅ **Retrieve terminal control strings** like clearing the screen or moving the cursor  
+✅ **Dynamically adapt the terminal environment** by issuing special commands  
+✅ **Optimize user interaction** with the terminal by using escape sequences for visual feedback
+
+---
+
+### `tgoto()`  
+
+> #include <curses.h>  
+>  
+> #include <term.h>  
+```c
+char *tgoto(const char *cap, int col, int row);
+```  
+
+- `cap`: A string representing a terminal capability (e.g., `"cm"` for cursor movement).
+- `col`: The column number where the cursor should move.
+- `row`: The row number where the cursor should move.
+- **Returns**: A string containing the cursor movement sequence for the terminal or `NULL` if the capability is not found.
+
+The `tgoto()` function is used to generate a cursor movement string based on the terminal's capabilities. It uses the `cap` (e.g., `"cm"` for cursor movement) and formats it with the provided column (`col`) and row (`row`) values. This function returns a string that can be used to move the cursor to the desired position on the screen.
+
+#### **Key Use Cases**  
+- **Moving the cursor** to a specific row and column on the terminal screen.  
+- **Creating customized user interfaces** that need precise control over the cursor position.  
+- **Terminal-based applications** that require dynamic control of cursor location (e.g., text editors, shell environments).
+
+#### **How It Works**  
+1. Call `tgetent()` to initialize the terminal database.
+2. Use `tgoto("cm", col, row)` to generate a string that moves the cursor to the specified position.
+3. Send the resulting string to the terminal to move the cursor.
+
+Example: Move the cursor to position (5, 10).
+```c
+#include <stdio.h>
+#include <curses.h>
+#include <term.h>
+
+int main(void)
+{
+    if (tgetent(NULL, getenv("TERM")) <= 0)
+    {
+        fprintf(stderr, "Could not initialize terminal.\n");
+        return 1;
+    }
+
+    char *move_cursor = tgoto(tgetstr("cm", NULL), 10, 5);
+    if (move_cursor)
+    {
+        printf("Move cursor to (10, 5): %s\n", move_cursor);
+    }
+    else
+    {
+        printf("Could not generate cursor movement string.\n");
+    }
+
+    return 0;
+}
+```  
+
+#### **Error Handling**  
+- Returns `NULL` if the `cap` provided does not exist in the termcap database (e.g., if `"cm"` is not found).  
+- Ensure that the terminal has been initialized with `tgetent()` before using `tgoto()`.  
+
+#### **In Minishell**  
+In **Minishell**, you will use `tgoto()` to:  
+✅ **Move the cursor dynamically** based on user input or shell output  
+✅ **Control cursor positioning** in interactive shell applications  
+✅ **Enhance the user experience** by providing clear visual feedback when displaying results in the terminal
+
+---
+
+### `tputs()`  
+
+> #include <curses.h>  
+>  
+> #include <term.h>  
+```c
+int tputs(const char *str, int affcnt, int (*putc)(int));
+```  
+
+- `str`: The string containing the terminal control sequence (e.g., for cursor movement or text formatting).
+- `affcnt`: The number of times the string should be output, typically `1` for a single command.
+- `putc`: A function that writes a character to the output (usually `putchar` or another custom function).
+
+- **Returns**: The number of characters written, or `ERR` on failure.
+
+The `tputs()` function is used to output a terminal control sequence (`str`) to the terminal. It takes the string `str`, which typically contains control sequences for terminal operations (like cursor movement, clearing the screen, etc.), and sends it to the terminal. It can handle delays and optimizes the number of times the string is output by using `affcnt`.
+
+#### **Key Use Cases**  
+- **Sending terminal control sequences** to move the cursor, change colors, or apply other formatting.  
+- **Optimizing terminal output** when you need to print control sequences multiple times, ensuring the correct timing and avoiding excessive output.  
+- **Improving terminal interaction** in text-based user interfaces or shells.
+
+#### **How It Works**  
+- Call `tputs()` to send terminal control sequences.  
+- The terminal's control sequences (like cursor movement or clearing the screen) are printed to the terminal using the provided function (`putc`) to handle character output.
+- `affcnt` controls how many times the sequence should be applied (usually `1` unless repeating is needed).
+
+Example: Clear the screen using `tputs()`.
+```c
+#include <stdio.h>
+#include <curses.h>
+#include <term.h>
+
+int main(void)
+{
+    if (tgetent(NULL, getenv("TERM")) <= 0)
+    {
+        fprintf(stderr, "Could not initialize terminal.\n");
+        return 1;
+    }
+
+    char *clear_screen = tgetstr("cl", NULL);  // "cl" is the clear screen sequence
+    if (clear_screen)
+    {
+        tputs(clear_screen, 1, putchar);  // Output clear screen sequence
+    }
+    else
+    {
+        fprintf(stderr, "Clear screen sequence not found.\n");
+    }
+
+    return 0;
+}
+```  
+
+#### **Error Handling**  
+- If `tputs()` fails, it returns `ERR`, indicating there was an issue with outputting the terminal control sequence.
+- The string `str` should be a valid terminal control sequence obtained from `tgetstr()`.
+- Ensure that the terminal has been initialized with `tgetent()`.
+
+#### **In Minishell**  
+In **Minishell**, you will use `tputs()` to:  
+✅ **Output terminal control sequences** like cursor movement, clearing the screen, or changing text formatting  
+✅ **Improve user interaction** with visual feedback or formatting (e.g., clearing the screen before printing new output)  
+✅ **Enhance the usability of the terminal** when managing the shell environment in an interactive session
+
 ---
 
 # SHORT REMINDERS
