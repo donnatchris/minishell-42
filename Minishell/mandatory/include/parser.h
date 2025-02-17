@@ -33,13 +33,12 @@ OR = 3 représente l'opérateur "||"
 SEQ = 4 représente l'opérateur ";"
 */
 
-typedef struct s_tree_node
+typedef struct s_tree
 {
-	int					type;
-	char				*cmd;
+	t_token				*token;
 	struct s_tree_node	*left;
 	struct s_tree_node	*right;
-}						t_tree_node;
+}						t_tree;
 /*
 type = CMD, PIPE, AND, OR, etc.
 cmd = Commande si c'est une feuille (sinon NULL)
@@ -68,15 +67,11 @@ typedef enum e_token_type
 typedef struct s_token
 {
 	t_token_type	type;
+	int				priority;
 	char			*start;
 	char			*end;
 }					t_token;
 
-// typedef struct s_token
-// {
-// 	t_token_type	type;
-// 	char			*string;
-// }					t_token;
 
 // prototypes
 t_dclst	**tokenize_to_dclst(char *input);
