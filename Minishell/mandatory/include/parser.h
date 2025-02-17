@@ -17,21 +17,13 @@
 
 // typedefs
 
-typedef enum e_type
+typedef struct s_token
 {
-	CMD,
-	PIPE,
-	AND,
-	OR,	
-	SEQ
-}	t_type;
-/*
-CMD = 0 représente une commande simple (ex: "ls -l")
-PIPE = 1 représente l'opérateur "|"
-AND = 2 représente l'opérateur "&&"
-OR = 3 représente l'opérateur "||"
-SEQ = 4 représente l'opérateur ";"
-*/
+	int		type;
+	int		priority;
+	char	*start;
+	char	*end;
+}			t_token;
 
 typedef struct s_tree
 {
@@ -45,6 +37,7 @@ cmd = Commande si c'est une feuille (sinon NULL)
 left = Pointeur vers le fils gauche (NULL pour une feuille)
 right = Pointeur vers le fils droit (NULL pour une feuille)
 */
+
 typedef enum e_token_type
 {
 	NOTHING,			// Rien (pour ne pas utiliser la valeur zéro)
@@ -64,16 +57,8 @@ typedef enum e_token_type
 	TOKEN_ERROR			// Erreur
 }	t_token_type;
 
-typedef struct s_token
-{
-	t_token_type	type;
-	int				priority;
-	char			*start;
-	char			*end;
-}					t_token;
-
-
 // prototypes
+
 t_dclst	**tokenize_to_dclst(char *input);
 int		get_token(char **ps, char *es, char **q, char **eq);
 void	clear_dclst_data(t_dclst **head);

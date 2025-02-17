@@ -1,6 +1,35 @@
 #include "../../include/minishell.h"
 #include "../../include/parser.h"
 
+// Function to fill the data string in the doubly circular linked list
+void	null_terminate_token(t_dclst **head)
+{
+	t_dclst	*current;
+	t_token	*token;
+
+	if (!head || !*head)
+		return ;
+	current = *head;
+	while (1)
+	{
+		token = (t_token *) current->data;
+		if (token->type == TOKEN_PARENTHESIS || token->type == TOKEN_STRING || token->type == TOKEN_LITTERAL)
+		{
+			token->start++;
+			token->end--;
+			*token->end = '\0';
+		}
+		else if (token->type == TOKEN_WORD)
+			*token->end = '\0';
+		else
+				token->start = NULL;
+		token->end = NULL;
+		current = current->next;
+		if (current == *head)
+			break ;
+	}
+}
+
 // Function to clear only the data from the doubly circular linked list
 void	clear_dclst_data(t_dclst **head)
 {
@@ -12,11 +41,7 @@ void	clear_dclst_data(t_dclst **head)
 	while (1)
 	{
 		if (current->data)
-		{
-			if (((t_token *) current->data)->str)
-				free(((t_token *) current->data)->str);
 			free(current->data);
-		}
 		current->data = NULL;
 		current = current->next;
 		if (current == *head)
@@ -71,5 +96,6 @@ t_dclst	**tokenize_to_dclst(char *input)
 		// atention input à free dans la fonction appelante si retourne NULL
 		// et que input a été allouée dynamiquement (comme avec readline())
 	}
+	null_terminate_token(head);
 	return (head);
 }

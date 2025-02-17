@@ -60,7 +60,8 @@ void	print_tokens(t_dclst **head)
 			ft_printf("TOKEN_EOF: ");
 		else if (token->type == TOKEN_ERROR)
 			ft_printf("TOKEN_ERROR: ");
-		print_string(token->start, token->end);
+		// print_string(token->start, token->end);
+		ft_printf("%s\n", token->start);
 		current = current->next;
 		if (current == *head)
 			break ;
