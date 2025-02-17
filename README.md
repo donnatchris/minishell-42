@@ -193,6 +193,15 @@ git push origin main
 
 A **binary tree** is a hierarchical data structure in which each node has at most two children, referred to as the **left child** and the **right child**. It is a type of tree structure where each node stores a value and links to its two children (if any), forming a branching structure.
 
+```mardown
+	root
+       /    \
+     node    node
+    /   \    /   \
+  leaf  leaf  leaf  leaf
+```
+
+
 #### Key Characteristics:
 1. **Root**: The topmost node in the tree, from which all other nodes descend.
 2. **Parent and Child**: A node is a **parent** if it has at least one child. Nodes connected directly to another node are **children**.
