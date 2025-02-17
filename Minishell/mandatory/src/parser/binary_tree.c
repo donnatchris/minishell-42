@@ -10,7 +10,7 @@ void	print_tree(t_tree *root)
 		print_tree(root->left);
 	if (root->right)
 		print_tree(root->right);
-	ft_printf("token: %s\n", root->token->start);
+	print_a_token(root->token);
 }
 
 // Function to free the binary tree

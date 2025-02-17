@@ -39,8 +39,8 @@ int	check_syntax(t_dclst **head)
 {
 	t_dclst	*current;
 	t_token	*token;
-	t_token	*next_token;
-	t_token	*previous_token;
+	t_token	*next_tok;
+	t_token	*prev_tok;
 
 	if (!head || !*head)
 		return (-1);
@@ -48,14 +48,14 @@ int	check_syntax(t_dclst **head)
 	while (1)
 	{
 		token = (t_token *) current->data;
-		next_token = (t_token *) current->next->data;
-		previous_token = (t_token *) current->prev->data;
+		next_tok = (t_token *) current->next->data;
+		prev_tok = (t_token *) current->prev->data;
 		if (token->priority != 6 && token->priority != 1)
 		{
-			if ((next_token->priority !=6 && next_token->priority != 1) || (previous_token->priority !=6 && previous_token->priority != 1))
+			if ((next_tok->priority !=6 && next_tok->priority != 1) || (prev_tok->priority !=6 && prev_tok->priority != 1))
 				return (print_token_error(token), -1);
 		}
-		if (next_token->type == TOKEN_EOF || current->next == *head)
+		if (next_tok->type == TOKEN_EOF || current->next == *head)
 			break ;
 		current = current->next;
 		token = (t_token *) current->data;

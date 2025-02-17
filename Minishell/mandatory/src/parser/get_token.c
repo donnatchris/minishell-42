@@ -54,17 +54,20 @@ int	get_semi_colon(char **s)
 }
 
 // Function to get the next amperstand from the input string
-int	get_amperstand(char **s)
+int	get_amperstand(char **s, char *es)
 {
 	int	ret;
 
-	ret = TOKEN_WORD;
 	if (*(*s + 1) == '&')
 	{
 		ret = TOKEN_AND;
-		(*s)++;
+		(*s)+=2;
+		return (ret);
 	}
+	ret = TOKEN_WORD;
 	(*s)++;
+	while (*s != es && !ft_strchr(WHITESPACES, **s) && !ft_strchr(SYMBOLS, **s))
+		(*s)++;
 	return (ret);
 }
 
@@ -151,7 +154,7 @@ int	get_symbol(char **s, char *es)
 	else if (**s == '|')
 		ret = get_vertical_bar(s);
 	else if (**s == '&')
-		ret = get_amperstand(s);
+		ret = get_amperstand(s, es);
 	else if (**s == '"')
 		ret = double_quote(s, es);
 	else if (**s == '\'')

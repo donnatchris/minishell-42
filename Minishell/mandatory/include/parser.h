@@ -27,10 +27,10 @@ typedef struct s_token
 
 typedef struct s_tree
 {
-	t_token				*token;
-	struct s_tree_node	*left;
-	struct s_tree_node	*right;
-}						t_tree;
+	t_token			*token;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}					t_tree;
 /*
 type = CMD, PIPE, AND, OR, etc.
 cmd = Commande si c'est une feuille (sinon NULL)
@@ -63,5 +63,9 @@ t_dclst	**tokenize(char *input);
 int		get_token(char **ps, char *es, char **q, char **eq);
 void	clear_dclst_data(t_dclst **head);
 int		check_syntax(t_dclst **head);
+t_tree	*create_tree(t_dclst *first, t_dclst *last);
+void	clear_tree(t_tree *root);
+void	print_tree(t_tree *root); // A retirer avant de rendre
+void	print_a_token(t_token *token); // A retirer avant de rendre
 
 #endif
