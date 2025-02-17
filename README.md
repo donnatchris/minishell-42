@@ -33,93 +33,66 @@ execute the program
 - readme.md for quick explanation and main commands of the project
 
 
-## MINISHELL INPUT HANDLING LIST
+## **Minishell Input Handling List**
 
-### **1. Special Characters to Parse and Handle**  
-These characters have a special meaning and must be properly **tokenized and interpreted**.  
+1. **Prompt**:  
+   - Display a prompt when waiting for a new command.
 
-#### **Command Separators**  
-- `;` → Separates multiple commands executed sequentially.  
+2. **History**:  
+   - Implement a working history (store previously entered commands).
 
-#### **Logical Operators**  
-- `&&` → Executes the next command **only if** the previous one succeeds.  
-- `||` → Executes the next command **only if** the previous one fails.  
+3. **Command Execution**:  
+   - Search and launch the correct executable:
+     - Use the `PATH` variable or relative/absolute paths to find executables.
 
-#### **Redirections**  
-- `>`  → Output redirection (overwrites the file).  
-- `>>` → Output redirection (appends to the file).  
-- `<`  → Input redirection (reads from a file).  
-- `<<` → **Heredoc** (reads multiple lines until a delimiter).  
+4. **Signals**:  
+   - Handle signals without using more than one global variable for the signal number.
+   - Properly handle signals like `ctrl-C`, `ctrl-D`, and `ctrl-\`.
 
-#### **Pipeline Operators**  
-- `|` → Redirects the output of one command to the input of another (**pipe**).  
+5. **Unclosed Quotes**:  
+   - Do not interpret unclosed quotes or unsupported special characters (e.g., `\`, `;`).
 
-#### **Expansion and Substitution**  
-- `$VAR` → Expands environment variables.  
-- `$?` → Expands the exit status of the last command.  
-- `` `cmd` `` or `$(cmd)` → Executes a command and replaces it with the output.  
+6. **Single Quotes (' ')**:  
+   - Treat text inside single quotes (`'`) as literal and prevent interpretation of metacharacters.
 
-#### **Quoting and Escaping**  
-- `'...'` → Prevents any expansion.  
-- `"..."` → Allows expansion (`$VAR` works inside).  
-- `\` → Escapes a special character (`\n`, `\$`, etc.).  
+7. **Double Quotes (" ")**:  
+   - Treat text inside double quotes (`"`) as literal, but allow the expansion of `$` (environment variables).
 
-#### **Grouping and Subshells**  
-- `(cmds)` → Runs the commands in a **subshell**.  
-- `{ cmds ; }` → Runs the commands in the **current shell**.  
+8. **Redirections**:  
+   - **Input Redirection**: Handle `<` for input redirection.
+   - **Output Redirection**: Handle `>` for output redirection.
+   - **Heredoc**: Handle `<<` to read input until a delimiter is seen.
+   - **Append Output**: Handle `>>` to append output to a file.
 
-#### **Metacharacters and Wildcards**  
-- `*` → Matches any file (`ls *.c`).  
-- `?` → Matches a single character (`file?.txt`).  
-- `[abc]` → Matches one of the listed characters.  
+9. **Pipes (|)**:  
+   - Handle pipe redirections (`|`) to connect multiple commands. The output of one command becomes the input of the next.
 
-#### **Others**  
-- `&` → Runs a command in the background (**not required in Minishell**).  
+10. **Environment Variables**:  
+    - Expand `$` followed by a valid variable name to its value in the environment.
+    - Handle `$?` to expand to the exit status of the last foreground pipeline.
 
-### **2. Builtin Commands to Implement**  
-Builtins are **internal commands** that must be implemented **without `execve()`**.  
+11. **Builtins**:  
+    Implement the following builtins:
+    - `echo` with `-n` option.
+    - `cd` with relative or absolute paths.
+    - `pwd` with no options.
+    - `export` with no options.
+    - `unset` with no options.
+    - `env` with no options or arguments.
+    - `exit` with no options.
 
-- `echo` → Prints text (handle `-n` to remove the newline).  
-- `cd` → Changes the current directory (`cd /path`, `cd ..`, `cd ~`).  
-- `pwd` → Prints the current directory.  
-- `export` → Sets an environment variable (`export VAR=value`).  
-- `unset` → Unsets an environment variable (`unset VAR`).  
-- `env` → Displays environment variables.  
-- `exit` → Exits the shell (`exit`, `exit 42`).  
+12. **Special Key Handling**:
+    - **Ctrl-C**: Displays a new prompt on a new line.
+    - **Ctrl-D**: Exits the shell.
+    - **Ctrl-\**: Does nothing.
 
-### **3. External Commands (Using `execve()`)**  
-If the user types a command that **is not a builtin**, Minishell must:  
-- **Search for the command in `$PATH`** (e.g., `/bin/ls`).
-- **Execute the command via `execve()`**.
-- **Handle errors (`command not found`, permissions, etc.).**  
+### **Bonus Features** (If Implementing Bonus Part):
 
-**Examples:**  
-> - `ls -l`  
-> - `/bin/echo "Hello"`  
-> - `grep "text" file.txt`
+13. **Logical Operators**:  
+    - Handle `&&` (logical AND) and `||` (logical OR) with parenthesis for priorities.
 
-### **4. Signal Handling (`Ctrl + Keys`)**  
-Minishell must **catch certain signals** for proper behavior:  
-
-- **`Ctrl + C` (`SIGINT`)** → Interrupts the current command (but not the shell).  
-- **`Ctrl + D` (`EOF`)** → Exits the shell if entered on an empty line.  
-- **`Ctrl + \` (`SIGQUIT`)** → Ignored except for child processes.  
-
-### **5. Special Cases to Handle**  
-- **Empty command** (`""`, multiple spaces) → Should do nothing.
-- **Invalid commands** (`xyzxyz`) → Print `command not found`.
-- **Non-executable files (`chmod -x file`)** → Print `Permission denied`.
-- **Non-existing files in redirections (`< file` with `file` missing)**.
-- **Heredoc (`<< limiter`)** → Read until the `limiter` is reached.
-- **Variable expansion in arguments** (`echo $USER`).  
-
-### **Summary**  
-In **Minishell**, you must handle:  
-✔ **All special characters** (redirections, pipes, expansions...).  
-✔ **All builtin commands** (`cd`, `echo`, `exit`, etc.).  
-✔ **All external commands** via `execve()`.  
-✔ **Signals (`Ctrl + C`, `Ctrl + D`, `Ctrl + \`)**.  
-✔ **Errors and edge cases** (invalid commands, permissions, etc.).
+14. **Wildcards**:  
+    - Handle the `*` wildcard for the current working directory.
 
 
 ## ORDER OF PRIORITY FOR HANDLING USER INPUT IN MINISHELL
