@@ -203,6 +203,46 @@ git push origin main
 
 ---
 
+### What is a Binary Tree?
+
+A **binary tree** is a hierarchical data structure in which each node has at most two children, referred to as the **left child** and the **right child**. It is a type of tree structure where each node stores a value and links to its two children (if any), forming a branching structure.
+
+#### Key Characteristics:
+1. **Root**: The topmost node in the tree, from which all other nodes descend.
+2. **Parent and Child**: A node is a **parent** if it has at least one child. Nodes connected directly to another node are **children**.
+3. **Leaf Nodes**: Nodes that have no children are called **leaf nodes**.
+4. **Height**: The height of the tree is the length of the longest path from the root to a leaf node.
+5. **Depth**: The depth of a node is the length of the path from the root to that node.
+
+#### Types of Binary Trees:
+- **Full Binary Tree**: Every node has either 0 or 2 children.
+- **Complete Binary Tree**: All levels are filled except possibly the last, which is filled from left to right.
+- **Perfect Binary Tree**: All internal nodes have exactly two children and all leaf nodes are at the same level.
+- **Balanced Binary Tree**: The heights of the left and right subtrees of any node differ by at most one.
+- **Degenerate (or Pathological) Tree**: A tree where each parent node has only one child, resembling a linked list.
+
+#### Operations:
+- **Insertion**: Adding a new node to the tree in an appropriate position.
+- **Traversal**: Visiting each node in a specific order, such as **in-order**, **pre-order**, or **post-order** traversal.
+- **Searching**: Finding a specific node or value in the tree, typically by traversing it.
+- **Deletion**: Removing a node from the tree while preserving the binary tree structure.
+
+#### Use Cases of Binary Trees:
+- **Binary Search Tree (BST)**: A special type of binary tree in which the left child is less than the parent node and the right child is greater. It allows efficient searching, insertion, and deletion operations.
+- **Expression Trees**: In the context of mathematical expressions, a binary tree can represent operators and operands, allowing for efficient parsing and evaluation.
+- **Huffman Coding Tree**: A binary tree used in data compression algorithms for efficient encoding of data based on frequency.
+
+Overall, binary trees are widely used in computer science for organizing and manipulating hierarchical data. They serve as the foundation for many more advanced data structures and algorithms.
+
+#### **In Minishell**  
+In **Minishell**, you will use the binary tree structure to:  
+✅ **Parse and organize the user input** by breaking down commands, operators, and arguments into nodes, enabling efficient management of the command pipeline.  
+✅ **Handle operator precedence** by constructing the binary tree to reflect the proper execution order, ensuring that operations like `|`, `>`, `<`, and logical operators (e.g., `&&`, `||`) are processed in the correct sequence.  
+✅ **Support command chaining and redirections** by storing expressions in the tree and recursively managing left and right subtrees to handle complex command structures.  
+✅ **Optimize the evaluation process** by traversing the tree to evaluate the correctness of the syntax and expand environment variables (e.g., `$PATH`, `$HOME`) within the context of each command.
+
+---
+
 ### GNU readline library
 
 The GNU Readline library is a powerful tool that provides line-editing and command history capabilities for interactive programs,
