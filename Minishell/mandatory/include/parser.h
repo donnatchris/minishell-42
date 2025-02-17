@@ -42,13 +42,13 @@ typedef enum e_token_type
 {
 	NOTHING,			// Rien (pour ne pas utiliser la valeur zéro)
 	TOKEN_PARENTHESIS,	// (...)
-	TOKEN_AND,			// &&
-	TOKEN_OR,			// ||
-	TOKEN_PIPE,			// |
 	TOKEN_REDIR_OUT,	// >
 	TOKEN_APPEND,		// >>
 	TOKEN_REDIR_IN,		// <
 	TOKEN_HEREDOC,		// <<
+	TOKEN_PIPE,			// |
+	TOKEN_AND,			// &&
+	TOKEN_OR,			// ||
 	TOKEN_SEMICOLON,	// ;
 	TOKEN_STRING,		// "texte" (variable autorisée)
 	TOKEN_WORD,			// Un mot

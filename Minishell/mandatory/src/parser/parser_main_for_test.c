@@ -16,7 +16,29 @@ void	print_string(char *start, char *end)
 	}
 	ft_printf("\n");
 }
-#include <stdio.h>
+
+// Function to print priorities
+void	print_priorities(t_dclst **head)
+{
+	t_dclst	*current;
+	t_token	*token;
+
+	if (!head || !*head)
+	{
+		ft_printf("No tokens to print\n");
+		return ;
+	}
+	current = *head;
+	while (1)
+	{
+		token = (t_token *) current->data;
+		ft_printf("priority: %d\n", token->priority);
+		current = current->next;
+		if (current == *head)
+			break ;
+	}
+}
+
 // Function to print each token in the doubly circular linked list
 void	print_tokens(t_dclst **head)
 {
@@ -62,7 +84,7 @@ void	print_tokens(t_dclst **head)
 			ft_printf("TOKEN_ERROR: ");
 		// print_string(token->start, token->end);
 		ft_printf("%s\n", token->start);
-		// printf("avec printf: %s /priority %d\n", token->start, token->type);
+		// printf("avec printf: %s /priority %d\n", token->start, token->priority);
 		current = current->next;
 		if (current == *head)
 			break ;
@@ -79,7 +101,7 @@ int	main(int ac, char **av)
 	head = NULL;
 	head = tokenize(av[1]);
 	print_tokens(head);
+	print_priorities(head);
 	clear_dclst_data(head);
-	dclst_clear(head);
 	return (0);
 }
