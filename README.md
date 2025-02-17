@@ -1276,8 +1276,6 @@ In **Minishell**, you will use `unlink()` to:
 ✅ **Handle file deletion** when processing commands that involve removing files or cleaning up after processes.  
 ✅ **Delete files specified by the user**, especially in cases of file redirection or output manipulation.  
 
----
-
 >### about inodes and hard links
 >
 >#### 🔹 What is an **inode**?  
@@ -1291,50 +1289,50 @@ In **Minishell**, you will use `unlink()` to:
 >✅ **Timestamps** (creation, modification, access)  
 >✅ **Number of hard links**  
 >✅ **Pointers to data blocks** (where the actual file content is stored)  
-
-##### 🔹 Key points:  
-- Every **file and directory** has a **unique inode number** within a filesystem.  
-- File names are stored separately in **directories**, which map names to **inode numbers**.  
-- Hard links share the **same inode** (same data).  
-- Soft links (symlinks) have **their own inode**, pointing to another file’s name.  
-
-##### 🔹 Check inodes with `ls -i`:  
-```bash
-ls -i file.txt
-```
-🔍 Displays the **inode number** of the file! 🚀
-
-#### 🔹 What is a **Hard Link**?  
-A **hard link** is an additional directory entry that points to the **same data (inode)** as an existing file. Unlike a **soft link (symbolic link)**, a hard link is **indistinguishable** from the original file.  
-
-##### 🔹 Key Features:  
-✅ Points directly to the **same inode (data)** as the original file.  
-✅ **Independent** of the original file (deleting one does **not** affect the other).  
-✅ Any modification applies to both files since they share **identical data**.  
-✅ Must be on the **same filesystem** (unlike symlinks, which can cross filesystems).  
-✅ Not a shortcut—it’s a **true reference** to the file.  
-
-##### 🔹 Example (Linux):  
-```bash
-touch file.txt          # Create a file
-ln file.txt hard_link   # Create a hard link
-```
-👉 Now, `file.txt` and `hard_link` are **identical**:  
-- Modifying one changes the other.  
-- Deleting `file.txt` does **not** affect `hard_link`.  
-
-##### 🔹 Difference from a **Soft Link (Symlink)**:  
-| **Feature**   | **Hard Link** | **Soft Link (Symlink)** |
-|--------------|-------------|-------------------|
-| Points to    | Inode (real data) | File name (path) |
-| Works if original is deleted? | ✅ Yes | ❌ No (broken link) |
-| Can cross filesystems? | ❌ No | ✅ Yes |
-
-##### 🔹 Check with `ls -li` (inode):  
-```bash
-ls -li file.txt hard_link
-```
-🔍 If they have the **same inode number**, it’s a hard link! 🚀
+>
+>##### 🔹 Key points:  
+>- Every **file and directory** has a **unique inode number** within a filesystem.  
+>- File names are stored separately in **directories**, which map names to **inode numbers**.  
+>- Hard links share the **same inode** (same data).  
+>- Soft links (symlinks) have **their own inode**, pointing to another file’s name.  
+>
+>##### 🔹 Check inodes with `ls -i`:  
+>```bash
+>ls -i file.txt
+>```
+>🔍 Displays the **inode number** of the file! 🚀
+>
+>#### 🔹 What is a **Hard Link**?  
+>A **hard link** is an additional directory entry that points to the **same data (inode)** as an existing file. Unlike a **soft link (symbolic link)**, a hard link is >**indistinguishable** from the original file.
+>
+>##### 🔹 Key Features:  
+>✅ Points directly to the **same inode (data)** as the original file.  
+>✅ **Independent** of the original file (deleting one does **not** affect the other).  
+>✅ Any modification applies to both files since they share **identical data**.  
+>✅ Must be on the **same filesystem** (unlike symlinks, which can cross filesystems).  
+>✅ Not a shortcut—it’s a **true reference** to the file.
+>
+>##### 🔹 Example (Linux):  
+>```bash
+>touch file.txt          # Create a file
+>ln file.txt hard_link   # Create a hard link
+>```
+>👉 Now, `file.txt` and `hard_link` are **identical**:  
+>- Modifying one changes the other.  
+>- Deleting `file.txt` does **not** affect `hard_link`.
+>
+>##### 🔹 Difference from a **Soft Link (Symlink)**:  
+>| **Feature**   | **Hard Link** | **Soft Link (Symlink)** |
+>|--------------|-------------|-------------------|
+>| Points to    | Inode (real data) | File name (path) |
+>| Works if original is deleted? | ✅ Yes | ❌ No (broken link) |
+>| Can cross filesystems? | ❌ No | ✅ Yes |
+>
+>##### 🔹 Check with `ls -li` (inode):  
+>```bash
+>ls -li file.txt hard_link
+>```
+>🔍 If they have the **same inode number**, it’s a hard link! 🚀
 
 ---
 
