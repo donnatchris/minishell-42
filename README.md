@@ -19,7 +19,7 @@ execute the program
 	./minishell
 
 ## ARCHITECTURE:
-- minishell/ directiry with the whole project
+- minishell/ directory with the whole project
 	- libft/ directory with the libft (+ get_next_line and ft_printf)
  	- dclst/ directory with functions and header for using doubly circular linked list
 	- mandatory/ directory with files for the mandatory part
