@@ -3,8 +3,9 @@
 
 /*****************************************************************************
 COMPILE WITH:
-gcc -o parser_main_for_test -Wall -Werror -Wextra parser_main_for_test.c get_token.c tokenizer.c check_token_list.c ../../../dclst/dclst1.c ../../../dclst/dclst2.c ../../../dclst/dclst3.c -L../../../libft -lft_inc -I../../../libft/headers/libft_H
+gcc -o parser_main_for_test -Wall -Werror -Wextra parser_main_for_test.c get_token.c tokenizer.c check_token_list.c binary_tree.c ../../../dclst/dclst1.c ../../../dclst/dclst2.c ../../../dclst/dclst3.c -L../../../libft -lft_inc -I../../../libft/headers/libft_H
 *****************************************************************************/
+
 
 // Function to print a string from one pointer to another
 void	print_string(char *start, char *end)
@@ -95,17 +96,20 @@ void	print_tokens(t_dclst **head)
 int	main(int ac, char **av)
 {
 	t_dclst	**head;
+	t_tree	*tree;
 
 	if (ac != 2)
 		return (ft_printf("One argument needed\n"), 1);
 	head = NULL;
 	head = tokenize(av[1]);
 	if (check_syntax(head) == -1)
-	{
-		clear_dclst_data(head);
-		return (1);
-	}
+		return (clear_dclst_data(head), 1);
+	ft_printf("\nLIST CREATED:\n");
 	print_tokens(head);
+	tree = create_tree(*head, (*head)->prev->prev);
+	ft_printf("\nTREE CREATED:\n");
+	print_tree(tree);
+	clear_tree(tree);
 	clear_dclst_data(head);
 	return (0);
 }

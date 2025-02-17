@@ -164,7 +164,7 @@ int	get_symbol(char **s, char *es)
 	}
 	return (ret);
 }
-//test
+
 // Function to get the next word from the input string
 int	get_word(char **s, char *es)
 {

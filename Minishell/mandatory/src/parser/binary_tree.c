@@ -1,17 +1,28 @@
 #include "../../include/minishell.h"
 #include "../../include/parser.h"
 
-// Function to free the binary tree
-void	free_tree(t_tree **root)
+// Function to print the tree
+void	print_tree(t_tree *root)
 {
-	if (!root || !*root)
+	if (!root)
 		return ;
-	if ((*root)->left)
-		free_tree(&(*root)->left);
-	if ((*root)->right)
-		free_tree(&(*root)->right);
-	free(*root);
-	*root = NULL;
+	if (root->left)
+		print_tree(root->left);
+	if (root->right)
+		print_tree(root->right);
+	ft_printf("token: %s\n", root->token->start);
+}
+
+// Function to free the binary tree
+void	clear_tree(t_tree *root)
+{
+	if (!root)
+		return ;
+	if (root->left)
+		clear_tree(root->left);
+	if (root->right)
+		clear_tree(root->right);
+	free(root);
 }
 
 // Function to create a new node in the binary tree
@@ -53,20 +64,22 @@ t_dclst	*find_lowest_priority(t_dclst *first_node, t_dclst *last_node)
 }
 
 // Function to create the binary tree from the doubly circular linked list
-t_tree	*create_tree(t_dclst *first_node, t_dclst *last_node)
+t_tree	*create_tree(t_dclst *first, t_dclst *last)
 {
 	t_tree	*node;
 	t_dclst	*lowest;
 
-	if (!first_node || !last_node)
+	if (!first || !last)
 		return (NULL);
-	lowest = find_lowest_priority(first_node, last_node);
+	lowest = find_lowest_priority(first, last);
 	node = create_tree_node((t_token *) lowest->data);
 	if (!node)
 		return (NULL);
-	if (first_node == last_node)
+	if (first == last)
 		return (node);
-	node->left = create_tree(first_node, lowest->prev);
-	node->right = create_tree(lowest->next, last_node);
+	if (lowest != first)
+		node->left = create_tree(first, lowest->prev);
+	if (lowest != last)
+		node->right = create_tree(lowest->next, last);
 	return (node);
 }
