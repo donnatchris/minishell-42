@@ -1683,18 +1683,18 @@ In **Minishell**, you will use `isatty()` to:
 >| `STDERR_FILENO` | **2** | Standard error (also terminal by default) |
 >
 >##### How they are used:
->1️⃣ **Reading from standard input**  
+>**Reading from standard input**  
 >```c
 >char buffer[100];
 >read(STDIN_FILENO, buffer, 100);  // Reads input from the user
 >```
 >
->2️⃣ **Writing to standard output**  
+>**Writing to standard output**  
 >```c
 >write(STDOUT_FILENO, "Hello, world!\n", 14);  // Prints to the terminal
 >```
 >
->3️⃣ **Writing an error message to standard error**  
+>**Writing an error message to standard error**  
 >```c
 >write(STDERR_FILENO, "Error: Invalid input!\n", 22);  // Displays error messages
 >```
