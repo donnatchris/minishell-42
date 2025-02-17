@@ -2561,3 +2561,27 @@ int sigaddset(sigset_t *set, int sig);
 - `sig`: The signal to add to the set (e.g., `SIGINT`, `SIGTERM`, etc.).
 - **Returns**: `0` on success, or `-1` on error.
 - **Purpose**: Adds a specific signal to a signal set.
+
+---
+
+## `strerror()` and `perror()`
+
+> #include <string.h>
+
+### **1. `strerror()`**
+```c
+char *strerror(int errnum);
+```
+- `errnum`: The error number, usually set by system calls (e.g., `errno`).
+- **Returns**: A pointer to a string that describes the error corresponding to `errnum`.
+- **Purpose**: Converts an error number into a human-readable error message.
+
+### **2. `perror()`**
+```c
+void perror(const char *s);
+```
+- `s`: A string that is printed before the error message, providing context.
+- **Returns**: None.
+- **Purpose**: Prints a description of the last error that occurred (using `errno`), preceded by the string `s`.
+
+--- 
