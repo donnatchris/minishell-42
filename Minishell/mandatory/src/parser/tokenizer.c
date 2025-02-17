@@ -12,7 +12,11 @@ void	clear_dclst_data(t_dclst **head)
 	while (1)
 	{
 		if (current->data)
+		{
+			if (((t_token *) current->data)->str)
+				free(((t_token *) current->data)->str);
 			free(current->data);
+		}
 		current->data = NULL;
 		current = current->next;
 		if (current == *head)
