@@ -11,7 +11,7 @@ int	get_single_quote(char **s, char *es)
 		(*s)++;
 	if (**s != '\'')
 	{
-		perror("syntax error unclosed single quote");
+		ft_putstr_fd("syntax error unclosed single quote\n", 2);
 		ret = TOKEN_ERROR;
 	}
 	else
@@ -32,7 +32,7 @@ int	double_quote(char **s, char *es)
 		(*s)++;
 	if (**s != '"')
 	{
-		perror("syntax error unclosed double quote");
+		ft_putstr_fd("syntax error unclosed double quote\n", 2);
 		ret = TOKEN_ERROR;
 	}
 	else
@@ -89,13 +89,13 @@ int	get_parenthesis(char **s, char *es)
 	int	depth;
 
 	if (**s == ')')
-		return (perror("syntax error near unexpected token `)'"), TOKEN_ERROR);
+		return (ft_putstr_fd("syntax error near unexpected token `)'\n", 2), TOKEN_ERROR);
 	(*s)++;
 	depth = 0;
 	while (1)
 	{
 		if (*s == es)
-			return (perror("syntax error unclosed bracket"), TOKEN_ERROR);
+			return (ft_putstr_fd("syntax error unclosed bracket\n", 2), TOKEN_ERROR);
 		else if (**s == '(')
 			depth++;
 		else if (**s == ')')
@@ -124,7 +124,7 @@ int	get_angle_bracket(char **s)
 			(*s)++;
 		}
 	}
-	else if (**s == '>')
+	else
 	{
 		ret = TOKEN_REDIR_OUT;
 		if (*(*s + 1) == '>')
@@ -157,8 +157,11 @@ int	get_symbol(char **s, char *es)
 	else if (**s == '\'')
 		ret = get_single_quote(s, es);
 	else
+	{
+		ret = 0;
 		ft_printf("c est quoi cette merde\n");
 		// a retirer avant de rendre
+	}
 	return (ret);
 }
 //test

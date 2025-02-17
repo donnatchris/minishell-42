@@ -1,10 +1,10 @@
 #include "../../include/minishell.h"
 #include "../../include/parser.h"
 
-/*
+/*****************************************************************************
 COMPILE WITH:
-gcc -o parser_main_for_test parser_main_for_test.c get_token.c tokenizer.c check_token_list.c ../../../dclst/dclst1.c ../../../dclst/dclst2.c ../../../dclst/dclst3.c -L../../../libft -lft_inc -I../../../libft/headers/libft_H
-*/
+gcc -o parser_main_for_test -Wall -Werror -Wextra parser_main_for_test.c get_token.c tokenizer.c check_token_list.c ../../../dclst/dclst1.c ../../../dclst/dclst2.c ../../../dclst/dclst3.c -L../../../libft -lft_inc -I../../../libft/headers/libft_H
+*****************************************************************************/
 
 // Function to print a string from one pointer to another
 void	print_string(char *start, char *end)
@@ -97,7 +97,7 @@ int	main(int ac, char **av)
 	t_dclst	**head;
 
 	if (ac != 2)
-		return (1);
+		return (ft_printf("One argument needed\n"), 1);
 	head = NULL;
 	head = tokenize(av[1]);
 	if (check_syntax(head) == -1)
