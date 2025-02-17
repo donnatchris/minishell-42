@@ -41,18 +41,18 @@ right = Pointeur vers le fils droit (NULL pour une feuille)
 typedef enum e_token_type
 {
 	NOTHING,			// Rien (pour ne pas utiliser la valeur zéro)
-	TOKEN_PARENTHESIS,	// (...)
-	TOKEN_REDIR_OUT,	// >
-	TOKEN_APPEND,		// >>
-	TOKEN_REDIR_IN,		// <
-	TOKEN_HEREDOC,		// <<
-	TOKEN_PIPE,			// |
-	TOKEN_AND,			// &&
-	TOKEN_OR,			// ||
-	TOKEN_SEMICOLON,	// ;
-	TOKEN_STRING,		// "texte" (variable autorisée)
-	TOKEN_WORD,			// Un mot
-	TOKEN_LITTERAL,		// 'texte' (pas de variable)
+	TOKEN_PARENTHESIS,	// (...) / Prio1
+	TOKEN_REDIR_OUT,	// > / Prio2
+	TOKEN_APPEND,		// >> / Prio2
+	TOKEN_REDIR_IN,		// < / Prio2
+	TOKEN_HEREDOC,		// << / Prio2
+	TOKEN_PIPE,			// | / Prio3
+	TOKEN_AND,			// && / Prio4
+	TOKEN_OR,			// || / Prio4
+	TOKEN_SEMICOLON,	// ;  / Prio5
+	TOKEN_STRING,		// "texte" (variable autorisée) / Prio6
+	TOKEN_WORD,			// Un mot (variable autorisée) / Prio6
+	TOKEN_LITTERAL,		// 'texte' (pas de variable) / Prio6
 	TOKEN_EOF,			// Fin d'entrée
 	TOKEN_ERROR			// Erreur
 }	t_token_type;
@@ -62,5 +62,6 @@ typedef enum e_token_type
 t_dclst	**tokenize(char *input);
 int		get_token(char **ps, char *es, char **q, char **eq);
 void	clear_dclst_data(t_dclst **head);
+int		check_syntax(t_dclst **head);
 
 #endif

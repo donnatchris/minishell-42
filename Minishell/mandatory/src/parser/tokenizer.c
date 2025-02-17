@@ -13,7 +13,7 @@ void	affect_tokens_priority(t_dclst **head)
 	while (1)
 	{
 		token = (t_token *) current->data;
-		if (token->type == TOKEN_PARENTHESIS)
+		if (token->type == TOKEN_PARENTHESIS || token->type == TOKEN_EOF)
 			token->priority = 1;
 		else if (token->type >= TOKEN_REDIR_OUT && token->type <= TOKEN_HEREDOC)
 			token->priority = 2;

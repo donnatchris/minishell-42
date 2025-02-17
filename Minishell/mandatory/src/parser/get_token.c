@@ -1,26 +1,6 @@
 #include "../../include/minishell.h"
 #include "../../include/parser.h"
 
-// Function to get the next variable from the input string
-// int	get_dollar_sign(char **s)
-// {
-// 	int	ret;
-
-// 	if (ft_strchr(WHITESPACES, *(*s + 1)))
-// 	{
-// 		ret = TOKEN_WORD;
-// 		(*s)++;
-// 	}
-// 	else
-// 	{
-// 		ret = TOKEN_VAR;
-// 		(*s)++;
-// 		while (!is_whitespace(**s) && !is_symbol(**s))
-// 			(*s)++;
-// 	}
-// 	return (ret);
-// }
-
 // Function to get the next single quote from the input string
 int	get_single_quote(char **s, char *es)
 {
