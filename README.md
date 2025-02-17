@@ -33,7 +33,7 @@ execute the program
 - readme.md for quick explanation and main commands of the project
 
 
-## **Minishell Input Handling List**
+## MINISHELL INPUT HANDLING LIST
 
 1. **Prompt**:  
    - Display a prompt when waiting for a new command.
@@ -95,66 +95,18 @@ execute the program
     - Handle the `*` wildcard for the current working directory.
 
 
-Here’s the **ORDER OF PRIORITY FOR HANDLING USER INPUT IN MINISHELL** based on the **Minishell Input Handling List**:
+## TOKENS IN MINISHELL
 
+A **token** is a sequence of characters in a string that represents a single unit of meaningful data.
+In programming and parsing, tokens are the building blocks that the parser breaks input into for further processing.
+Tokens can include keywords, identifiers, operators, literals, or symbols that are meaningful within a specific context.
+For example, in a programming language, a token might represent a keyword like `if`, an operator like `+`, or a number like `42`.
+In general, tokens allow the parser to understand and categorize different parts of an input string.
 
-## **HANDLING USER INPUT IN MINISHELL**
-
-To ensure correct execution of commands, the parsing and processing of user input should follow a structured approach. Here’s the recommended order:
-
-1. **Handle Special Characters**:  
-   - First, identify and process any special characters (e.g., `ctrl-C`, `ctrl-D`, `ctrl-\`).
-   - **Ctrl-C** should display a new prompt.
-   - **Ctrl-D** should exit the shell.
-   - **Ctrl-\** should be ignored.
-
-2. **Handle Quotation Marks**:
-   - Parse the input to identify and correctly handle strings enclosed in **single quotes (`'`)** and **double quotes (`"`)**.
-     - Single quotes treat the contents as literal text.
-     - Double quotes allow variable expansion but treat everything inside as a literal except `$` for environment variable expansion.
-
-3. **Expand Environment Variables**:
-   - Before further processing, expand any environment variables (e.g., `$HOME`, `$USER`).
-   - Also handle the special variable `$?` for the exit status of the last command.
-
-4. **Parse Redirections**:
-   - Identify and handle redirections (`<`, `>`, `>>`, `<<`).
-     - Handle **input redirection (`<`)**: Associate input with a file.
-     - Handle **output redirection (`>`)**: Redirect output to a file.
-     - Handle **append mode (`>>`)**: Append output to a file.
-     - Handle **here-documents (`<<`)**: Gather input until a delimiter is encountered.
-
-5. **Handle Pipes (`|`)**:
-   - Parse and handle pipes (`|`) for connecting commands in a pipeline.
-   - Ensure the output of one command is properly passed as input to the next command in the pipeline.
-
-6. **Handle Builtin Commands**:
-   - **Echo**: Implement `echo` with `-n` option.
-   - **Cd**: Implement `cd` with relative or absolute paths.
-   - **Pwd**: Implement `pwd` with no options.
-   - **Export**: Implement `export` with no options.
-   - **Unset**: Implement `unset` with no options.
-   - **Env**: Implement `env` with no options or arguments.
-   - **Exit**: Implement `exit` with no options (ensure proper exit behavior).
-
-7. **Process User Command**:
-   - After handling the redirections, pipes, and builtins, resolve the user input into a command to be executed.
-   - Check if the command is valid and executable. Search the `PATH` variable or use a relative/absolute path to locate the executable.
-   - Handle execution with `execve()`.
-
-8. **Command Execution and Handling Signals**:
-   - Fork a new process to execute the command and handle the necessary input/output redirections.
-   - Use **signals** for managing process states (such as handling termination signals).
-   - Properly manage the child processes with `wait()`, `waitpid()`, or other waiting mechanisms (`wait3()`, `wait4()`).
-
-9. **History Management**:
-   - Keep track of the command history and manage it as needed (e.g., with `add_history()`, `readline()`, `history` file).
-
-10. **Return to Prompt**:
-    - Once the command is executed, return to the prompt for the next user input.
-
-
-## Tokens to Process by Order of Priority in Minishell
+In the context of **Minishell**, tokens are the elements extracted from the user's input command line.
+These can include commands, arguments, operators (such as `|`, `&&`, `>`, `<`), special symbols (like parentheses for grouping), or environment variables (e.g., `$HOME`).
+Minishell parses the input by first breaking it into tokens, which are then used to construct an abstract syntax tree (AST) or to directly interpret and execute the commands.
+Handling tokens correctly allows Minishell to process complex command lines, perform redirections, handle pipes, and expand environment variables, enabling it to execute user commands accurately and efficiently.
 
 To ensure the correct execution of commands, tokens should be processed in the following order of priority:
 
