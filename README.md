@@ -95,168 +95,64 @@ execute the program
     - Handle the `*` wildcard for the current working directory.
 
 
-## ORDER OF PRIORITY FOR HANDLING USER INPUT IN MINISHELL
-To ensure **correct execution** of commands, the **parsing and processing** of user input should follow a structured approach. Here’s the recommended order:
+Here’s the **ORDER OF PRIORITY FOR HANDLING USER INPUT IN MINISHELL** based on the **Minishell Input Handling List**:
 
-### **1. Lexical Analysis (Tokenization)**
-- **First**, break the input string into **tokens**.
-- Identify the **type** of each token (command, argument, operator, etc.).  
 
-**Example:**  
-> Input:  
-> ```shell
-> echo "Hello; world" > output.txt
-> ```
-> Tokens:  
-> ```plaintext
-> [echo] ["Hello; world"] [>] [output.txt]
-> ```
-At this stage, **do not** interpret anything—just split and classify.
+## **ORDER OF PRIORITY FOR HANDLING USER INPUT IN MINISHELL**
 
-### **2. Handle Quoting & Escaping**
-- **Process quotes** (`'...'`, `"..."`) to group words correctly.
-- **Process escape characters** (`\` to escape special symbols).  
+To ensure correct execution of commands, the parsing and processing of user input should follow a structured approach. Here’s the recommended order:
 
-**Example:**  
-> Input:  
-> ```shell
-> echo "Hello; world"
-> ```
-> Should be **one argument**, not split at `;`:  
-> ```plaintext
-> [echo] ["Hello; world"]
-> ```
+1. **Handle Special Characters**:  
+   - First, identify and process any special characters (e.g., `ctrl-C`, `ctrl-D`, `ctrl-\`).
+   - **Ctrl-C** should display a new prompt.
+   - **Ctrl-D** should exit the shell.
+   - **Ctrl-\** should be ignored.
 
-### **3. Syntax Parsing & Syntax Error Detection**
-- Check for **syntax errors** before executing anything.
-- Detect **unmatched quotes, missing arguments**, or invalid syntax.  
-If an error is found, **stop execution immediately**.
+2. **Handle Quotation Marks**:
+   - Parse the input to identify and correctly handle strings enclosed in **single quotes (`'`)** and **double quotes (`"`)**.
+     - Single quotes treat the contents as literal text.
+     - Double quotes allow variable expansion but treat everything inside as a literal except `$` for environment variable expansion.
 
-**Example Errors to Catch Early:**  
-> - `echo "Hello` (missing closing quote)  
-> - `| ls` (pipe at the start without a command before)  
-> - `cat <` (missing file after `<`)  
+3. **Expand Environment Variables**:
+   - Before further processing, expand any environment variables (e.g., `$HOME`, `$USER`).
+   - Also handle the special variable `$?` for the exit status of the last command.
 
-### **4. Handle Logical Operators (`&&`, `||`)**
-- **Process** `&&` and `||` before anything else.
-- These determine **which commands should run** based on success/failure.  
+4. **Parse Redirections**:
+   - Identify and handle redirections (`<`, `>`, `>>`, `<<`).
+     - Handle **input redirection (`<`)**: Associate input with a file.
+     - Handle **output redirection (`>`)**: Redirect output to a file.
+     - Handle **append mode (`>>`)**: Append output to a file.
+     - Handle **here-documents (`<<`)**: Gather input until a delimiter is encountered.
 
-**Example:**  
-> ```shell
-> mkdir test && cd test || echo "Failed"
-> ```
-> - `mkdir test` **runs**  
-> - If it **succeeds**, `cd test` **executes**  
-> - If `cd test` **fails**, then `echo "Failed"` runs  
+5. **Handle Pipes (`|`)**:
+   - Parse and handle pipes (`|`) for connecting commands in a pipeline.
+   - Ensure the output of one command is properly passed as input to the next command in the pipeline.
 
-### **5. Handle Command Grouping (`( )`, `{ }`)**
-- **If parentheses are used**, they create a **subshell**.
-- **If `{ }` is used**, commands execute in the **current shell**.  
+6. **Handle Builtin Commands**:
+   - **Echo**: Implement `echo` with `-n` option.
+   - **Cd**: Implement `cd` with relative or absolute paths.
+   - **Pwd**: Implement `pwd` with no options.
+   - **Export**: Implement `export` with no options.
+   - **Unset**: Implement `unset` with no options.
+   - **Env**: Implement `env` with no options or arguments.
+   - **Exit**: Implement `exit` with no options (ensure proper exit behavior).
 
-**Example:**  
-> ```shell
-> (cd /tmp && ls) > output.txt
-> ```
-> - **Subshell ensures `cd` does not affect the main shell**  
-> - **Entire group output is redirected**  
+7. **Process User Command**:
+   - After handling the redirections, pipes, and builtins, resolve the user input into a command to be executed.
+   - Check if the command is valid and executable. Search the `PATH` variable or use a relative/absolute path to locate the executable.
+   - Handle execution with `execve()`.
 
-### **6. Handle Pipes (`|`)**
-- **Split commands** based on `|` and set up **pipes**.
-- Ensure **input/output redirection** between commands works.  
-At this stage, commands are **not yet executed**, just structured into a pipeline.
+8. **Command Execution and Handling Signals**:
+   - Fork a new process to execute the command and handle the necessary input/output redirections.
+   - Use **signals** for managing process states (such as handling termination signals).
+   - Properly manage the child processes with `wait()`, `waitpid()`, or other waiting mechanisms (`wait3()`, `wait4()`).
 
-**Example:**  
-> ```shell
-> cat file.txt | grep "hello" | wc -l
-> ```
-> - `cat` sends output to `grep`  
-> - `grep` filters lines and sends output to `wc -l`  
-> - `wc -l` counts the lines  
+9. **History Management**:
+   - Keep track of the command history and manage it as needed (e.g., with `add_history()`, `readline()`, `history` file).
 
-### **7. Handle Redirections (`>`, `>>`, `<`, `<<`)**
-- **Before executing commands**, set up file descriptors.
-- **Check for file errors** (non-existent file, permission issues).  
+10. **Return to Prompt**:
+    - Once the command is executed, return to the prompt for the next user input.
 
-**Example:**  
-> ```shell
-> echo "Hello" > output.txt
-> ```
-> - Open `output.txt` **before** running `echo`.  
-
-### **8. Handle Variable Expansion (`$VAR`, `$?`)**
-- **Expand environment variables** **before execution**.
-- **Replace** `$VAR` with its value.
-- **Expand `$?`** to the **last exit status**.  
-
-**Examples:**  
-> ```shell
-> echo $HOME
-> ```
-> If `$HOME=/Users/user`, then command becomes:  
-> ```shell
-> echo /Users/user
-> ```
-> ```shell
-> ls nonexistent_folder; echo $?
-> ```
-> If `ls` fails (`exit status 2`), then:  
-> ```shell
-> echo 2
-> ```
-
-### **9. Execute Builtin Commands (`cd`, `exit`, etc.)**
-- **Before searching in `$PATH`**, check if the command is a **builtin**.
-- If it's a builtin, **execute it without `execve()`**.  
-
-**Example:**  
-> ```shell
-> cd /tmp
-> ```
-> - `cd` is a **builtin**, so it must be executed **directly** inside Minishell.  
-> - It does **not** create a new process.
-
-### **10. Execute External Commands (via `execve()`)**
-- **Search for the command in `$PATH`**.
-- **If found, execute it via `execve()`**.
-- **If not found, print an error message (`command not found`)**.  
-
-**Example:**  
-> ```shell
-> ls -l /home
-> ```
-> - Minishell **searches for `ls` in `$PATH`**.  
-> - If found (`/bin/ls`), it **executes it using `execve()`**.  
-
-### **11. Handle Background Execution (`&`)**
-*(Optional, not required for Minishell, but can be handled for extra functionality)*  
-If `&` is detected, run the command in the **background**.  
-
-**Example:**  
-> ```shell
-> sleep 5 &
-> ```
-> - The shell **does not wait** for `sleep 5` to finish.  
-> - The process runs in the **background**.  
-
-### **12. Signal Handling (`Ctrl + C`, `Ctrl + D`, `Ctrl + \`)**
-**After forking child processes**, handle signals properly.  
-- `Ctrl + C` → Should **interrupt** running commands but **not Minishell itself**.  
-- `Ctrl + D` → If the user presses `EOF` on an **empty line**, **exit the shell**.  
-- `Ctrl + \` → Ignore unless handling a **child process**.  
-
-### **Final Summary: Order of Execution**  
-1️⃣ **Tokenize input** (split into words, classify tokens)  
-2️⃣ **Handle quoting & escaping**  
-3️⃣ **Check for syntax errors** (e.g., unmatched quotes, misplaced pipes)  
-4️⃣ **Process logical operators (`&&`, `||`)**  
-5️⃣ **Handle grouping (`( )`, `{ }`)**  
-6️⃣ **Set up pipes (`|`)**  
-7️⃣ **Prepare redirections (`>`, `<`, `>>`, `<<`)**  
-8️⃣ **Expand variables (`$VAR`, `$?`)**  
-9️⃣ **Check and execute builtins** (`cd`, `export`, `exit`, etc.)  
-🔟 **Execute external commands** (via `execve()`)  
-1️⃣1️⃣ **Handle background execution (`&`)** *(if implemented)*  
-1️⃣2️⃣ **Handle signals (`Ctrl + C`, `Ctrl + D`)**  
 
 ## DOCUMENTATION:
 
