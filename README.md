@@ -98,7 +98,7 @@ execute the program
 Here’s the **ORDER OF PRIORITY FOR HANDLING USER INPUT IN MINISHELL** based on the **Minishell Input Handling List**:
 
 
-## **ORDER OF PRIORITY FOR HANDLING USER INPUT IN MINISHELL**
+## **HANDLING USER INPUT IN MINISHELL**
 
 To ensure correct execution of commands, the parsing and processing of user input should follow a structured approach. Here’s the recommended order:
 
@@ -152,6 +152,37 @@ To ensure correct execution of commands, the parsing and processing of user inpu
 
 10. **Return to Prompt**:
     - Once the command is executed, return to the prompt for the next user input.
+
+
+## Tokens to Process by Order of Priority in Minishell
+
+To ensure the correct execution of commands, tokens should be processed in the following order of priority:
+
+1. **Parentheses `()`**  
+   - Used for grouping commands and controlling the execution order within the shell. Handle first to correctly identify subexpressions.
+
+2. **Logical AND `&&`**  
+   - Used to execute the second command only if the first command succeeds. High priority to allow proper chaining of conditional commands.
+
+3. **Logical OR `||`**  
+   - Used to execute the second command only if the first command fails. Similar priority to `&&` for conditional command chaining.
+
+4. **Pipe `|`**  
+   - Allows output from one command to be passed as input to another. It should be processed next to handle command pipelines.
+
+5. **Redirections `<`, `>`, `>>`, `<<`**  
+   - Used to redirect input and output, including appending (`>>`) and reading until a delimiter (`<<`). These should be handled after pipes to set up proper input/output flows.
+
+6. **Command Substitution `$()`**  
+   - Used to execute commands inside `$()` and replace them with their output. Should be processed before normal arguments.
+
+7. **Environment Variable Expansion `$VAR`**  
+   - Expands environment variables like `$HOME`, `$PATH`, etc., to their actual values. These need to be handled before final command execution.
+
+8. **Arguments (words, strings, etc.)**  
+   - The command name and its arguments are processed last, once all operators and special tokens are handled.
+
+By following this order of priority, the shell will ensure that commands, their operators, and redirections are properly parsed and executed.
 
 
 ## DOCUMENTATION:
