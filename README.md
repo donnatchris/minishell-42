@@ -1529,6 +1529,26 @@ In **Minishell**, you will use `opendir()` to:
 ✅ **Read directory contents** to retrieve the files and subdirectories within a specified path.  
 ✅ **Facilitate directory exploration** in your shell, providing functionality for users to browse and interact with the filesystem.
 
+>#### What is a **directory**?  
+>A **directory** is a special type of file that **stores references to other files** (including their inode numbers). It acts as a **lookup table** that maps file names to inodes.  
+>
+>##### Is a directory an inode?  
+>✅ A **directory itself has an inode**, just like regular files.  
+>✅ The **inode of a directory** stores **metadata** (permissions, owner, timestamps, etc.), but instead of pointing to file data, it points to **a list of filenames and their
+corresponding inodes**.  
+>
+>##### 🔹 How directories work:  
+>- When you create a **new file**, the system:  
+>   - Allocates an **inode** for it.  
+>   - Adds an **entry in the directory** linking the filename to the inode number.  
+>- When you **list a directory (`ls -l`)**, it reads the directory’s inode to find the filenames and fetches their inodes for metadata.  
+>
+>##### 🔹 Check directory contents with `ls -i`:  
+>```bash
+>ls -i /home/user
+>```
+>📌 This will show inode numbers of all files and subdirectories inside `/home/user`. 🚀
+
 ---
 
 ### readdir()
