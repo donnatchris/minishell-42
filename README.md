@@ -1672,6 +1672,39 @@ In **Minishell**, you will use `isatty()` to:
 ✅ **Determine if input is coming from a user or a script** to handle interactive vs. non-interactive modes  
 ✅ **Adapt behavior based on whether output is redirected**, such as formatting differences in commands like `ls`
 
+>#### `STDIN_FILENO`, `STDOUT_FILENO`, and `STDERR_FILENO`  
+>
+>These are **file descriptor macros** defined in `<unistd.h>` that represent the standard input, output, and error streams in Unix-based systems.  
+>
+>| Macro           | Value | Description |
+>|-----------------|-------|-------------|
+>| `STDIN_FILENO`  | **0** | Standard input (keyboard by default) |
+>| `STDOUT_FILENO` | **1** | Standard output (terminal by default) |
+>| `STDERR_FILENO` | **2** | Standard error (also terminal by default) |
+>
+>##### How they are used:
+>1️⃣ **Reading from standard input**  
+>```c
+>char buffer[100];
+>read(STDIN_FILENO, buffer, 100);  // Reads input from the user
+>```
+>
+>2️⃣ **Writing to standard output**  
+>```c
+>write(STDOUT_FILENO, "Hello, world!\n", 14);  // Prints to the terminal
+>```
+>
+>3️⃣ **Writing an error message to standard error**  
+>```c
+>write(STDERR_FILENO, "Error: Invalid input!\n", 22);  // Displays error messages
+>```
+>
+>##### Why use these macros?  
+>✅ Makes the code more **portable** and **readable** instead of using raw numbers (`0, 1, 2`).  
+>✅ Useful when **redirecting** input/output in shells (e.g., `ls > output.txt`, `./program < input.txt`). 
+>
+>📌 **In Minishell**, you'll use these file descriptors to **handle redirections and pipes**, ensuring input/output is properly managed. 🚀
+
 ---
 
 ### `ttyname()`  
