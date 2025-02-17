@@ -50,7 +50,7 @@ void	clear_dclst_data(t_dclst **head)
 }
 
 // Function to split the input into tokens and store them in the doubly circular linked list
-int	tokenize(char *input, t_dclst **head)
+int	tokenize_to_dclst(char *input, t_dclst **head)
 {
 	t_token	*token;
 	char	*string;
@@ -71,7 +71,7 @@ int	tokenize(char *input, t_dclst **head)
 		token->type = type;
 		token->start = start;
 		token->end = end;
-		token->priority = type;
+		token->priority = token->type;
 		if (token->priority > 10)
 			token->priority = 10;
 		dclst_add_back(head, token);
@@ -80,7 +80,7 @@ int	tokenize(char *input, t_dclst **head)
 }
 
 // Function to create a doubly circular linked list of tokens from the input
-t_dclst	**tokenize_to_dclst(char *input)
+t_dclst	**tokenize(char *input)
 {
 	t_dclst	**head;
 
@@ -88,7 +88,7 @@ t_dclst	**tokenize_to_dclst(char *input)
 	head = malloc(sizeof(t_dclst *));
 	if (!head)
 		return (NULL);
-	if (tokenize(input, head) == -1)
+	if (tokenize_to_dclst(input, head) == -1)
 	{
 		clear_dclst_data(head);
 		dclst_clear(head);

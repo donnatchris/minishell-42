@@ -59,7 +59,7 @@ typedef enum e_token_type
 
 // prototypes
 
-t_dclst	**tokenize_to_dclst(char *input);
+t_dclst	**tokenize(char *input);
 int		get_token(char **ps, char *es, char **q, char **eq);
 void	clear_dclst_data(t_dclst **head);
 
