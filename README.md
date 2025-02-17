@@ -19,17 +19,20 @@ execute the program
 	./minishell
 
 ## ARCHITECTURE:
-
-- philo/ directory with files for the mandatory part
-	- src/ directory for main files of the project
-	- utils/ directory for secondary files
-	- include/ directory for headers
-- philo_bonus/ directory with files for the bonus part
-	- src/ directory for main files of the project
-	- utils/ directory for secondary files
-	- include/ directory for headers
-- test/ directory fot tests files
-- Makefile (with rules: make bonus clean fclean re)
+- minishell/ directiry with the whole project
+	- libft/ directory with the libft (+ get_next_line and ft_printf)
+ 	- dclst/ directory with functions and header for using doubly circular linked list
+	- mandatory/ directory with files for the mandatory part
+		- src/ directory for main files of the project
+  			- builtins/
+     			- env/
+        		- executor/
+          		- parser/ files for splitting the user input into tokens and storing them in a binary tree
+            		- signals/
+		- utils/ directory for secondary files
+		- include/ directory for headers
+	- bonus/ directory for the bonus part
+	- Makefile (with rules: make bonus clean fclean re)
 - readme.md for quick explanation and main commands of the project
 
 
