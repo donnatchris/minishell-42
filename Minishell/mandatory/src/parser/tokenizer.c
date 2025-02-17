@@ -36,13 +36,15 @@ int	tokenize(char *input, t_dclst **head)
 		type = get_token(&string, input + ft_strlen(input), &start, &end);
 		if (type == TOKEN_ERROR)
 			return (-1);
-		token = NULL;
 		token = (t_token *) malloc(sizeof(t_token));
 		if (!token)
 			return (-1);
 		token->type = type;
 		token->start = start;
 		token->end = end;
+		token->priority = type;
+		if (token->priority > 10)
+			token->priority = 10;
 		dclst_add_back(head, token);
 	}
 	return (0);
