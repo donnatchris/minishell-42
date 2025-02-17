@@ -1278,10 +1278,10 @@ In **Minishell**, you will use `unlink()` to:
 
 >### about inodes and hard links
 >
->#### 🔹 What is an **inode**?  
+>#### What is an **inode**?  
 >An **inode** (index node) is a **data structure** in a filesystem that stores **metadata** about a file but **not** its name or content.  
 >
->##### 🔹 What does an inode contain?  
+>##### What does an inode contain?  
 >✅ **File type** (regular file, directory, etc.)  
 >✅ **Permissions** (read, write, execute)  
 >✅ **Owner & group**  
@@ -1290,29 +1290,29 @@ In **Minishell**, you will use `unlink()` to:
 >✅ **Number of hard links**  
 >✅ **Pointers to data blocks** (where the actual file content is stored)  
 >
->##### 🔹 Key points:  
+>##### Key points:  
 >- Every **file and directory** has a **unique inode number** within a filesystem.  
 >- File names are stored separately in **directories**, which map names to **inode numbers**.  
 >- Hard links share the **same inode** (same data).  
 >- Soft links (symlinks) have **their own inode**, pointing to another file’s name.  
 >
->##### 🔹 Check inodes with `ls -i`:  
+>##### Check inodes with `ls -i`:  
 >```bash
 >ls -i file.txt
 >```
 >🔍 Displays the **inode number** of the file! 🚀
 >
->#### 🔹 What is a **Hard Link**?  
+>#### What is a **Hard Link**?  
 >A **hard link** is an additional directory entry that points to the **same data (inode)** as an existing file. Unlike a **soft link (symbolic link)**, a hard link is >**indistinguishable** from the original file.
 >
->##### 🔹 Key Features:  
+>##### Key Features:  
 >✅ Points directly to the **same inode (data)** as the original file.  
 >✅ **Independent** of the original file (deleting one does **not** affect the other).  
 >✅ Any modification applies to both files since they share **identical data**.  
 >✅ Must be on the **same filesystem** (unlike symlinks, which can cross filesystems).  
 >✅ Not a shortcut—it’s a **true reference** to the file.
 >
->##### 🔹 Example (Linux):  
+>##### Example (Linux):  
 >```bash
 >touch file.txt          # Create a file
 >ln file.txt hard_link   # Create a hard link
@@ -1321,14 +1321,14 @@ In **Minishell**, you will use `unlink()` to:
 >- Modifying one changes the other.  
 >- Deleting `file.txt` does **not** affect `hard_link`.
 >
->##### 🔹 Difference from a **Soft Link (Symlink)**:  
+>##### Difference from a **Soft Link (Symlink)**:  
 >| **Feature**   | **Hard Link** | **Soft Link (Symlink)** |
 >|--------------|-------------|-------------------|
 >| Points to    | Inode (real data) | File name (path) |
 >| Works if original is deleted? | ✅ Yes | ❌ No (broken link) |
 >| Can cross filesystems? | ❌ No | ✅ Yes |
 >
->##### 🔹 Check with `ls -li` (inode):  
+>##### Check with `ls -li` (inode):  
 >```bash
 >ls -li file.txt hard_link
 >```
