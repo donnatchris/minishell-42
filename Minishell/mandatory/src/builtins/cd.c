@@ -26,18 +26,26 @@ char	*get_env_value(const char *key, char **envp)
 	return (NULL);
 }
 
+// Function to change directory
+// like the cd command
 int	cd_cmd(const char *path, char **envp)
 {
-	// char	old_pwd[PATH_MAX];
-	// char	cwd[PATH_MAX];
-
-	// if (!getcwd(old_pwd, sizeof(old_pwd)))
-	// 	perror("cd error: getcwd failed");
 	if (!path || *path == '\0')
-	{
 		path = get_env_value("HOME", envp);
-		if (!path)
-			return (ft_printf("cd: HOME NOT SET "));
+	if (!path)
+		return (ft_printf("cd: HOME NOT SET "), -1);
+	if (!ft_strncomp(path, "..", 2) && ft_strlen(path) == 2)
+		path = get_env_value("OLDPWD", envp);
+	else if (!ft_strncomp(path, ".", ft_strlen(path)))
+		return (0);
+	else if (!ft_strncomp(path, "~", 1) && ft_strlen(path) == 1)
+	{
+		if (chdir("/") == -1)
+		{
+			if (chdir(path) == -1)
+				return (perror("cd error"), -1);
+			return (0);
+		}
 	}
 	if (chdir(path) == -1)
 		return (perror("cd error"), -1);
@@ -47,7 +55,7 @@ int	cd_cmd(const char *path, char **envp)
 int	main(int ac, char **av, char **envp)
 {
 	if (ac != 2)
-		return (ft_printf("one arg nedded"), 1);
+		return (ft_printf("one arg needed"), 1);
 	// char	*res;
 	// res = get_env_value(av[1], envp);
 	// if (!res)

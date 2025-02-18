@@ -6,6 +6,7 @@ gcc -o test_pwd -Wall -Werror -Wextra pwd.c ../../../dclst/dclst1.c ../../../dcl
 *****************************************************************************/
 
 // Function to print the actual working directory
+// like the pwd comand
 void	pwd_cmd()
 {
 	char	current_dir[PATH_MAX];
@@ -16,8 +17,8 @@ void	pwd_cmd()
 		ft_printf("%s\n", current_dir);
 }
 
-int	main(void)
-{
-	pwd_cmd();
-	return (0);
-}
+// int	main(void)
+// {
+// 	pwd_cmd();
+// 	return (0);
+// }
