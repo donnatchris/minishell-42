@@ -134,7 +134,7 @@ int	update_env_var(const char *key, const char *value, char **envp)
 	if (!new_entry)
 		return (free(temp), ft_putstr_fd("update_env_var: strjoin failed\n", 2), -1);
 	free(temp);
-	free(*var);
+	// free(*var); // doit travailler sur la copie alouée dynamiquement
 	*var = new_entry;
 	return (0);
 }
@@ -162,7 +162,7 @@ char	*find_actual_dir(void)
 
 	if (!getcwd(pwd, sizeof(pwd)))
 		return (perror("cd: getcwd failed"), NULL);
-	return (pwd);
+	return (ft_strdup(pwd));
 }
 
 // Function to change directory to the parent directory
@@ -177,10 +177,10 @@ char	*find_parent_dir(void)
 	if (ptr == NULL)
 		return (perror("cd: invalid path"), NULL);
 	if (ptr == pwd)
-		return ("/");
+		return (ft_strdup("/"));
 	else
 		*ptr = '\0';
-	return (pwd);
+	return (ft_strdup(pwd));
 }
 
 // Function to find the path for the cd command
@@ -197,9 +197,9 @@ char	*find_cd_path(char *input, char **envp)
 	else if (!ft_strncmp(input, ".", 1) && ft_strlen(input) == 1)
 		return (find_actual_dir());
 	else if (!ft_strncmp(input, "~", 1) && ft_strlen(input) == 1)
-		return ("/");
+		return (ft_strdup("/"));
 	else
-		return (input);
+		return (ft_strdup(input));
 }
 
 // Function to change directorylike the cd command
@@ -216,15 +216,16 @@ int	cd_cmd(char *path, char **envp)
 	if (!new_pwd)
 		return (-1);
 	if (chdir(new_pwd) == -1)
-		return (perror("cd error"), -1);
+		return  (free(new_pwd), perror("cd error"), -1);
 	actualize_cd_var(pwd, new_pwd, &envp);
+	free(new_pwd);
 	return (0);
 }
 
-// int	main(int ac, char **av)
-// {
-// 	if (ac != 2)
-// 		return (ft_printf("one arg needed"), 1);
-// 	cd_cmd(av[1]);
-// 	return (0);
-// }
+int	main(int ac, char **av, char **envp)
+{
+	if (ac != 2)
+		return (ft_printf("one arg needed"), 1);
+	cd_cmd(av[1], envp);
+	return (0);
+}
