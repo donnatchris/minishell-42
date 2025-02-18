@@ -188,16 +188,19 @@ char	*find_parent_dir(void)
 // Returns NULL on failure
 char	*find_cd_path(char *input, char **envp)
 {
-	if (!input || *input == '\0')
-		input = ft_getenv("HOME", envp);
-	if (!input)
+	char	*home;
+
+	home = ft_getenv("HOME", envp);
+	if (!home)
 		return (ft_putstr_fd("cd: HOME NOT SET", 2), NULL);
+	if (!input || *input == '\0')
+		input = home;
 	if (!ft_strncmp(input, "..", 2) && ft_strlen(input) == 2)
 		return (find_parent_dir());
 	else if (!ft_strncmp(input, ".", 1) && ft_strlen(input) == 1)
 		return (find_actual_dir());
-	else if (!ft_strncmp(input, "~", 1) && ft_strlen(input) == 1)
-		return (ft_strdup("/"));
+	else if (input[0] == '~')
+		return (ft_strjoin(home, input + 1));
 	else
 		return (ft_strdup(input));
 }
@@ -217,7 +220,9 @@ int	cd_cmd(char *path, char **envp)
 		return (-1);
 	if (chdir(new_pwd) == -1)
 		return  (free(new_pwd), perror("cd error"), -1);
+	ft_printf("new_pwd = %s\n", new_pwd); // debug
 	actualize_cd_var(pwd, new_pwd, &envp);
+	ft_printf("PWD = %s\n", ft_getenv("PWD", envp)); // debug
 	free(new_pwd);
 	return (0);
 }
