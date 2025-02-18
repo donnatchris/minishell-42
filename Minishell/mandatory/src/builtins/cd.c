@@ -5,6 +5,12 @@ COMPILE WITH:
 gcc -o test_cd -Wall -Werror -Wextra cd.c ../../../dclst/dclst1.c ../../../dclst/dclst2.c ../../../dclst/dclst3.c -L../../../libft -lft_inc -I../../../libft/headers/libft_H
 *****************************************************************************/
 
+// // Function to go the actual dir
+// int	go_to_actual_dir(void)
+// {
+
+// }
+
 // Function to change directory to the parent directory
 int	go_to_parent_dir(void)
 {
@@ -37,11 +43,11 @@ int	cd_cmd(const char *path)
 	if (!path || *path == '\0')
 		path = getenv("HOME");
 	if (!path)
-		return (ft_printf("cd: HOME NOT SET "), -1);
+		return (ft_putstr_fd("cd: HOME NOT SET", 2), -1);
 	if (!ft_strncmp(path, "..", 2) && ft_strlen(path) == 2)
 		return (go_to_parent_dir());
-	else if (!ft_strncmp(path, ".", 1) && ft_strlen(path) == 1)
-		return (0);
+	// else if (!ft_strncmp(path, ".", 1) && ft_strlen(path) == 1)
+	// 	return (go_to_actual_dir(), 0);
 	else if (!ft_strncmp(path, "~", 1) && ft_strlen(path) == 1)
 	{
 		if (chdir("/") == -1)
@@ -53,10 +59,10 @@ int	cd_cmd(const char *path)
 	return (0);
 }
 
-int	main(int ac, char **av)
-{
-	if (ac != 2)
-		return (ft_printf("one arg needed"), 1);
-	cd_cmd(av[1]);
-	return (0);
-}
+// int	main(int ac, char **av)
+// {
+// 	if (ac != 2)
+// 		return (ft_printf("one arg needed"), 1);
+// 	cd_cmd(av[1]);
+// 	return (0);
+// }
