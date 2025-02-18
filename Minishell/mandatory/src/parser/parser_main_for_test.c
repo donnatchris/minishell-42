@@ -1,11 +1,9 @@
 #include "../../include/minishell.h"
-#include "../../include/parser.h"
 
 /*****************************************************************************
 COMPILE WITH:
 gcc -o parser_main_for_test -Wall -Werror -Wextra parser_main_for_test.c get_token.c tokenizer.c check_token_list.c binary_tree.c ../../../dclst/dclst1.c ../../../dclst/dclst2.c ../../../dclst/dclst3.c -L../../../libft -lft_inc -I../../../libft/headers/libft_H
 *****************************************************************************/
-
 
 // Function to print a string from one pointer to another
 void	print_string(char *start, char *end)

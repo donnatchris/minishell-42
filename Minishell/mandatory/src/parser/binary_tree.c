@@ -1,5 +1,4 @@
 #include "../../include/minishell.h"
-#include "../../include/parser.h"
 
 // Function to print the tree
 void	print_tree(t_tree *root)

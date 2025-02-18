@@ -1,5 +1,4 @@
 #include "../../include/minishell.h"
-#include "../../include/parser.h"
 
 // Function to print the token in error messages
 void	print_token(t_token *token)

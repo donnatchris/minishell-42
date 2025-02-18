@@ -1,5 +1,4 @@
 #include "../../include/minishell.h"
-#include "../../include/parser.h"
 
 // Function to affect the priority to each token in the doubly circular linked list
 void	affect_tokens_priority(t_dclst **head)

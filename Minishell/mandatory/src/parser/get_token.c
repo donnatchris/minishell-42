@@ -1,5 +1,4 @@
 #include "../../include/minishell.h"
-#include "../../include/parser.h"
 
 // Function to get the next single quote from the input string
 int	get_single_quote(char **s, char *es)
