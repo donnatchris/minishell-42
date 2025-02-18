@@ -134,7 +134,7 @@ int	update_env_var(const char *key, const char *value, char **envp)
 	if (!new_entry)
 		return (free(temp), ft_putstr_fd("update_env_var: strjoin failed\n", 2), -1);
 	free(temp);
-	// free(*var); // doit travailler sur la copie alouée dynamiquement
+	// free(*var); // doit travailler sur la copie alouée dynamiquement pour pouvoir free
 	*var = new_entry;
 	return (0);
 }
@@ -201,6 +201,8 @@ char	*find_cd_path(char *input, char **envp)
 		return (find_actual_dir());
 	else if (input[0] == '~')
 		return (ft_strjoin(home, input + 1));
+	else if (!ft_strncmp(input, "-", 1))
+		return (ft_strdup(ft_getenv("OLDPWD", envp)));
 	else
 		return (ft_strdup(input));
 }
@@ -220,17 +222,17 @@ int	cd_cmd(char *path, char **envp)
 		return (-1);
 	if (chdir(new_pwd) == -1)
 		return  (free(new_pwd), perror("cd error"), -1);
-	ft_printf("new_pwd = %s\n", new_pwd); // debug
 	actualize_cd_var(pwd, new_pwd, &envp);
 	ft_printf("PWD = %s\n", ft_getenv("PWD", envp)); // debug
+	ft_printf("OLDPWD = %s\n", ft_getenv("OLDPWD", envp)); // debug
 	free(new_pwd);
 	return (0);
 }
 
-int	main(int ac, char **av, char **envp)
-{
-	if (ac != 2)
-		return (ft_printf("one arg needed"), 1);
-	cd_cmd(av[1], envp);
-	return (0);
-}
+// int	main(int ac, char **av, char **envp)
+// {
+// 	if (ac != 2)
+// 		return (ft_printf("one arg needed"), 1);
+// 	cd_cmd(av[1], envp);
+// 	return (0);
+// }
