@@ -2,45 +2,73 @@
 
 /*****************************************************************************
 COMPILE WITH:
-gcc -o test_echo -Wall -Werror -Wextra echo.c  -L ../../../libft -lft_inc -I../../../libft/headers/libft_H
+gcc -o test_echo -Wall -Werror -Wextra echo.c -L ../../../libft -lft_inc -I ../../../libft/headers/libft_H
 *****************************************************************************/
 
-void	echo_cmd(char **array)
+void	echo_cmd(t_dclst *start, t_dclst *end, char **envp)
 {
-	int	i;
-	int	newline;
+	int		newline;
+	char	*str;
+	t_token	*token;
+	t_dclst	*current;
 
-	i = 0;
-	newline = 0;
-	if (ft_strncmp(array[0], "-n", 2) == 0)
+	if (!start)
+		return ;
+	current = skip_newline_flags(start, end, &newline, envp);
+	while (1)
 	{
-		newline = 1;
-		i++;
-	}
-	while (array[i] != NULL)
-	{
-		ft_putstr_fd(array[i], 1);
-		if (array[i + 1] != NULL)
-			ft_putchar_fd(' ', 1);
-		i++;
+		token = (t_token *)current->data;
+		str = manage_dollar(token, envp);
+		ft_putstr_fd(str, 1);
+		free(str);
+		if (current == end || !end)
+			break ;
+		ft_putchar_fd(' ', 1);
+		current = current->next;
 	}
 	if (newline == 0)
 		ft_putchar_fd('\n', 1);
-	return ;
 }
 
-/*int	main(int argc, char *argv[])
+t_dclst	*skip_newline_flags(t_dclst *start, t_dclst *end, int *newline, char **envp)
+{
+	t_token	*token;
+	t_dclst	*current;
+
+	if (start == end)
+		return (start);
+	current = start;
+	while (1)
+	{
+		token = (t_token *)current->data;
+		if (newline_flag(token, newline, envp) == 1 || current == end)
+			break ;
+		current = current->next;
+	}
+	return (current);
+}
+
+int	newline_flag(t_token *token, int *newline, char **envp)
 {
 	int	i;
+	char	*str;
 
-	i = 0;
-	if (argc < 2)
-		return (write(1, "\n", 1), 0);
-	while (argv[i] != NULL)
+	i = 2;
+	str = manage_dollar(token, envp);
+	if (ft_strncmp(str, "-n", 2) != 0)
 	{
-		argv[i] = argv[i + 1];
+		(*newline) = 0;
+		return (free(str), 1);
+	}
+	while (str[i])
+	{
+		if (str[i] != 'n')
+		{
+			(*newline) = 0;
+			return (free(str), 1);
+		}
 		i++;
 	}
-	echo_cmd(argv);
-	return (0);
-}*/
+	(*newline) = 1;
+	return (free(str), 0);
+}

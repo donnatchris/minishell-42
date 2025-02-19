@@ -102,7 +102,7 @@ void	print_dclst_tokens(t_dclst **head)
 }
 
 // Main function to test the tokenizer
-int	main(int ac, char **av)
+int	main(int ac, char **av, char **envp)
 {
 	t_dclst	**head;
 	t_tree	*tree;
@@ -118,6 +118,7 @@ int	main(int ac, char **av)
 	tree = create_tree(*head, (*head)->prev->prev);
 	ft_printf("\nTREE CREATED:\n");
 	print_tree(tree);
+	echo_cmd(*head, (*head)->prev->prev, envp);
 	clear_tree(tree);
 	clear_dclst_data(head);
 	return (0);

@@ -1,32 +1,28 @@
 #include "../../include/minishell.h"
 
-typedef struct s_env
-{
-	char			*name;
-	char			*data;
-	struct	s_env	*next;
-}					t_env;
+/*****************************************************************************
+COMPILE WITH:
+gcc -o test_env -Wall -Werror -Wextra env.c ../../../libft/src/libft_SRC/ft_putstr_fd.c ../../../libft/src/libft_SRC/ft_putchar_fd.c
+*****************************************************************************/
 
-int	env_cmd(char **env)
+void	env_cmd(char **envp)
 {
-	update_env(env);
+	int	i;
+
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		ft_putstr_fd(envp[i], 1);
+		ft_putchar_fd('\n', 1);
+		i++;
+	}
 }
 
-void	update_env(char **env)
-{
-
-}
-
-void	fetch_env(char **env)
-{
-
-}
-
-int	main(int argc, char *argv[], char *envp[])
+/*int	main(int argc, char *argv[], char *envp[])
 {
 	(void)argc;
 	(void)argv;
+	env_cmd(envp);
 	(void)envp;
-
 	return (0);
-}
+}*/
