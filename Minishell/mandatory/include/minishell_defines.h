@@ -5,7 +5,6 @@
 # define SYMBOLS "<>|&;()'\""
 # define WHITESPACES " \t\n\r\v\f"
 
-// structures and typedefs
 typedef struct s_token
 {
 	int		type;

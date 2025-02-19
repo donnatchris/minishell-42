@@ -113,7 +113,7 @@ t_dclst	**tokenize(char *input)
 	t_dclst	**head;
 
 	head = NULL;
-	head = malloc(sizeof(t_dclst *));
+	head = (t_dclst **) malloc(sizeof(t_dclst *));
 	if (!head)
 		return (NULL);
 	if (tokenize_to_dclst(input, head) == -1)

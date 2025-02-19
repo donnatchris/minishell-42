@@ -25,7 +25,6 @@ char	**ft_realloc_env(char **envp, size_t new_size)
 }
 
 // Function to add a new variable to the environment
-// from a key and a value
 // Returns 0 on success, -1 on failure
 int	create_env_var(const char *key, const char *value, char ***envp)
 {
@@ -94,19 +93,26 @@ void	delete_env(char **envp)
 
 // Function to make a dynamicly allocated copy of the environment
 // Returns a pointer to the new environment array, or NULL on failure
-char	**copy_env(char **envp)
+t_var_env	**copy_env(char **envp)
 {
-	char	**new_envp;
-	size_t	size;
-	size_t	i;
+	t_var_env	**new_envp;
+	t_var_env	*var;
+	size_t		size;
+	size_t		i;
 
 	size = count_env_size(envp);
-	new_envp = (char **) malloc(sizeof(char *) * (size + 1));
+	new_envp = (t_var_env **) malloc(sizeof(char *) * (size + 1));
 	if (!new_envp)
 		return (NULL);
 	i = 0;
 	while (envp[i])
 	{
+		var = (t_var_env *) malloc (sizeof(var));
+		if (!var)
+			return (delete_env(new_envp), NULL);
+
+
+
 		new_envp[i] = ft_strdup(envp[i]);
 		if (!new_envp[i])
 		{
