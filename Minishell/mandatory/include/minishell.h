@@ -48,6 +48,14 @@ void	env_cmd(char **envp);
 void	echo_cmd(t_dclst *start, t_dclst *end, char **envp);
 t_dclst	*skip_newline_flags(t_dclst *start, t_dclst *end, int *newline, char **envp);
 int	    newline_flag(t_token *token, int *newline, char **envp);
+// cd.c
+void	actualize_cd_env(char *oldpwd, char ***envp);
+char	*find_actual_dir(void);
+char	*find_parent_dir(void);
+char	*find_cd_path(char *input, char **envp);
+int		cd_cmd(t_dclst *first, t_dclst *last, char **envp);
+// pwd.c
+void	pwd_cmd();
 /* ************************************************************************** */
 /*										utils								  */
 /* ************************************************************************** */

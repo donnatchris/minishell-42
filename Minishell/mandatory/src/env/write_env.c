@@ -73,7 +73,6 @@ int	update_env_var(const char *key, const char *value, char **envp)
 	if (!new_entry)
 		return (free(temp), ft_putstr_fd("update_env_var: strjoin failed\n", 2), -1);
 	free(temp);
-	free(*var);
 	*var = new_entry;
 	return (0);
 }

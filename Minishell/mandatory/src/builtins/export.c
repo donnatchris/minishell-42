@@ -97,53 +97,53 @@ int export_cmd(t_dclst *start, t_dclst *end, char **envp)
 
 
 
-// POUR INFORMATION:
-// Function to update an existing variable in the environment
-// Returns 0 on success, -1 on failure
-int	update_env_var(const char *key, const char *value, char **envp)
-{
-	char	**var;
-	char	*temp;
-	char	*new_entry;
+// // POUR INFORMATION:
+// // Function to update an existing variable in the environment
+// // Returns 0 on success, -1 on failure
+// int	update_env_var(const char *key, const char *value, char **envp)
+// {
+// 	char	**var;
+// 	char	*temp;
+// 	char	*new_entry;
 
-	if (!envp || !key || !value)
-		return (ft_putstr_fd("update_env_var: invalid arguments\n", 2), -1);
-	var = find_env_var(key, envp);
-	if (!var)
-		return(create_env_var(key, value, &envp));
-	temp = ft_strjoin(key, "=");
-	if (!temp)
-		return (ft_putstr_fd("update_env_var: strjoin failed\n", 2), -1);
-	if (!new_entry)
-		return (free(temp), ft_putstr_fd("update_env_var: strjoin failed\n", 2), -1);
-	free(temp);
-	free(*var);
-	*var = new_entry;
-	return (0);
-}
+// 	if (!envp || !key || !value)
+// 		return (ft_putstr_fd("update_env_var: invalid arguments\n", 2), -1);
+// 	var = find_env_var(key, envp);
+// 	if (!var)
+// 		return(create_env_var(key, value, &envp));
+// 	temp = ft_strjoin(key, "=");
+// 	if (!temp)
+// 		return (ft_putstr_fd("update_env_var: strjoin failed\n", 2), -1);
+// 	if (!new_entry)
+// 		return (free(temp), ft_putstr_fd("update_env_var: strjoin failed\n", 2), -1);
+// 	free(temp);
+// 	free(*var);
+// 	*var = new_entry;
+// 	return (0);
+// }
 
-int	create_env_var(const char *key, const char *value, char ***envp)
-{
-	char	*temp;
-	char	*new_entry;
-	char	**new_envp;
-	size_t	size;
+// int	create_env_var(const char *key, const char *value, char ***envp)
+// {
+// 	char	*temp;
+// 	char	*new_entry;
+// 	char	**new_envp;
+// 	size_t	size;
 
-	if (!envp || !key || !value)
-		return (ft_putstr_fd("create_env_var: invalid arguments\n", 2), -1);
-	temp = ft_strjoin(key, "=");
-	if (!temp)
-		return (ft_putstr_fd("create_env_var: strjoin failed\n", 2), -1);
-	new_entry = ft_strjoin(temp, value);
-	if (!new_entry)
-		return (free(temp), ft_putstr_fd("create_env_var: strjoin failed\n", 2), -1);
-	free(temp);
-	size = count_env_size(*envp);
-	new_envp = ft_realloc_env(*envp, size + 1);
-	if (!new_envp)
-		return (free(new_entry), ft_putstr_fd("create_env_var: realloc failed\n", 2), -1);
-	new_envp[size] = new_entry;
-	new_envp[size + 1] = NULL;
-	*envp = new_envp;
-	return (0);
-}
+// 	if (!envp || !key || !value)
+// 		return (ft_putstr_fd("create_env_var: invalid arguments\n", 2), -1);
+// 	temp = ft_strjoin(key, "=");
+// 	if (!temp)
+// 		return (ft_putstr_fd("create_env_var: strjoin failed\n", 2), -1);
+// 	new_entry = ft_strjoin(temp, value);
+// 	if (!new_entry)
+// 		return (free(temp), ft_putstr_fd("create_env_var: strjoin failed\n", 2), -1);
+// 	free(temp);
+// 	size = count_env_size(*envp);
+// 	new_envp = ft_realloc_env(*envp, size + 1);
+// 	if (!new_envp)
+// 		return (free(new_entry), ft_putstr_fd("create_env_var: realloc failed\n", 2), -1);
+// 	new_envp[size] = new_entry;
+// 	new_envp[size + 1] = NULL;
+// 	*envp = new_envp;
+// 	return (0);
+// }

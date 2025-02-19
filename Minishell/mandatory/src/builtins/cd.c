@@ -4,14 +4,16 @@
 COMPILE WITH:
 gcc -o test_cd -Wall -Werror -Wextra cd.c ../env/read_env.c ../env/write_env.c ../../../dclst/dclst1.c ../../../dclst/dclst2.c ../../../dclst/dclst3.c -L../../../libft -lft_inc -I../../../libft/headers/libft_H
 *****************************************************************************/
-
+//test
 // Function to update or create PWD and OLDPWD in the environment variables
 // Returns 0 on success, -1 on failure
-void	actualize_cd_env(char *oldpwd, char *pwd, char ***envp)
+void	actualize_cd_env(char *oldpwd, char ***envp)
 {
+	char	pwd[PATH_MAX];
+
 	if (update_env_var("OLDPWD", oldpwd, *envp) == -1)
 		ft_putstr_fd("cd: failed to create OLDPWD\n", 2);
-	if (update_env_var("PWD", pwd, *envp) == -1)
+	if (update_env_var("PWD", getcwd(pwd, sizeof(pwd)), *envp) == -1)
 		ft_putstr_fd("cd: failed to create PWD\n", 2);
 }
 
@@ -74,19 +76,31 @@ char	*find_cd_path(char *input, char **envp)
 // Function to change directorylike the cd command
 // and properly update the environment variables
 // Returns 0 on success, -1 on failure
-int	cd_cmd(char *path, char **envp)
+int	cd_cmd(t_dclst *first, t_dclst *last, char **envp)
 {
 	char	pwd[PATH_MAX];
 	char	*new_pwd;
+	char	*path;
+	t_token	*tok;
 
+	if (!first || !envp)
+		return (ft_putstr_fd("cd: invalid arguments\n", 2), -1);
+	(void) last;
 	if (!getcwd(pwd, sizeof(pwd)))
 		return (perror("cd: getcwd failed"), -1);
+	tok = (t_token *) first->data;
+	if (tok->type < TOKEN_STRING || tok->type > TOKEN_LITTERAL)
+		return (ft_putstr_fd("cd: invalid arguments\n", 2), -1);
+	path = manage_dollar(tok, envp);
+	if (!path)
+		return (-1);
 	new_pwd = find_cd_path(path, envp);
 	if (!new_pwd)
-		return (-1);
+		return (free(path), -1);
 	if (chdir(new_pwd) == -1)
-		return  (free(new_pwd), perror("cd error"), -1);
-	actualize_cd_env(pwd, new_pwd, &envp);
+		return  (free(path), free(new_pwd), perror("cd error"), -1);
+	actualize_cd_env(pwd, &envp);
+	free(path);
 	free(new_pwd);
 	return (0);
 }

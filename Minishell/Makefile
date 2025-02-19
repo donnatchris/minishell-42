@@ -31,7 +31,10 @@ SRC = \
 	$(DCLST_DIR)/dclst1.c \
 	$(DCLST_DIR)/dclst2.c \
 	$(DCLST_DIR)/dclst3.c \
+	$(SRC_DIR)/builtins/cd.c \
 	$(SRC_DIR)/builtins/echo.c \
+	$(SRC_DIR)/builtins/env.c \
+	$(SRC_DIR)/builtins/pwd.c \
 	$(SRC_DIR)/env/read_env.c \
 	$(SRC_DIR)/env/write_env.c \
 	$(SRC_DIR)/parser/binary_tree.c \
