@@ -13,10 +13,11 @@ int	main(int ac, char **av, char **envp)
 	head = NULL;
 	while (1)
 	{
-		ft_printf(YELLOW "%s > " RESET, getcwd(pwd, sizeof(pwd)));
-		input = readline("");
+		ft_printf(YELLOW "%s\n" RESET, getcwd(pwd, sizeof(pwd)));
+		input = readline(CYAN "MINISHELL > " RESET);
 		if (!input)
 			return (ft_printf("\n"), 0);
+		add_history(input);
 		head = tokenize(input);
 		if (check_syntax(head) == -1)
 			return (clear_dclst_data(head), 1);
