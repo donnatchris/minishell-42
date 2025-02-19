@@ -29,7 +29,7 @@ char	**find_env_var(const char *var, char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		if (!ft_strncmp(envp[i], var, len) && envp[i][len] == '=')
+		if (!ft_strncmp(envp[i], var, len) && (envp[i][len] == '=' || envp[i][len] == '\0')) // le '=' et le '\0' obligatoire ?
 			return (&envp[i]);
 		i++;
 	}

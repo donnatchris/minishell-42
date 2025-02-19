@@ -91,18 +91,18 @@ int	cd_cmd(char *path, char **envp)
 	return (0);
 }
 
-int	main(int ac, char **av, char **envp)
-{
-	char	**new_envp;
+// int	main(int ac, char **av, char **envp)
+// {
+// 	char	**new_envp;
 
-	if (ac != 2)
-		return (ft_printf("one arg needed"), 1);
-	new_envp = copy_env(envp);
-	if (!new_envp)
-		return (perror("copy_env malloc failed"), 1);
-	cd_cmd(av[1], new_envp);
-	ft_printf("PWD = %s\n", ft_getenv("PWD", new_envp)); // debug
-	ft_printf("OLDPWD = %s\n", ft_getenv("OLDPWD", new_envp)); // debug
-	delete_env(new_envp);
-	return (0);
-}
+// 	if (ac != 2)
+// 		return (ft_printf("one arg needed"), 1);
+// 	new_envp = copy_env(envp);
+// 	if (!new_envp)
+// 		return (perror("copy_env malloc failed"), 1);
+// 	cd_cmd(av[1], new_envp);
+// 	ft_printf("PWD = %s\n", ft_getenv("PWD", new_envp)); // debug
+// 	ft_printf("OLDPWD = %s\n", ft_getenv("OLDPWD", new_envp)); // debug
+// 	delete_env(new_envp);
+// 	return (0);
+// }
