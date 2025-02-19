@@ -1,18 +1,20 @@
 #include "../include/minishell.h"
-
+//test
 // Main function to launch the minishell
 int	main(int ac, char **av, char **envp)
 {
 	t_dclst	**head;
 	t_tree	*tree;
 	char	*input;
+	char	pwd[PATH_MAX];
 
 	(void)ac;
 	(void)av;
 	head = NULL;
 	while (1)
 	{
-		input = readline(YELLOW "MINISHELL> " RESET);
+		ft_printf(YELLOW "%s > " RESET, getcwd(pwd, sizeof(pwd)));
+		input = readline("");
 		if (!input)
 			return (ft_printf("\n"), 0);
 		head = tokenize(input);
@@ -49,8 +51,6 @@ int	main(int ac, char **av, char **envp)
 		cd_cmd(*head, (*head)->prev->prev, new_envp);
 		ft_printf("PWD = %s\n", ft_getenv("PWD", new_envp));
 		ft_printf("OLDPWD = %s\n", ft_getenv("OLDPWD", new_envp));
-		ft_printf("\nPWD_CMD\n");
-		pwd_cmd();
 		delete_env(new_envp);
 
 		clear_tree(tree);
