@@ -31,49 +31,67 @@ mais s'il y a plusieurs arguments, affiche le message d'erreur pour chaque argum
 */
 #include "../../include/minishell.h"
 
+// Function to print error message of export_cmd
+// Returns -1
+int	print_export_error(char *arg)
+{
+	ft_putstr_fd("export : `", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
+	return (-1);
+}
+
 // Function to check is the string is a valid variable name
 // Return 1 if the string is valid, 0 if not
 int	is_valid_var_name(char *str)
 {
-    if (!str)
+	if (!str)
 		return (0);
 	if (!ft_isalpha(*str) && *str != '_')
-        return (0);
-    str++;
-    while (*str)
-    {
-        if (!ft_isalphanum(*str) && *str != '_')
+		return (0);
+	str++;
+	while (*str)
+	{
+		if (!ft_isalphanum(*str) && *str != '_')
 			return (0);
 		str++;
-    }
+	}
 	return (1);
 }
 
-// Function to get the string to manage
-// Returns a pointer to the string to manage or NULL on failure
-
-
 // Function to export variables and store them in the envp
+// or update the value of an existing variable
+// or print the value of existing variables in the envp
 // Returns 0 on success, -1 on failure
-int export_cmd(t_token *tok, char **envp)
+int export_cmd(t_dclst *start, t_dclst *end, char **envp)
 {
-    char    *str;
-	int		mem_alloc;
+	t_dclst *current;
+	t_token *tok;
+	char    *str;
 
-    if (!envp || !tok || tok->type < TOKEN_STRING && tok->type > TOKEN_LITTERAL)
-        return (ft_putsrt_fd("export : invalid arguments", 2), -1);
-	mem_alloc = 0;
-	if (tok->type != TOKEN_LITTERAL)
+	if (!envp)
+		return (ft_putsrt_fd("export : invalid arguments", 2), -1);
+	if (!start)
+		return (print_exp_var_env(envp));
+	current = start;
+	while (1)
 	{
-		str = replace_each_dollar(tok->start, envp);
-		if (!str)
-			return (-1);
-		mem_alloc = 1;
+		tok = current->data;
+		export_token(tok, envp);
+		if (!end || current == end)
+			break ;
+		current = current->next;
 	}
-	else
-		str = ft_substr(tok->start, 1, tok->end - tok->start - 1);
-    
-    
+	
+
+
+
+
+	str = manage_dollar(tok, envp);
+	if (!str)
+		return (-1);
+	if (!is_valid_var_name(str))
+		return (free(str), print_export_error(tok->start));
 }
 
 

@@ -6,6 +6,7 @@
 # include <stdio.h>
 # include <errno.h>
 # include <limits.h>
+# include <readline/readline.h>
 
 // headers
 # include "../../libft/headers/libft_H/libft.h"
