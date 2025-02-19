@@ -15,7 +15,7 @@
 
 // prototypes
 /* ************************************************************************** */
-/*                                       parser                               */
+/*										parser								  */
 /* ************************************************************************** */
 t_dclst	**tokenize(char *input);
 int		get_token(char **ps, char *es, char **q, char **eq);
@@ -25,5 +25,18 @@ t_tree	*create_tree(t_dclst *first, t_dclst *last);
 void	clear_tree(t_tree *root);
 void	print_tree(t_tree *root); // A retirer avant de rendre
 void	print_a_token(t_token *token); // A retirer avant de rendre
+/* ************************************************************************** */
+/*										env									  */
+/* ************************************************************************** */
+// write_env.c
+char	**ft_realloc_env(char **envp, size_t new_size);
+int		create_env_var(const char *key, const char *value, char ***envp);
+int		update_env_var(const char *key, const char *value, char **envp);
+void	delete_env(char **envp);
+char	**copy_env(char **envp);
+// read_env.c
+size_t	count_env_size(char **envp);
+char	**find_env_var(const char *var, char **envp);
+char	*ft_getenv(const char *var, char **envp);
 
 #endif
