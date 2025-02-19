@@ -39,6 +39,15 @@ size_t	count_env_size(char **envp);
 char	**find_env_var(const char *var, char **envp);
 char	*ft_getenv(const char *var, char **envp);
 /* ************************************************************************** */
+/*										builtins							  */
+/* ************************************************************************** */
+// env.c
+void	env_cmd(char **envp);
+// echo.c
+void	echo_cmd(t_dclst *start, t_dclst *end, char **envp);
+t_dclst	*skip_newline_flags(t_dclst *start, t_dclst *end, int *newline, char **envp);
+int	    newline_flag(t_token *token, int *newline, char **envp);
+/* ************************************************************************** */
 /*										utils								  */
 /* ************************************************************************** */
 // dollar_manager.c

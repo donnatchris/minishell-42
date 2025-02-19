@@ -14,6 +14,7 @@ void	echo_cmd(t_dclst *start, t_dclst *end, char **envp)
 
 	if (!start)
 		return ;
+	newline = 0;
 	current = skip_newline_flags(start, end, &newline, envp);
 	while (1)
 	{
@@ -56,19 +57,13 @@ int	newline_flag(t_token *token, int *newline, char **envp)
 	i = 2;
 	str = manage_dollar(token, envp);
 	if (ft_strncmp(str, "-n", 2) != 0)
-	{
-		(*newline) = 0;
 		return (free(str), 1);
-	}
 	while (str[i])
 	{
 		if (str[i] != 'n')
-		{
-			(*newline) = 0;
 			return (free(str), 1);
-		}
 		i++;
 	}
-	(*newline) = 1;
+	*newline = 1;
 	return (free(str), 0);
 }

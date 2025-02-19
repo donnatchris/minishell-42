@@ -2,7 +2,7 @@
 
 /*****************************************************************************
 COMPILE WITH:
-gcc -o parser_main_for_test -Wall -Werror -Wextra parser_main_for_test.c get_token.c tokenizer.c check_token_list.c binary_tree.c ../../../dclst/dclst1.c ../../../dclst/dclst2.c ../../../dclst/dclst3.c -L../../../libft -lft_inc -I../../../libft/headers/libft_H
+gcc -o parser_main_for_test -Wall -Werror -Wextra parser_main_for_test.c get_token.c tokenizer.c check_token_list.c binary_tree.c ../../../dclst/dclst1.c ../../../dclst/dclst2.c ../../../dclst/dclst3.c ../../utils/dollar_manager.c ../env/read_env.c ../builtins/echo.c -L../../../libft -lft_inc -I../../../libft/headers/libft_H 
 *****************************************************************************/
 
 // Function to print a string from one pointer to another
@@ -118,6 +118,7 @@ int	main(int ac, char **av, char **envp)
 	tree = create_tree(*head, (*head)->prev->prev);
 	ft_printf("\nTREE CREATED:\n");
 	print_tree(tree);
+	ft_printf("\nECHO COMMAND:\n");
 	echo_cmd(*head, (*head)->prev->prev, envp);
 	clear_tree(tree);
 	clear_dclst_data(head);

@@ -93,7 +93,7 @@ char	*manage_dollar(t_token *token, char **envp)
 	return (str);
 }
 
-int	main(int ac, char **av, char **envp)
+/*int	main(int ac, char **av, char **envp)
 {
 	char	*str;
 
@@ -105,4 +105,4 @@ int	main(int ac, char **av, char **envp)
 	ft_printf("%s", str);
 	free(str);
 	return (0);
-}
+}*/
