@@ -31,90 +31,6 @@ mais s'il y a plusieurs arguments, affiche le message d'erreur pour chaque argum
 */
 #include "../../include/minishell.h"
 
-// Function to find the end of a variable name
-// Returns a pointer to the end of the variable name or NULL if there is no name
-char	*find_var_name_end(char *ptr)
-{
-	if (!ptr)
-		return (NULL);
-	if (!ft_isalpha(*ptr) && *ptr != '_')
-		return (ptr);
-	while (ft_isalphanum(*ptr) || *ptr == '_')
-		ptr++;
-	return (ptr);
-}
-
-// Function to replace a $ with variable in a string
-// Returns a pointer to the new string or NULL if it fails
-char	*replace_a_dollar(char *str, char *doll_pos, char **envp)
-{
-	unsigned int	i;
-	unsigned int	j;
-	char			*var;
-	char			*value;
-	char			*remainder;
-	char			*temp_str;
-	char			*new_str;
-
-	if (!str || !envp)
-		return (NULL);
-	i = doll_pos - str;
-	remainder = find_var_name_end(doll_pos + 1);
-	j = remainder - str;
-	var = ft_substr(str, doll_pos - str + 1, (remainder - str - (doll_pos - str)) - 1);
-	if (!var)
-		return (ft_putstr_fd("replace_a_dollar : ft_strdup failed", 2), NULL);
-	value = ft_getenv(var, envp);
-	if (!value)
-		value = "";
-	free(var);
-	str[i] = '\0';
-	temp_str = ft_strjoin(str, value);
-	if (!temp_str)
-		return (ft_putstr_fd("replace_a_dollar : ft_strjoin failed", 2), NULL);
-	new_str = ft_strjoin(temp_str, remainder);
-	free(temp_str);
-	if (!new_str)
-		return (ft_putstr_fd("replace_a_dollar : ft_strjoin failed", 2), NULL);
-	return (new_str);
-}
-
-// Function to replace every $ of a string with the corresponding variable in the envp
-// Returns a pointer to the new string or NULL if it fails
-char	*replace_each_dollar(char *str, char **envp)
-{
-	char	*ptr;
-	char	*res;
-
-	if (!str || !envp)
-		return (ft_putstr_fd("replace_each_doll : invalid arg", 2), NULL);
-	ptr = ft_strchr(str, '$');
-	res = ft_strdup(str);
-	if (!res)
-		return (ft_putstr_fd("replace_each_doll : ft_strdup failed", 2), NULL);
-	while (ptr)
-	{
-		str = res;
-		res = replace_a_dollar(str, ptr, envp);
-		free(str);
-		if (!res)
-			return (NULL);
-		ptr = ft_strchr(res, '$');
-	}
-	return (res);
-}
-
-
-
-
-
-
-
-
-
-
-
-
 // Function to check is the string is a valid variable name
 // Return 1 if the string is valid, 0 if not
 int	is_valid_var_name(char *str)
@@ -133,17 +49,29 @@ int	is_valid_var_name(char *str)
 	return (1);
 }
 
-// Function to export a variable and store it in the envp
+// Function to get the string to manage
+// Returns a pointer to the string to manage or NULL on failure
+
+
+// Function to export variables and store them in the envp
+// Returns 0 on success, -1 on failure
 int export_cmd(t_token *tok, char **envp)
 {
-    char    **var;
-	char	*name;
-	char	*value;
+    char    *str;
+	int		mem_alloc;
 
     if (!envp || !tok || tok->type < TOKEN_STRING && tok->type > TOKEN_LITTERAL)
-        return (ft_putsrt_fd("export : invalid arguments", 2) -1);
+        return (ft_putsrt_fd("export : invalid arguments", 2), -1);
+	mem_alloc = 0;
 	if (tok->type != TOKEN_LITTERAL)
-		replace_doll_with_var(tok->start);
+	{
+		str = replace_each_dollar(tok->start, envp);
+		if (!str)
+			return (-1);
+		mem_alloc = 1;
+	}
+	else
+		str = ft_substr(tok->start, 1, tok->end - tok->start - 1);
     
     
 }
@@ -151,7 +79,7 @@ int export_cmd(t_token *tok, char **envp)
 
 
 
-
+// POUR INFORMATION:
 // Function to update an existing variable in the environment
 // Returns 0 on success, -1 on failure
 int	update_env_var(const char *key, const char *value, char **envp)

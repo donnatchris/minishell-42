@@ -74,6 +74,25 @@ char	*replace_each_dollar(char *str, char **envp)
 	return (res);
 }
 
+// Function to manage the $ in a token
+// Returns a pointer to the new string or NULL if it fails
+char	*manage_dollar(t_token *token, char **envp)
+{
+	char	*str;
+
+	if (!token || !envp || !token->start)
+		return (ft_putstr_fd("manage_dollar : invalid arg", 2), NULL);
+	if (token->type < TOKEN_STRING || token->type > TOKEN_LITTERAL)
+		return (ft_putstr_fd("manage_dollar : invalid token type", 2), NULL);
+	if (token->type == TOKEN_LITTERAL)
+		str = ft_strdup(token->start);
+	else
+		str = replace_each_dollar(token->start, envp);
+	if (!str)
+		return (ft_putstr_fd("manage_dollar : replace_each_dollar failed", 2), NULL);
+	return (str);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*str;

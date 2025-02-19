@@ -38,5 +38,13 @@ char	**copy_env(char **envp);
 size_t	count_env_size(char **envp);
 char	**find_env_var(const char *var, char **envp);
 char	*ft_getenv(const char *var, char **envp);
+/* ************************************************************************** */
+/*										utils								  */
+/* ************************************************************************** */
+// dollar_manager.c
+char	*find_var_name_end(char *ptr);
+char	*replace_a_dollar(char *str, char *doll_pos, char **envp);
+char	*replace_each_dollar(char *str, char **envp);
+char	*manage_dollar(t_token *token, char **envp);
 
 #endif
