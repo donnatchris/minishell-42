@@ -2,7 +2,7 @@
 
 /*****************************************************************************
 COMPILE WITH:
-gcc -o parser_main_for_test -Wall -Werror -Wextra parser_main_for_test.c get_token.c tokenizer.c check_token_list.c binary_tree.c ../../../dclst/dclst1.c ../../../dclst/dclst2.c ../../../dclst/dclst3.c ../../utils/dollar_manager.c ../env/read_env.c ../builtins/echo.c -L../../../libft -lft_inc -I../../../libft/headers/libft_H 
+gcc -o parser_main_for_test -Wall -Werror -Wextra parser_main_for_test.c get_token.c tokenizer.c check_token_list.c binary_tree.c ../../../dclst/dclst1.c ../../../dclst/dclst2.c ../../../dclst/dclst3.c ../../utils/dollar_manager.c ../env/read_env.c ../builtins/echo.c -lreadline -L../../../libft -lft_inc -I../../../libft/headers/libft_H 
 *****************************************************************************/
 
 // Function to print a string from one pointer to another
@@ -101,26 +101,58 @@ void	print_dclst_tokens(t_dclst **head)
 	}
 }
 
-// Main function to test the tokenizer
-int	main(int ac, char **av, char **envp)
-{
-	t_dclst	**head;
-	t_tree	*tree;
+// Main function to test with readline and echo
+// int	main(int ac, char **av, char **envp)
+// {
+// 	t_dclst	**head;
+// 	t_tree	*tree;
+// 	char	*input;
 
-	if (ac != 2)
-		return (ft_printf("One argument needed\n"), 1);
-	head = NULL;
-	head = tokenize(av[1]);
-	if (check_syntax(head) == -1)
-		return (clear_dclst_data(head), 1);
-	ft_printf("\nLIST CREATED:\n");
-	print_dclst_tokens(head);
-	tree = create_tree(*head, (*head)->prev->prev);
-	ft_printf("\nTREE CREATED:\n");
-	print_tree(tree);
-	ft_printf("\nECHO COMMAND:\n");
-	echo_cmd(*head, (*head)->prev->prev, envp);
-	clear_tree(tree);
-	clear_dclst_data(head);
-	return (0);
-}
+// 	(void)ac;
+// 	(void)av;
+// 	head = NULL;
+// 	while (1)
+// 	{
+// 		input = readline("MINISHELL: test echo > ");
+// 		if (!input)
+// 			return (ft_printf("\n"), 0);
+// 		head = tokenize(input);
+// 		if (check_syntax(head) == -1)
+// 			return (clear_dclst_data(head), 1);
+// 		ft_printf("\nLIST CREATED:\n");
+// 		print_dclst_tokens(head);
+// 		tree = create_tree(*head, (*head)->prev->prev);
+// 		ft_printf("\nTREE CREATED:\n");
+// 		print_tree(tree);
+// 		ft_printf("\nECHO COMMAND:\n");
+// 		echo_cmd(*head, (*head)->prev->prev, envp);
+// 		clear_tree(tree);
+// 		clear_dclst_data(head);
+// 		free(input);
+// 	}
+// 	return (0);
+// }
+
+// Main function to test the tokenizer
+// int	main(int ac, char **av, char **envp)
+// {
+// 	t_dclst	**head;
+// 	t_tree	*tree;
+
+// 	if (ac != 2)
+// 		return (ft_printf("One argument needed\n"), 1);
+// 	head = NULL;
+// 	head = tokenize(av[1]);
+// 	if (check_syntax(head) == -1)
+// 		return (clear_dclst_data(head), 1);
+// 	ft_printf("\nLIST CREATED:\n");
+// 	print_dclst_tokens(head);
+// 	tree = create_tree(*head, (*head)->prev->prev);
+// 	ft_printf("\nTREE CREATED:\n");
+// 	print_tree(tree);
+// 	ft_printf("\nECHO COMMAND:\n");
+// 	echo_cmd(*head, (*head)->prev->prev, envp);
+// 	clear_tree(tree);
+// 	clear_dclst_data(head);
+// 	return (0);
+// }

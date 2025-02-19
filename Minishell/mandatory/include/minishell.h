@@ -57,4 +57,8 @@ char	*replace_a_dollar(char *str, char *doll_pos, char **envp);
 char	*replace_each_dollar(char *str, char **envp);
 char	*manage_dollar(t_token *token, char **envp);
 
+// A SUPPRIMER AVANT DE RENDRE
+void	print_dclst_tokens(t_dclst **head);
+void	print_a_token(t_token *token);
+
 #endif

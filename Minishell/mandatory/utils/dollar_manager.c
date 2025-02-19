@@ -64,7 +64,7 @@ char	*replace_each_dollar(char *str, char **envp)
 		return (ft_putstr_fd("replace_each_doll : ft_strdup failed", 2), NULL);
 	while (ptr)
 	{
-		ft_printf("PTR in loop = %s\n", ptr);
+		ptr = ft_strchr(res, '$');
 		str = res;
 		res = replace_a_dollar(str, ptr, envp);
 		free(str);
@@ -94,24 +94,24 @@ char	*manage_dollar(t_token *token, char **envp)
 	return (str);
 }
 
-int	main(int ac, char **av, char **envp)
-{
-	char	*input;
-	char	*str;
+// int	main(int ac, char **av, char **envp)
+// {
+// 	char	*input;
+// 	char	*str;
 
-	(void) ac;
-	(void) av;
-	input = readline("Enter a string: ");
-	if (!input)
-		return (0);
-	str = replace_each_dollar(input, envp);
-	if (!str)
-		return (ft_printf("la chaine est vide \n"), 1);
-	ft_printf("%s", str);
-	free(str);
-	free(input);
-	return (0);
-}
+// 	(void) ac;
+// 	(void) av;
+// 	input = readline("Enter a string: ");
+// 	if (!input)
+// 		return (0);
+// 	str = replace_each_dollar(input, envp);
+// 	if (!str)
+// 		return (ft_printf("la chaine est vide \n"), 1);
+// 	ft_printf("%s", str);
+// 	free(str);
+// 	free(input);
+// 	return (0);
+// }
 
 // int	main(int ac, char **av, char **envp)
 // {
