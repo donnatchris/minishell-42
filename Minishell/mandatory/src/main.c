@@ -1,5 +1,5 @@
 #include "../include/minishell.h"
-//test
+
 // Main function to launch the minishell
 int	main(int ac, char **av, char **envp)
 {

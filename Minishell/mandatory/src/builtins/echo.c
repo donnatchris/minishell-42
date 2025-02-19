@@ -1,10 +1,5 @@
 #include "../../include/minishell.h"
 
-/*****************************************************************************
-COMPILE WITH:
-gcc -o test_echo -Wall -Werror -Wextra echo.c -L ../../../libft -lft_inc -I ../../../libft/headers/libft_H
-*****************************************************************************/
-
 void	echo_cmd(t_dclst *start, t_dclst *end, char **envp)
 {
 	int		newline;

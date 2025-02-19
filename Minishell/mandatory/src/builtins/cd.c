@@ -1,10 +1,5 @@
 #include "../../include/minishell.h"
 
-/*****************************************************************************
-COMPILE WITH:
-gcc -o test_cd -Wall -Werror -Wextra cd.c ../env/read_env.c ../env/write_env.c ../../../dclst/dclst1.c ../../../dclst/dclst2.c ../../../dclst/dclst3.c -L../../../libft -lft_inc -I../../../libft/headers/libft_H
-*****************************************************************************/
-//test
 // Function to update or create PWD and OLDPWD in the environment variables
 // Returns 0 on success, -1 on failure
 void	actualize_cd_env(char *oldpwd, char ***envp)
@@ -104,19 +99,3 @@ int	cd_cmd(t_dclst *first, t_dclst *last, char **envp)
 	free(new_pwd);
 	return (0);
 }
-
-// int	main(int ac, char **av, char **envp)
-// {
-// 	char	**new_envp;
-
-// 	if (ac != 2)
-// 		return (ft_printf("one arg needed"), 1);
-// 	new_envp = copy_env(envp);
-// 	if (!new_envp)
-// 		return (perror("copy_env malloc failed"), 1);
-// 	cd_cmd(av[1], new_envp);
-// 	ft_printf("PWD = %s\n", ft_getenv("PWD", new_envp)); // debug
-// 	ft_printf("OLDPWD = %s\n", ft_getenv("OLDPWD", new_envp)); // debug
-// 	delete_env(new_envp);
-// 	return (0);
-// }
