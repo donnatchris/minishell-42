@@ -31,6 +31,84 @@ mais s'il y a plusieurs arguments, affiche le message d'erreur pour chaque argum
 */
 #include "../../include/minishell.h"
 
+
+
+
+
+
+
+
+
+
+
+// Function to find the lowest variable in the environment (alphabetically)
+// above the variable passed as an argument
+// Returns the address of the variable in the environment or NULL if not found
+char	*find_next_lowest_var(char *var, char **envp)
+{
+	int		i;
+	char	*temp;
+
+	if (!envp)
+		return (NULL);
+	i = 0;
+	if (!var)
+		var = "";
+	temp = NULL;
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], var, ft_strlen(envp[i])) > 0 && (!temp || ft_strncmp(envp[i], temp, ft_strlen(envp[i])) < 0))
+			temp = envp[i];
+		i++;
+	}
+	return (temp);
+}
+
+// Function to print characters of a string from pointer start to pointer end
+void	print_chars(char *start, char *end)
+{
+	while (start < end)
+	{
+		ft_putchar_fd(*start, 1);
+		start++;
+	}
+}
+
+// Function to print all the variables in the environment
+// sorted alphabetically
+void	print_exp_var_env(char **envp)
+{
+	char	*var;
+	char	*eq;
+	char	*value;
+
+	if (!envp)
+		return (ft_printf("\n"));
+	var = NULL;
+	while (1)
+	{
+		var = find_next_lowest_var(var, envp);
+		if (!var)
+			break ;
+		ft_printf("declare -x ");
+		eq = ft_strchr(var, '=');
+		if (!eq)
+			ft_printf("%s\n", var);
+		else
+		{
+			value = eq + 1;
+			print_chars(var, eq);
+			ft_printf("=\"%s\"", value);
+		}
+	}
+}
+
+
+
+
+
+
+
 // Function to print error message of export_cmd
 // Returns -1
 int	print_export_error(char *arg)
@@ -50,7 +128,7 @@ int	is_valid_var_name(char *str)
 	if (!ft_isalpha(*str) && *str != '_')
 		return (0);
 	str++;
-	while (*str)
+	while (*str && *str != '=')
 	{
 		if (!ft_isalnum(*str) && *str != '_')
 			return (0);
@@ -59,56 +137,28 @@ int	is_valid_var_name(char *str)
 	return (1);
 }
 
-int	print_one_exp_var_env(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(envp[i], 1);
-		ft_putstr_fd("\n", 1);
-		i++;
-	}
-	return (0);
-}
-
 // Function to export variables and store them in the envp
 // or update the value of an existing variable
 // or print the value of existing variables in the envp
 // Returns 0 on success, -1 on failure
-int export_cmd(t_dclst *start, t_dclst *end, char **envp)
+int export_cmd(char **args, char **envp)
 {
-	t_dclst *current;
-	// t_token *tok;
-	// char    *str;
+	int		i;
+	char	value;
 
 	if (!envp)
-		return (ft_putstr_fd("export : invalid arguments", 2), -1);
-	// if (!start)
-	// 	return (print_all_exp_var_env(envp));
-	current = start;
-	while (1)
+		return (ft_putstr_fd("export_cmd: envp not set\n", 2), -1);	
+	if (!args || !*args)
+		return (print_exp_var_env(envp), 0);
+	i = 0;
+	while (args[i])
 	{
-		// tok = current->data;
-		// if (!ft_strncmp(tok->start, "", 1))
-		// 	return (print_exp_var_env(envp));
-		// export_token(tok, envp);
-		if (!end || current == end)
-			break ;
-		current = current->next;
+		if (!is_valid_var_name(args[i]))
+			print_export_error(args[i]);
+		else
+			update_env_var(args[i], ft_strchr(args[i], '='), envp);
+		args++;
 	}
-	
-
-
-
-
-	// str = manage_dollar(tok, envp);
-	// if (!str)
-	// 	return (-1);
-	// if (!is_valid_var_name(str))
-	// 	return (free(str), print_export_error(tok->start));
 	return (0);
 }
 
