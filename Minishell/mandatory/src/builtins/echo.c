@@ -8,8 +8,13 @@ void	echo_cmd(char **args, char **envp)
 	(void)envp;
 	newline = 0;
 	i = 0;
-	while (newline_flag(args[i], &newline) == 0 && args[i] != NULL)
+	while (newline_flag(args[i]) == 0)
+	{
+		newline = 1;
 		i++;
+		if (args[i] == NULL)
+			break ;
+	}
 	while (args[i] != NULL)
 	{
 		ft_putstr_fd(args[i], 1);
@@ -21,19 +26,22 @@ void	echo_cmd(char **args, char **envp)
 		ft_putchar_fd('\n', 1);
 }
 
-int	newline_flag(char *str, int *newline)
+int	newline_flag(char *str)
 {
 	int	i;
 
-	i = 2;
-	if (ft_strncmp(str, "-n", 2) != 0)
+	i = 0;
+	if (str[i] != '-')
 		return (1);
+	i++;
+	if (str[i] != 'n')
+		return (1);
+	i++;
 	while (str[i])
 	{
 		if (str[i] != 'n')
-			return (1);
+			return (1); 
 		i++;
 	}
-	*newline = 1;
 	return (0);
 }
