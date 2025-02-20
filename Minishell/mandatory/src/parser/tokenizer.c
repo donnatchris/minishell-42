@@ -51,7 +51,7 @@ void	null_terminate_token(t_dclst **head)
 		else if (token->type == TOKEN_WORD)
 			*token->end = '\0';
 		else
-				token->start = NULL;
+				token->start = ""; // was null before last modification
 		token->end = NULL;
 		current = current->next;
 		if (current == *head)

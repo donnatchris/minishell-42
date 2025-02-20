@@ -13,11 +13,17 @@ int	main(int ac, char **av, char **envp)
 	head = NULL;
 	while (1)
 	{
+	//	// A DECOMMENTER POUR TESTEER PWD
+		ft_printf("\nPWD COMMAND:\n");
+		pwd_cmd(&input, envp);
+
 		ft_printf(YELLOW "%s\n" RESET, getcwd(pwd, sizeof(pwd)));
 		input = readline(CYAN "MINISHELL > " RESET);
 		if (!input)
 			return (ft_printf("\n"), 0);
 		add_history(input);
+
+
 		head = tokenize(input);
 		if (check_syntax(head) == -1)
 			return (clear_dclst_data(head), 1);
@@ -28,9 +34,11 @@ int	main(int ac, char **av, char **envp)
 		print_tree(tree);
 
 
+
+
 	//	// A DECOMMENTER POUR TESTEER ECHO
 		// ft_printf("\nECHO COMMAND:\n");
-		// echo_cmd(*head, (*head)->prev->prev, envp);
+		// echo_cmd(&input, envp);
 
 
 	//	// A DECOMMENTER POUR TESTEER ENV
@@ -39,7 +47,7 @@ int	main(int ac, char **av, char **envp)
 		// new_envp = copy_env(envp);
 		// if (!new_envp)
 		// 	return (perror("copy_env malloc failed"), 1);
-		// env_cmd(envp);
+		// env_cmd(&input, new_envp);
 		// delete_env(new_envp);
 
 
@@ -49,7 +57,7 @@ int	main(int ac, char **av, char **envp)
 		new_envp = copy_env(envp);
 		if (!new_envp)
 			return (perror("copy_env malloc failed"), 1);
-		cd_cmd(*head, (*head)->prev->prev, new_envp);
+		cd_cmd(&input, new_envp);
 		ft_printf("PWD = %s\n", ft_getenv("PWD", new_envp));
 		ft_printf("OLDPWD = %s\n", ft_getenv("OLDPWD", new_envp));
 		delete_env(new_envp);

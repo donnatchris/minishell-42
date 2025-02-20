@@ -71,31 +71,22 @@ char	*find_cd_path(char *input, char **envp)
 // Function to change directorylike the cd command
 // and properly update the environment variables
 // Returns 0 on success, -1 on failure
-int	cd_cmd(t_dclst *first, t_dclst *last, char **envp)
+int	cd_cmd(char **args, char **envp)
 {
 	char	pwd[PATH_MAX];
 	char	*new_pwd;
 	char	*path;
-	t_token	*tok;
 
-	if (!first || !envp)
+	if (!args || !envp)
 		return (ft_putstr_fd("cd: invalid arguments\n", 2), -1);
-	(void) last;
 	if (!getcwd(pwd, sizeof(pwd)))
 		return (perror("cd: getcwd failed"), -1);
-	tok = (t_token *) first->data;
-	if (tok->type < TOKEN_STRING || tok->type > TOKEN_LITTERAL)
-		return (ft_putstr_fd("cd: invalid arguments\n", 2), -1);
-	path = manage_dollar(tok, envp);
-	if (!path)
-		return (-1);
+	path = args[0];
 	new_pwd = find_cd_path(path, envp);
 	if (!new_pwd)
-		return (free(path), -1);
+		return (-1);
 	if (chdir(new_pwd) == -1)
-		return  (free(path), free(new_pwd), perror("cd error"), -1);
+		return  (free(new_pwd), perror("cd error"), -1);
 	actualize_cd_env(pwd, &envp);
-	free(path);
-	free(new_pwd);
-	return (0);
+	return (free(new_pwd), 0);
 }

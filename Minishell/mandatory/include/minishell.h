@@ -53,9 +53,11 @@ void	actualize_cd_env(char *oldpwd, char ***envp);
 char	*find_actual_dir(void);
 char	*find_parent_dir(void);
 char	*find_cd_path(char *input, char **envp);
-int		cd_cmd(t_dclst *first, t_dclst *last, char **envp);
+int		cd_cmd(char **args, char **envp);
+// export.c
+int		export_cmd(char **args, char **envp);
 // pwd.c
-void	pwd_cmd();
+void	pwd_cmd(char **args, char **envp);
 /* ************************************************************************** */
 /*										utils								  */
 /* ************************************************************************** */
@@ -64,6 +66,8 @@ char	*find_var_name_end(char *ptr);
 char	*replace_a_dollar(char *str, char *doll_pos, char **envp);
 char	*replace_each_dollar(char *str, char **envp);
 char	*manage_dollar(t_token *token, char **envp);
+// delete_functions.c
+void	delete_str_tab(char **tab);
 
 // A SUPPRIMER AVANT DE RENDRE
 void	print_dclst_tokens(t_dclst **head);
