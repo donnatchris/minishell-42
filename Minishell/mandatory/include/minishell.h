@@ -43,9 +43,9 @@ char	*ft_getenv(const char *var, char **envp);
 /*										builtins							  */
 /* ************************************************************************** */
 // env.c
-void	env_cmd(char **arguments, char **envp);
+void	env_cmd(char **args, char **envp);
 // echo.c
-void	echo_cmd(char **arguments, char **envp);
+void	echo_cmd(char **args, char **envp);
 int	newline_flag(char *str, int *newline);
 // cd.c
 void	actualize_cd_env(char *oldpwd, char ***envp);

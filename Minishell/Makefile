@@ -34,7 +34,6 @@ SRC = \
 	$(SRC_DIR)/builtins/cd.c \
 	$(SRC_DIR)/builtins/echo.c \
 	$(SRC_DIR)/builtins/env.c \
-	$(SRC_DIR)/builtins/export.c \
 	$(SRC_DIR)/builtins/pwd.c \
 	$(SRC_DIR)/env/read_env.c \
 	$(SRC_DIR)/env/write_env.c \

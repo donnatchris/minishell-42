@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-void	echo_cmd(char **arguments, char **envp)
+void	echo_cmd(char **args, char **envp)
 {
 	int		newline;
 	int		i;
@@ -8,12 +8,12 @@ void	echo_cmd(char **arguments, char **envp)
 	(void)envp;
 	newline = 0;
 	i = 0;
-	while (newline_flag(arguments[i], &newline) == 0 && arguments[i] != NULL)
+	while (newline_flag(args[i], &newline) == 0 && args[i] != NULL)
 		i++;
-	while (arguments[i] != NULL)
+	while (args[i] != NULL)
 	{
-		ft_putstr_fd(arguments[i], 1);
-		if (arguments[i + 1] != NULL)
+		ft_putstr_fd(args[i], 1);
+		if (args[i + 1] != NULL)
 			ft_putchar_fd(' ', 1);
 	}
 	if (newline == 0)
