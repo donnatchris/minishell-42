@@ -47,7 +47,7 @@ char	*ft_getenv(const char *var, char **envp);
 void	env_cmd(char **args, char **envp);
 // echo.c
 void	echo_cmd(char **args, char **envp);
-int	newline_flag(char *str, int *newline);
+int		is_newline_flag(char *str);
 // cd.c
 void	actualize_cd_env(char *oldpwd, char ***envp);
 char	*find_actual_dir(void);
