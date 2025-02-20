@@ -1,9 +1,10 @@
 #include "../../include/minishell.h"
 
-void	env_cmd(char **envp)
+void	env_cmd(char **args, char **envp)
 {
 	int	i;
 
+	(void)args;
 	if (!envp)
 		return ;
 	i = 0;
