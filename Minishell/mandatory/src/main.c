@@ -13,10 +13,6 @@ int	main(int ac, char **av, char **envp)
 	head = NULL;
 	while (1)
 	{
-	//	// A DECOMMENTER POUR TESTEER PWD
-		ft_printf("\nPWD COMMAND:\n");
-		pwd_cmd(&input, envp);
-
 		ft_printf(YELLOW "%s\n" RESET, getcwd(pwd, sizeof(pwd)));
 		input = readline(CYAN "MINISHELL > " RESET);
 		if (!input)
@@ -41,6 +37,7 @@ int	main(int ac, char **av, char **envp)
 		// echo_cmd(&input, envp);
 
 
+
 	//	// A DECOMMENTER POUR TESTEER ENV
 		// ft_printf("\nENV COMMAND\n");
 		// char	**new_envp;
@@ -51,6 +48,13 @@ int	main(int ac, char **av, char **envp)
 		// delete_env(new_envp);
 
 
+
+	//	// A DECOMMENTER POUR TESTEER PWD
+		// ft_printf("\nPWD COMMAND:\n");
+		// pwd_cmd(&input, envp);
+
+
+		
 	//	// A DECOMMENTER POUR TESTER CD
 		ft_printf("\nCD COMMAND\n");
 		char	**new_envp;
@@ -61,6 +65,8 @@ int	main(int ac, char **av, char **envp)
 		ft_printf("PWD = %s\n", ft_getenv("PWD", new_envp));
 		ft_printf("OLDPWD = %s\n", ft_getenv("OLDPWD", new_envp));
 		delete_env(new_envp);
+
+
 
 		clear_tree(tree);
 		clear_dclst_data(head);
