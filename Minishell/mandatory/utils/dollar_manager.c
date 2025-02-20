@@ -78,9 +78,9 @@ char	*manage_dollar(t_token *token, char **envp)
 
 	if (!token || !envp || !token->start)
 		return (ft_putstr_fd("manage_dollar : invalid arg", 2), NULL);
-	if (token->type < TOKEN_STRING || token->type > TOKEN_LITTERAL)
-		return (ft_putstr_fd("manage_dollar : invalid token type", 2), NULL);
-	if (token->type == TOKEN_LITTERAL)
+	// if (token->type < TOKEN_STRING || token->type > TOKEN_LITTERAL)
+	// 	return (ft_putstr_fd("manage_dollar : invalid token type", 2), NULL);
+	if (token->type != TOKEN_STRING && token->type != TOKEN_WORD)
 		str = ft_strdup(token->start);
 	else
 		str = replace_each_dollar(token->start, envp);

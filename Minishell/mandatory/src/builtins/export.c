@@ -52,11 +52,26 @@ int	is_valid_var_name(char *str)
 	str++;
 	while (*str)
 	{
-		if (!ft_isalphanum(*str) && *str != '_')
+		if (!ft_isalnum(*str) && *str != '_')
 			return (0);
 		str++;
 	}
 	return (1);
+}
+
+int	print_one_exp_var_env(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(envp[i], 1);
+		ft_putstr_fd("\n", 1);
+		i++;
+	}
+	return (0);
 }
 
 // Function to export variables and store them in the envp
@@ -66,18 +81,20 @@ int	is_valid_var_name(char *str)
 int export_cmd(t_dclst *start, t_dclst *end, char **envp)
 {
 	t_dclst *current;
-	t_token *tok;
-	char    *str;
+	// t_token *tok;
+	// char    *str;
 
 	if (!envp)
-		return (ft_putsrt_fd("export : invalid arguments", 2), -1);
-	if (!start)
-		return (print_exp_var_env(envp));
+		return (ft_putstr_fd("export : invalid arguments", 2), -1);
+	// if (!start)
+	// 	return (print_all_exp_var_env(envp));
 	current = start;
 	while (1)
 	{
-		tok = current->data;
-		export_token(tok, envp);
+		// tok = current->data;
+		// if (!ft_strncmp(tok->start, "", 1))
+		// 	return (print_exp_var_env(envp));
+		// export_token(tok, envp);
 		if (!end || current == end)
 			break ;
 		current = current->next;
@@ -87,11 +104,12 @@ int export_cmd(t_dclst *start, t_dclst *end, char **envp)
 
 
 
-	str = manage_dollar(tok, envp);
-	if (!str)
-		return (-1);
-	if (!is_valid_var_name(str))
-		return (free(str), print_export_error(tok->start));
+	// str = manage_dollar(tok, envp);
+	// if (!str)
+	// 	return (-1);
+	// if (!is_valid_var_name(str))
+	// 	return (free(str), print_export_error(tok->start));
+	return (0);
 }
 
 
