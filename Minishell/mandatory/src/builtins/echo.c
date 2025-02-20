@@ -15,6 +15,7 @@ void	echo_cmd(char **args, char **envp)
 		ft_putstr_fd(args[i], 1);
 		if (args[i + 1] != NULL)
 			ft_putchar_fd(' ', 1);
+		i++;
 	}
 	if (newline == 0)
 		ft_putchar_fd('\n', 1);

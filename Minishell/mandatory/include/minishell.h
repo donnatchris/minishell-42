@@ -7,6 +7,7 @@
 # include <errno.h>
 # include <limits.h>
 # include <readline/readline.h>
+# include <readline/history.h>
 
 // headers
 # include "../../libft/headers/libft_H/libft.h"
