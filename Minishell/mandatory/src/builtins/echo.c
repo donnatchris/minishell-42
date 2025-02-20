@@ -2,37 +2,47 @@
 
 void	echo_cmd(char **args, char **envp)
 {
-	int		newline;
-	int		i;
+	int	newline_flag;
+	int	argument;
+	int	i;
 
 	(void)envp;
-	newline = 0;
+	newline_flag = 0;
+	argument = 0;
 	i = 0;
-	while (newline_flag(args[i], &newline) == 0 && args[i] != NULL)
-		i++;
-	while (args[i] != NULL)
+	while (args[i])
 	{
-		ft_putstr_fd(args[i], 1);
-		if (args[i + 1] != NULL)
-			ft_putchar_fd(' ', 1);
+		if (!argument && is_newline_flag(args[i]))
+			newline_flag = 1;
+		else
+		{
+			argument = 1;
+			ft_printf("%s", args[i]);
+			if (args[i + 1])
+				ft_printf(" ");
+		}
+		i++;
 	}
-	if (newline == 0)
-		ft_putchar_fd('\n', 1);
+	if (!newline_flag)
+		ft_printf("\n");
 }
 
-int	newline_flag(char *str, int *newline)
+int	is_newline_flag(char *str)
 {
 	int	i;
 
-	i = 2;
-	if (ft_strncmp(str, "-n", 2) != 0)
-		return (1);
+	i = 0;
+	if (str[i] != '-')
+		return (0);
+	i++;
+	if (str[i] != 'n')
+		return (0);
+	i++;
 	while (str[i])
 	{
 		if (str[i] != 'n')
-			return (1);
+			return (0);
 		i++;
 	}
-	*newline = 1;
-	return (0);
+	return (1);
 }
