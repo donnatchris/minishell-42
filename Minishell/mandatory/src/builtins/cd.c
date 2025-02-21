@@ -6,9 +6,9 @@ void	actualize_cd_env(char *oldpwd, char ***envp)
 {
 	char	pwd[PATH_MAX];
 
-	if (update_env_var("OLDPWD", oldpwd, *envp) == -1)
+	if (update_env_var("OLDPWD", '=', oldpwd, envp) == -1)
 		ft_putstr_fd("cd: failed to create OLDPWD\n", 2);
-	if (update_env_var("PWD", getcwd(pwd, sizeof(pwd)), *envp) == -1)
+	if (update_env_var("PWD", '=', getcwd(pwd, sizeof(pwd)), envp) == -1)
 		ft_putstr_fd("cd: failed to create PWD\n", 2);
 }
 
@@ -68,10 +68,10 @@ char	*find_cd_path(char *input, char **envp)
 		return (ft_strdup(input));
 }
 
-// Function to change directorylike the cd command
+// Function to change working directory like the cd command in bash
 // and properly update the environment variables
 // Returns 0 on success, -1 on failure
-int	cd_cmd(char **args, char **envp)
+int	cd_cmd(char **args, char ***envp)
 {
 	char	pwd[PATH_MAX];
 	char	*new_pwd;
@@ -82,11 +82,11 @@ int	cd_cmd(char **args, char **envp)
 	if (!getcwd(pwd, sizeof(pwd)))
 		return (perror("cd: getcwd failed"), -1);
 	path = args[0];
-	new_pwd = find_cd_path(path, envp);
+	new_pwd = find_cd_path(path, *envp);
 	if (!new_pwd)
 		return (-1);
 	if (chdir(new_pwd) == -1)
 		return  (free(new_pwd), perror("cd error"), -1);
-	actualize_cd_env(pwd, &envp);
+	actualize_cd_env(pwd, envp);
 	return (free(new_pwd), 0);
 }

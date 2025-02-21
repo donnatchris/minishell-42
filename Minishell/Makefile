@@ -34,6 +34,7 @@ SRC = \
 	$(SRC_DIR)/builtins/cd.c \
 	$(SRC_DIR)/builtins/echo.c \
 	$(SRC_DIR)/builtins/env.c \
+	$(SRC_DIR)/builtins/export.c \
 	$(SRC_DIR)/builtins/pwd.c \
 	$(SRC_DIR)/env/read_env.c \
 	$(SRC_DIR)/env/write_env.c \
@@ -44,6 +45,7 @@ SRC = \
 	$(SRC_DIR)/parser/tokenizer.c \
 	$(UTILS_DIR)/dollar_manager.c \
 	$(UTILS_DIR)/delete_functions.c \
+	$(UTILS_DIR)/initialize_minishell.c \
 	$(MAIN)
 
 # Sources files for bonus part

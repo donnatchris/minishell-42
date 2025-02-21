@@ -1,5 +1,6 @@
 #include "../include/minishell.h"
 
+// Function to free the command array
 void	delete_str_tab(char **tab)
 {
 	int i;

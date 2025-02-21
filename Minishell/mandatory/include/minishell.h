@@ -30,21 +30,21 @@ void	print_a_token(t_token *token); // A retirer avant de rendre
 /* ************************************************************************** */
 /*										env									  */
 /* ************************************************************************** */
-// write_env.c
-char	**ft_realloc_env(char **envp, size_t new_size);
-int		create_env_var(const char *key, const char *value, char ***envp);
-int		update_env_var(const char *key, const char *value, char **envp);
-void	delete_env(char **envp);
-char	**copy_env(char **envp);
 // read_env.c
 size_t	count_env_size(char **envp);
 char	**find_env_var(const char *var, char **envp);
 char	*ft_getenv(const char *var, char **envp);
+// write_env.c
+char	**ft_realloc_env(char ***envp, char *new_entry);
+int		create_env_var_void(const char *key, char sep, char ***envp);
+int		create_env_var(const char *key, char sep, const char *value, char ***envp);
+int		update_env_var(const char *key, char sep, const char *value, char ***envp);
+char	**copy_env(char **envp);
 /* ************************************************************************** */
 /*										builtins							  */
 /* ************************************************************************** */
 // env.c
-void	env_cmd(char **args, char **envp);
+int	env_cmd(char **args, char **envp);
 // echo.c
 int		echo_cmd(char **args, char **envp);
 int		newline_flag(char *str);
@@ -53,9 +53,9 @@ void	actualize_cd_env(char *oldpwd, char ***envp);
 char	*find_actual_dir(void);
 char	*find_parent_dir(void);
 char	*find_cd_path(char *input, char **envp);
-int		cd_cmd(char **args, char **envp);
+int		cd_cmd(char **args, char ***envp);
 // export.c
-int		export_cmd(char **args, char **envp);
+int		export_cmd(char **args, char ***envp);
 // pwd.c
 void	pwd_cmd(char **args, char **envp);
 /* ************************************************************************** */
@@ -68,6 +68,8 @@ char	*replace_each_dollar(char *str, char **envp);
 char	*manage_dollar(t_token *token, char **envp);
 // delete_functions.c
 void	delete_str_tab(char **tab);
+// initialize minishell
+int	change_shlvl(char ***envp);
 
 // A SUPPRIMER AVANT DE RENDRE
 void	print_dclst_tokens(t_dclst **head);
