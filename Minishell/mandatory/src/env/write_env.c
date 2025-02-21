@@ -4,7 +4,6 @@
 // Returns a pointer to the new environment array, or NULL on failure
 char	**ft_realloc_env(char ***envp, char *new_entry)
 {
-	ft_printf("ft_realloc_env\n");
 	char	**new_envp;
 	size_t	size;
 	size_t	i;
@@ -38,7 +37,6 @@ char	**ft_realloc_env(char ***envp, char *new_entry)
 // Returns 0 on success, -1 on failure
 int	create_env_var_void(const char *key, char sep, char ***envp)
 {
-	ft_printf("create_env_var_void\n");
 	char	*new_entry;
 
 	if (!envp || !key)
@@ -60,7 +58,6 @@ int	create_env_var_void(const char *key, char sep, char ***envp)
 // Returns 0 on success, -1 on failure
 int	create_env_var(const char *key, char sep, const char *value, char ***envp)
 {
-	ft_printf("create_env_var\n");
 	char	*temp;
 	char	*new_entry;
 	char	**new_envp;
@@ -93,7 +90,6 @@ int	create_env_var(const char *key, char sep, const char *value, char ***envp)
 // Returns 0 on success, -1 on failure
 int	update_env_var(const char *key, char sep, const char *value, char ***envp)
 {
-	ft_printf("update_env_var\n");
 	char	**var;
 	char	*temp;
 	char	*new_entry;

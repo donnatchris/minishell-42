@@ -55,30 +55,32 @@ int	main(int ac, char **av, char **envp)
 		// export_cmd(ft_split(input, ' '), &new_envp);
 		// ft_printf("EXPORT COMMAND:\n");
 		// export_cmd(ft_split(input, ' '), &new_envp);
+		ft_printf("\nENV COMMAND\n");
+		env_cmd(&input, new_envp);
 
 	//	// A DECOMMENTER POUR TESTER UNSET
 		ft_printf("UNSET COMMAND:\n");
 		unset_cmd(ft_split(input, ' '), &new_envp);
 
-	//	// A DECOMMENTER POUR TESTEER ENV
+	//	// A DECOMMENTER POUR TESTER ENV
 		ft_printf("\nENV COMMAND\n");
 		env_cmd(&input, new_envp);
 
 		// clear_tree(tree);
 		// clear_dclst_data(head);
-		free(input);
+		// free(input);
 
-		ft_printf(YELLOW "%s\n" RESET, getcwd(pwd, sizeof(pwd)));
-		input = readline(CYAN "MINISHELL > " RESET);
-		if (!input)
-			return (ft_printf("\n"), 0);
-		add_history(input);
+		// ft_printf(YELLOW "%s\n" RESET, getcwd(pwd, sizeof(pwd)));
+		// input = readline(CYAN "MINISHELL > " RESET);
+		// if (!input)
+		// 	return (ft_printf("\n"), 0);
+		// add_history(input);
 
 	//	// A DECOMMENTER POUR TESTER CD
-		ft_printf("\nCD COMMAND\n");
-		cd_cmd(&input, &new_envp);
-		ft_printf("OLDPWD = %s\n", ft_getenv("OLDPWD", new_envp));
-		ft_printf("PWD = %s\n", ft_getenv("PWD", new_envp));
+		// ft_printf("\nCD COMMAND\n");
+		// cd_cmd(&input, &new_envp);
+		// ft_printf("OLDPWD = %s\n", ft_getenv("OLDPWD", new_envp));
+		// ft_printf("PWD = %s\n", ft_getenv("PWD", new_envp));
 
 		free(input);
 
