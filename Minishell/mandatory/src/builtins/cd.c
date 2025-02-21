@@ -53,7 +53,7 @@ char	*find_cd_path(char *input, char **envp)
 
 	home = ft_getenv("HOME", envp);
 	if (!home)
-		return (ft_putstr_fd("cd: HOME NOT SET", 2), NULL);
+		return (ft_putstr_fd("cd: HOME NOT SET\n", 2), NULL);
 	if (!input || *input == '\0')
 		input = home;
 	if (!ft_strncmp(input, "..", 2) && ft_strlen(input) == 2)
