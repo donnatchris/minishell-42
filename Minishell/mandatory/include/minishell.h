@@ -44,7 +44,7 @@ char	**copy_env(char **envp);
 /*										builtins							  */
 /* ************************************************************************** */
 // env.c
-void	env_cmd(char **args, char **envp);
+int	env_cmd(char **args, char **envp);
 // echo.c
 void	echo_cmd(char **args, char **envp);
 int     newline_flag(char *str);
@@ -68,6 +68,8 @@ char	*replace_each_dollar(char *str, char **envp);
 char	*manage_dollar(t_token *token, char **envp);
 // delete_functions.c
 void	delete_str_tab(char **tab);
+// initialize minishell
+int	change_shlvl(char ***envp);
 
 // A SUPPRIMER AVANT DE RENDRE
 void	print_dclst_tokens(t_dclst **head);

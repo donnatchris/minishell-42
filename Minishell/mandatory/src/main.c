@@ -12,6 +12,7 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	new_envp = copy_env(envp);
+	change_shlvl(&new_envp);
 	if (!new_envp)
 		return (1);
 	head = NULL;

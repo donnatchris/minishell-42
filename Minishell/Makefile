@@ -45,6 +45,7 @@ SRC = \
 	$(SRC_DIR)/parser/tokenizer.c \
 	$(UTILS_DIR)/dollar_manager.c \
 	$(UTILS_DIR)/delete_functions.c \
+	$(UTILS_DIR)/initialize_minishell.c \
 	$(MAIN)
 
 # Sources files for bonus part

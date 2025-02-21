@@ -2,7 +2,7 @@
 
 // Function to print the environment variables
 // like the env command in bash
-void	env_cmd(char **args, char **envp)
+int	env_cmd(char **args, char **envp)
 {
 	int	i;
 
@@ -10,7 +10,7 @@ void	env_cmd(char **args, char **envp)
 	if (!envp)
 	{
 		ft_putstr_fd("env_cmd: invalid arguments\n", 2);
-		return ;
+		return (-1);
 	}
 	i = 0;
 	while (envp[i] != NULL)
@@ -22,4 +22,5 @@ void	env_cmd(char **args, char **envp)
 		}
 	i++;
 	}
+	return (0);
 }
