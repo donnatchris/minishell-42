@@ -91,6 +91,24 @@ int	is_valid_var_name(char *str)
 	return (1);
 }
 
+// Function to cut the variable name from the string
+// Returns the variable name or NULL if the string is invalid
+char	*cut_name(char *str)
+{
+	char	*name;
+	int		i;
+
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (str[i] && str[i] != '=')
+		i++;
+	name = ft_substr(str, 0, i);
+	if (!name)
+		return (perror("cut_name: ft_sustr failed"), NULL);
+	return (name);
+}
+
 // Function to export variables and store them in the envp
 // or update the value of an existing variable
 // or print the value of existing variables in the envp
@@ -100,6 +118,7 @@ int	is_valid_var_name(char *str)
 int export_cmd(char **args, char ***envp)
 {
 	int		i;
+	char	*name;
 	char	*value;
 
 	if (!envp)
@@ -113,13 +132,17 @@ int export_cmd(char **args, char ***envp)
 			print_export_error(args[i]);
 		else
 		{
+			name = cut_name(args[i]);
+			if (!name)
+				return (-1);
 			value = ft_strchr(args[i], '=');
 			if (!value)
-				update_env_var(args[i], ' ', NULL, envp);
+				update_env_var(name, ' ', NULL, envp);
 			else if (*(value + 1) == '\0')
-				update_env_var(args[i], '=', NULL, envp);
+				update_env_var(name, '=', NULL, envp);
 			else
-				update_env_var(args[i], '=', value + 1, envp);
+				update_env_var(name, '=', value + 1, envp);
+			free(name);
 		}
 		args++;
 	}

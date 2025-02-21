@@ -106,7 +106,10 @@ int	update_env_var(const char *key, char sep, const char *value, char ***envp)
 	temp = ft_strjoin(key, "=");
 	if (!temp)
 		return (ft_putstr_fd("update_env_var: strjoin failed\n", 2), -1);
-	new_entry = ft_strjoin(temp, value);
+	if (!value)
+		new_entry = ft_strdup(temp);
+	else
+		new_entry = ft_strjoin(temp, value);
 	free(temp);
 	if (!new_entry)
 		return (ft_putstr_fd("update_env_var: strjoin failed\n", 2), -1);
