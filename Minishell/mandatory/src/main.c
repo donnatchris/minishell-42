@@ -54,8 +54,8 @@ int	main(int ac, char **av, char **envp)
 		export_cmd(ft_split(input, ' '), &new_envp);
 
 	//	// A DECOMMENTER POUR TESTEER ENV
-		// ft_printf("\nENV COMMAND\n");
-		// env_cmd(&input, new_envp);
+		ft_printf("\nENV COMMAND\n");
+		env_cmd(&input, new_envp);
 
 		// clear_tree(tree);
 		// clear_dclst_data(head);
