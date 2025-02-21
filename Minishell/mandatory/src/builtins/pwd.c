@@ -1,7 +1,7 @@
 #include "../../include/minishell.h"
 
 // Function to print the actual working directory
-// like the pwd comand
+// like the pwd comand in bash
 void	pwd_cmd(char **args, char **envp)
 {
 	char	current_dir[PATH_MAX];
