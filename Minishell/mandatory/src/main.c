@@ -51,8 +51,12 @@ int	main(int ac, char **av, char **envp)
 		// ft_printf("PWD = %s\n", ft_getenv("PWD", new_envp));
 
 	//	// A DECOMMENTER POUR TESTER EXPORT
-		ft_printf("EXPORT COMMAND:\n");
-		export_cmd(ft_split(input, ' '), &new_envp);
+		// ft_printf("EXPORT COMMAND:\n");
+		// export_cmd(ft_split(input, ' '), &new_envp);
+
+	//	// A DECOMMENTER POUR TESTER UNSET
+		ft_printf("UNSET COMMAND:\n");
+		unset_cmd(ft_split(input, ' '), &new_envp);
 
 	//	// A DECOMMENTER POUR TESTEER ENV
 		ft_printf("\nENV COMMAND\n");

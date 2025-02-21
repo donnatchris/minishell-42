@@ -65,7 +65,6 @@ int	print_exp_var_env(char **envp)
 }
 
 // Function to print error message of export_cmd
-// Returns -1
 void	print_export_error(char *arg)
 {
 	ft_putstr_fd("export : `", 2);

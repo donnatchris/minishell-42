@@ -57,7 +57,18 @@ int		cd_cmd(char **args, char ***envp);
 // export.c
 int		export_cmd(char **args, char ***envp);
 // pwd.c
+char	*find_next_lowest_var(char *var, char **envp);
+void	print_chars(char *start, char *end);
+int		print_exp_var_env(char **envp);
+void	print_export_error(char *arg);
+int		is_valid_var_name(char *str);
+char	*cut_name(char *str);
 void	pwd_cmd(char **args, char **envp);
+// unset.c
+void	print_unset_error(char *arg);
+int		my_realloc(void **ptr, int old_size, int new_size);
+int		unset_one_env_var(char *key, char ***envp);
+int		unset_cmd(char **args, char ***envp);
 /* ************************************************************************** */
 /*										utils								  */
 /* ************************************************************************** */
