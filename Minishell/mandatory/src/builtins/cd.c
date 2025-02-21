@@ -50,6 +50,7 @@ char	*find_parent_dir(void)
 char	*find_cd_path(char *input, char **envp)
 {
 	char	*home;
+	char	*old;
 
 	home = ft_getenv("HOME", envp);
 	if (!home)
@@ -63,7 +64,13 @@ char	*find_cd_path(char *input, char **envp)
 	else if (input[0] == '~')
 		return (ft_strjoin(home, input + 1));
 	else if (!ft_strncmp(input, "-", 1))
-		return (ft_strdup(ft_getenv("OLDPWD", envp)));
+	{
+		old = ft_getenv("OLDPWD", envp); 
+		if (!old)
+			return (ft_putstr_fd("cd: OLDPWD NOT SET\n", 2), NULL);
+		else
+			return (ft_strdup(ft_getenv("OLDPWD", envp)));
+	}
 	else
 		return (ft_strdup(input));
 }
