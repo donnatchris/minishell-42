@@ -24,6 +24,7 @@ int	echo_cmd(char **args, char **envp)
 	}
 	if (newline == 0)
 		ft_putchar_fd('\n', 1);
+	return (0);
 }
 
 int	newline_flag(char *str)
