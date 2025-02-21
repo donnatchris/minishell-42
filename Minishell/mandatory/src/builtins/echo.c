@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-void	echo_cmd(char **args, char **envp)
+int	echo_cmd(char **args, char **envp)
 {
 	int		newline;
 	int		i;
@@ -40,7 +40,7 @@ int	newline_flag(char *str)
 	while (str[i])
 	{
 		if (str[i] != 'n')
-			return (1); 
+			return (1);
 		i++;
 	}
 	return (0);
