@@ -35,12 +35,12 @@ int	main(int ac, char **av, char **envp)
 		// ft_printf("\nTREE CREATED:\n");
 		// print_tree(tree);
 
-	//	// A DECOMMENTER POUR TESTEER ECHO
+	//	// A DECOMMENTER POUR TESTER ECHO
 		// ft_printf("\nECHO COMMAND:\n");
 		// echo_cmd(ft_split(input, ' '), envp);
 
 
-	//	// A DECOMMENTER POUR TESTEER PWD
+	//	// A DECOMMENTER POUR TESTER PWD
 		// ft_printf("\nPWD COMMAND:\n");
 		// pwd_cmd(&input, envp);
 
@@ -51,6 +51,8 @@ int	main(int ac, char **av, char **envp)
 		// ft_printf("PWD = %s\n", ft_getenv("PWD", new_envp));
 
 	//	// A DECOMMENTER POUR TESTER EXPORT
+		// ft_printf("EXPORT COMMAND:\n");
+		// export_cmd(ft_split(input, ' '), &new_envp);
 		// ft_printf("EXPORT COMMAND:\n");
 		// export_cmd(ft_split(input, ' '), &new_envp);
 

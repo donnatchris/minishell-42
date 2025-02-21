@@ -37,6 +37,7 @@ SRC = \
 	$(SRC_DIR)/builtins/export.c \
 	$(SRC_DIR)/builtins/pwd.c \
 	$(SRC_DIR)/builtins/unset.c \
+	$(SRC_DIR)/builtins/exit.c \
 	$(SRC_DIR)/env/read_env.c \
 	$(SRC_DIR)/env/write_env.c \
 	$(SRC_DIR)/parser/binary_tree.c \

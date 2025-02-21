@@ -69,6 +69,8 @@ void	print_unset_error(char *arg);
 int		my_realloc(void **ptr, int old_size, int new_size);
 int		unset_one_env_var(char *key, char ***envp);
 int		unset_cmd(char **args, char ***envp);
+// exit.c
+void	exit_cmd(char **args, char **envp);
 /* ************************************************************************** */
 /*										utils								  */
 /* ************************************************************************** */
@@ -81,6 +83,8 @@ char	*manage_dollar(t_token *token, char **envp);
 void	delete_str_tab(char **tab);
 // initialize minishell
 int	change_shlvl(char ***envp);
+// ft_strtol.c
+long	ft_strtol(const char *nptr, char **endptr, int base);
 
 // A SUPPRIMER AVANT DE RENDRE
 void	print_dclst_tokens(t_dclst **head);
