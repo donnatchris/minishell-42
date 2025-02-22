@@ -55,28 +55,26 @@ int	(*hard_builtin(char *cmd))(char **args, char ***envp)
 // Returns the exit status of the command
 int	exec_node(t_dclst *node, char ***envp)
 {
-	char	*cmd;
 	char	**args;
 	int		status;
 	int		(*hard_built_func)(char **, char ***);
 	int		(*soft_built_func)(char **, char **);
 
 	if (!node || !envp)
-		return (shell_error_msg("exec_node", "Invalid argument"));
-	(void)envp;
-	cmd = extract_cmd(node, *envp);
+		return (shell_error_msg("exec_node", "invalid argument"));
 	args = extract_args(node, *envp);
-	if (!ft_strncmp(cmd, "exit", 5))
+	if (!args)
+		return (shell_error_msg("exec_node", "extract_args failed"), -1);
+	if (!ft_strncmp(args[0], "exit", 5))
 		exit_cmd(args, *envp);
-	hard_built_func = hard_builtin(cmd);
-	soft_built_func = soft_builtin(cmd);
+	hard_built_func = hard_builtin(args[0]);
+	soft_built_func = soft_builtin(args[0]);
 	if (hard_built_func)
 		status = exec_hard_builtin(hard_built_func, args, envp);
 	else if (soft_built_func)
 		status = exec_soft_builtin(soft_built_func, args, *envp);
 	else
-		status = execve_cmd(cmd, args, *envp);
-	free(cmd);
+		status = execve_cmd(args[0], args, *envp);
 	delete_str_tab(args);
 	return (status);
 }

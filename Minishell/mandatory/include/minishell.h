@@ -29,7 +29,7 @@ int		newline_flag(char *str);
 void	actualize_cd_env(char *oldpwd, char ***envp);
 char	*find_actual_dir(void);
 char	*find_parent_dir(void);
-char	*find_cd_path(char *input, char **envp);
+char	*find_cd_path(char *input, char **envp, char *home, char *old);
 int		cd_cmd(char **args, char ***envp);
 // export.c
 int		export_cmd(char **args, char ***envp);
@@ -76,7 +76,6 @@ int		exec_node(t_dclst *node, char ***envp);
 // extract_cmd_and_args.c
 char	**ft_realloc_str_array(char **tab, size_t new_size);
 char	**extract_args(t_dclst *node, char **envp);
-char	*extract_cmd(t_dclst *node, char **envp);
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */

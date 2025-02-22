@@ -1,4 +1,8 @@
 #include "../include/minishell.h"
+//test
+// int	run_minishell
+
+
 
 // Main function to launch the minishell
 int	main(int ac, char **av, char **envp)
@@ -7,36 +11,47 @@ int	main(int ac, char **av, char **envp)
 	t_tree	*tree;
 	char	**new_envp;
 	char	*input;
-	char	pwd[PATH_MAX];
 
 	(void)ac;
 	(void)av;
+	(void)tree;
 	new_envp = copy_env(envp);
 	if (!new_envp)
-		return (1);
+		return (shell_error_msg("main", "failed to copy envp"));
 	change_shlvl(&new_envp);
 	head = NULL;
 	while (1)
 	{
-	//	// A DECOMMENTER POUR TESTER LE PROMPT
-		(void)tree;
-		// (void)head;
-		ft_printf(YELLOW "%s\n" RESET, getcwd(pwd, sizeof(pwd)));
 		input = readline(CYAN "MINISHELL > " RESET);
 		if (!input)
-			return (ft_printf("\n"), 0);
+			continue ;
 		add_history(input);
-
+		if (!input[0] || input[0] == '\n')
+		{
+			if (input)
+				free(input);
+			ft_printf("\n");
+			continue ;
+		}
 		head = tokenize(input);
+		if (!head)
+		{
+			free(input);
+			continue ;
+		}
 		if (check_syntax(head) == -1)
-			return (clear_dclst_data(head), 1);
+		{
+			clear_dclst_data(head);
+			free(input);
+			continue ;
+		}
+		exec_node(*head, &new_envp);
 		// ft_printf("\nLIST CREATED:\n");
 		// print_dclst_tokens(head);
 		// tree = create_tree(*head, (*head)->prev->prev);
 		// ft_printf("\nTREE CREATED:\n");
 		// print_tree(tree);
 
-		exec_node(*head, &new_envp);
 
 	//	// A DECOMMENTER POUR TESTER ECHO
 		// ft_printf("\nECHO COMMAND:\n");

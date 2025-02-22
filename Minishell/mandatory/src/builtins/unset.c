@@ -70,9 +70,9 @@ int	unset_cmd(char **args, char ***envp)
 	char	**key;
 	char	*name;
 
-	if (!envp || !args)
+	if (!envp || !*envp || !args || !args[0])
 		return (shell_error_msg("unset", "invalid arguments"));
-	i = 0;
+	i = 1;
 	while (args[i])
 	{
 		if (is_valid_var_name(args[i]))

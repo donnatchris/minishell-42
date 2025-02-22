@@ -8,10 +8,7 @@ int	env_cmd(char **args, char **envp)
 
 	(void)args;
 	if (!envp)
-	{
-		ft_putstr_fd("env_cmd: invalid arguments\n", 2);
-		return (-1);
-	}
+		return (shell_error_msg("env", "invalid arguments"));
 	i = 0;
 	while (envp[i] != NULL)
 	{

@@ -3,9 +3,9 @@
 // Function to print error from token parsing
 int	print_token_error(t_token *token)
 {
-	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
 	print_token(token);
-	ft_printf("'\n");
+	ft_printf("\n");
 	return (-1);
 }
 

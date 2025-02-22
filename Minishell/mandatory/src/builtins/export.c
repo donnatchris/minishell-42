@@ -112,11 +112,11 @@ int export_cmd(char **args, char ***envp)
 	char	*name;
 	char	*value;
 
-	if (!envp)
-		return (shell_error_msg("export", "envp not set"));	
-	if (!args || !*args)
+	if (!envp || !*envp || !args || !args[0])
+		return (shell_error_msg("export", "invalid arguments"));	
+	if (!args || !args[1])
 		return (print_exp_var_env(*envp), 0);
-	i = 0;
+	i = 1;
 	while (args[i])
 	{
 		if (!is_valid_var_name(args[i]))
