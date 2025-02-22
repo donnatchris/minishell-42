@@ -25,14 +25,6 @@ void	print_token(t_token *token)
 		ft_putstr_fd(token->start, 2);
 }
 
-// Function to print token error messages
-void	print_token_error(t_token *token)
-{
-	ft_putstr_fd("syntax error near unexpected token ", 2);
-	print_token(token);
-	ft_printf("\n");
-}
-
 // Function to check the syntax of tokens in the doubly circular linked list
 int	check_syntax(t_dclst **head)
 {
@@ -52,7 +44,7 @@ int	check_syntax(t_dclst **head)
 		if (token->priority != 6 && token->priority != 1)
 		{
 			if ((next_tok->priority !=6 && next_tok->priority != 1) || (prev_tok->priority !=6 && prev_tok->priority != 1))
-				return (print_token_error(token), -1);
+				return (print_token_error(token));
 		}
 		if (next_tok->type == TOKEN_EOF || current->next == *head)
 			break ;

@@ -28,7 +28,7 @@ char	*replace_a_dollar(char *str, char *doll_pos, char **envp)
 	remainder = find_var_name_end(doll_pos + 1);
 	var = ft_substr(str, doll_pos - str + 1, (remainder - str - (doll_pos - str)) - 1);
 	if (!var)
-		return (ft_putstr_fd("replace_a_dollar : ft_strdup failed", 2), NULL);
+		return (shell_error_msg("replace_a_dollar", "ft_strdup failed"), NULL);
 	value = ft_getenv(var, envp);
 	if (!value)
 		value = "";
@@ -36,11 +36,11 @@ char	*replace_a_dollar(char *str, char *doll_pos, char **envp)
 	str[doll_pos - str] = '\0';
 	temp_str = ft_strjoin(str, value);
 	if (!temp_str)
-		return (ft_putstr_fd("replace_a_dollar : ft_strjoin failed", 2), NULL);
+		return (shell_error_msg("replace_a_dollar", "ft_strjoin failed"), NULL);
 	new_str = ft_strjoin(temp_str, remainder);
 	free(temp_str);
 	if (!new_str)
-		return (ft_putstr_fd("replace_a_dollar : ft_strjoin failed", 2), NULL);
+		return (shell_error_msg("replace_a_dollar", "ft_strjoin failed"), NULL);
 	return (new_str);
 }
 
@@ -52,11 +52,11 @@ char	*replace_each_dollar(char *str, char **envp)
 	char	*res;
 
 	if (!str || !envp)
-		return (ft_putstr_fd("replace_each_doll : invalid arg", 2), NULL);
+		return (shell_error_msg("replace_each_doll", "invalid arg"), NULL);
 	ptr = ft_strchr(str, '$');
 	res = ft_strdup(str);
 	if (!res)
-		return (ft_putstr_fd("replace_each_doll : ft_strdup failed", 2), NULL);
+		return (shell_error_msg("replace_each_doll", "ft_strdup failed"), NULL);
 	while (ptr)
 	{
 		ptr = ft_strchr(res, '$');
@@ -85,6 +85,6 @@ char	*manage_dollar(t_token *token, char **envp)
 	else
 		str = replace_each_dollar(token->start, envp);
 	if (!str)
-		return (ft_putstr_fd("manage_dollar : replace_each_dollar failed", 2), NULL);
+		return (NULL);
 	return (str);
 }

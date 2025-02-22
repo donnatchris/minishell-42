@@ -58,7 +58,7 @@ int	unset_one_env_var(char *key, char ***envp)
 		}
 		i++;
 	}
-	return (shell_error_msg ("unset_one_env var", "key not found"), -1);
+	return (shell_error_msg ("unset_one_env var", "key not found"));
 }
 
 // Function to remove environment variables from the environment variable list
@@ -71,7 +71,7 @@ int	unset_cmd(char **args, char ***envp)
 	char	*name;
 
 	if (!envp || !args)
-		return (shell_error_msg("unset", "invalid arguments"), -1);
+		return (shell_error_msg("unset", "invalid arguments"));
 	i = 0;
 	while (args[i])
 	{
@@ -82,7 +82,7 @@ int	unset_cmd(char **args, char ***envp)
 			{
 				name = cut_name(*key);
 				if (!name)
-					return (shell_error_msg("unset", "cut_name failed"), -1);
+					return (shell_error_msg("unset", "cut_name failed"));
 				unset_one_env_var(name, envp);
 				free(name);
 			}

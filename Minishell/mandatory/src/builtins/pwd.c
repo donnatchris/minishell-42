@@ -9,7 +9,7 @@ void	pwd_cmd(char **args, char **envp)
 	(void)args;
 	(void)envp;
 	if (!getcwd(current_dir, sizeof(current_dir)))
-		perror("pwd: error retrieving current directory");
+		shell_error_msg("pwd", "getcwd failed");
 	else
 		ft_printf("%s\n", current_dir);
 }

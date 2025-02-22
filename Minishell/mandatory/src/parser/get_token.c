@@ -10,7 +10,7 @@ int	get_single_quote(char **s, char *es)
 		(*s)++;
 	if (**s != '\'')
 	{
-		ft_putstr_fd("syntax error unclosed single quote\n", 2);
+		ft_putstr_fd("sminishell: syntax error unclosed single quote\n", 2);
 		ret = TOKEN_ERROR;
 	}
 	else
@@ -31,7 +31,7 @@ int	double_quote(char **s, char *es)
 		(*s)++;
 	if (**s != '"')
 	{
-		ft_putstr_fd("syntax error unclosed double quote\n", 2);
+		ft_putstr_fd("minishell: syntax error unclosed double quote\n", 2);
 		ret = TOKEN_ERROR;
 	}
 	else
@@ -91,13 +91,13 @@ int	get_parenthesis(char **s, char *es)
 	int	depth;
 
 	if (**s == ')')
-		return (ft_putstr_fd("syntax error near unexpected token `)'\n", 2), TOKEN_ERROR);
+		return (ft_putstr_fd("minishell: syntax error near unexpected token `)'\n", 2), TOKEN_ERROR);
 	(*s)++;
 	depth = 0;
 	while (1)
 	{
 		if (*s == es)
-			return (ft_putstr_fd("syntax error unclosed bracket\n", 2), TOKEN_ERROR);
+			return (ft_putstr_fd("minishell: syntax error unclosed bracket\n", 2), TOKEN_ERROR);
 		else if (**s == '(')
 			depth++;
 		else if (**s == ')')

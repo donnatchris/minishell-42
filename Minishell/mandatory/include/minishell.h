@@ -37,7 +37,6 @@ int		export_cmd(char **args, char ***envp);
 char	*find_next_lowest_var(char *var, char **envp);
 void	print_chars(char *start, char *end);
 int		print_exp_var_env(char **envp);
-void	print_export_error(char *arg);
 int		is_valid_var_name(char *str);
 char	*cut_name(char *str);
 void	pwd_cmd(char **args, char **envp);
@@ -76,8 +75,10 @@ void	clear_dclst_data(t_dclst **head);
 int		check_syntax(t_dclst **head);
 t_tree	*create_tree(t_dclst *first, t_dclst *last);
 void	clear_tree(t_tree *root);
+void	print_token(t_token *token);
 void	print_tree(t_tree *root); // A retirer avant de rendre
 void	print_a_token(t_token *token); // A retirer avant de rendre
+void	print_dclst_tokens(t_dclst **head); // A retirer avant de rendre
 /* ************************************************************************** */
 /*										signals								  */
 /* ************************************************************************** */
@@ -93,16 +94,14 @@ char	*replace_a_dollar(char *str, char *doll_pos, char **envp);
 char	*replace_each_dollar(char *str, char **envp);
 char	*manage_dollar(t_token *token, char **envp);
 // error_msg.c
-void	ft_perror(char *cmd, char *msg);
+int		print_token_error(t_token *token);
+int		ft_perror(char *cmd, char *msg);
 int		shell_error_msg(char *cmd, char *msg);
-void	shell_error_quote(char *cmd, char *msg);
+int		shell_error_quote(char *cmd, char *msg);
 // initialize minishell
 int	change_shlvl(char ***envp);
 // ft_strtol.c
 long	ft_strtol(const char *nptr, char **endptr, int base);
 
-// A SUPPRIMER AVANT DE RENDRE
-void	print_dclst_tokens(t_dclst **head);
-void	print_a_token(t_token *token);
 
 #endif

@@ -113,7 +113,7 @@ int export_cmd(char **args, char ***envp)
 	char	*value;
 
 	if (!envp)
-		return (shell_error_msg("export", "envp not set"), -1);	
+		return (shell_error_msg("export", "envp not set"));	
 	if (!args || !*args)
 		return (print_exp_var_env(*envp), 0);
 	i = 0;
