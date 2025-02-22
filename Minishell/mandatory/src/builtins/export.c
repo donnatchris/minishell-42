@@ -64,14 +64,6 @@ int	print_exp_var_env(char **envp)
 	return (0);
 }
 
-// Function to print error message of export_cmd
-void	print_export_error(char *arg)
-{
-	ft_putstr_fd("export : `", 2);
-	ft_putstr_fd(arg, 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
-}
-
 // Function to check is the string is a valid variable name
 // Return 1 if the string is valid, 0 if not
 int	is_valid_var_name(char *str)
@@ -104,7 +96,7 @@ char	*cut_name(char *str)
 		i++;
 	name = ft_substr(str, 0, i);
 	if (!name)
-		return (perror("cut_name: ft_sustr failed"), NULL);
+		return (shell_error_msg("export", "ft_sustr failed"), NULL);
 	return (name);
 }
 
@@ -121,14 +113,14 @@ int export_cmd(char **args, char ***envp)
 	char	*value;
 
 	if (!envp)
-		return (ft_putstr_fd("export_cmd: envp not set\n", 2), -1);	
+		return (shell_error_msg("export", "envp not set"), -1);	
 	if (!args || !*args)
 		return (print_exp_var_env(*envp), 0);
 	i = 0;
 	while (args[i])
 	{
 		if (!is_valid_var_name(args[i]))
-			print_export_error(args[i]);
+			shell_error_quote("export", args[i]);
 		else
 		{
 			name = cut_name(args[i]);

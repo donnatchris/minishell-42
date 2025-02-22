@@ -42,7 +42,6 @@ int		is_valid_var_name(char *str);
 char	*cut_name(char *str);
 void	pwd_cmd(char **args, char **envp);
 // unset.c
-void	print_unset_error(char *arg);
 int		my_realloc(void **ptr, int old_size, int new_size);
 int		unset_one_env_var(char *key, char ***envp);
 int		unset_cmd(char **args, char ***envp);
@@ -95,7 +94,8 @@ char	*replace_each_dollar(char *str, char **envp);
 char	*manage_dollar(t_token *token, char **envp);
 // error_msg.c
 void	ft_perror(char *cmd, char *msg);
-int	shell_error_msg(char *cmd, char *msg);
+int		shell_error_msg(char *cmd, char *msg);
+void	shell_error_quote(char *cmd, char *msg);
 // initialize minishell
 int	change_shlvl(char ***envp);
 // ft_strtol.c
