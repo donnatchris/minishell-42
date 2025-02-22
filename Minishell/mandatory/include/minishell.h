@@ -6,6 +6,7 @@
 # include <stdio.h>
 # include <errno.h>
 # include <limits.h>
+# include <sys/types.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -16,30 +17,6 @@
 # include "minishell_defines.h"
 
 // prototypes
-/* ************************************************************************** */
-/*										parser								  */
-/* ************************************************************************** */
-t_dclst	**tokenize(char *input);
-int		get_token(char **ps, char *es, char **q, char **eq);
-void	clear_dclst_data(t_dclst **head);
-int		check_syntax(t_dclst **head);
-t_tree	*create_tree(t_dclst *first, t_dclst *last);
-void	clear_tree(t_tree *root);
-void	print_tree(t_tree *root); // A retirer avant de rendre
-void	print_a_token(t_token *token); // A retirer avant de rendre
-/* ************************************************************************** */
-/*										env									  */
-/* ************************************************************************** */
-// read_env.c
-size_t	count_env_size(char **envp);
-char	**find_env_var(const char *var, char **envp);
-char	*ft_getenv(const char *var, char **envp);
-// write_env.c
-char	**ft_realloc_env(char ***envp, char *new_entry);
-int		create_env_var_void(const char *key, char sep, char ***envp);
-int		create_env_var(const char *key, char sep, const char *value, char ***envp);
-int		update_env_var(const char *key, char sep, const char *value, char ***envp);
-char	**copy_env(char **envp);
 /* ************************************************************************** */
 /*										builtins							  */
 /* ************************************************************************** */
@@ -72,15 +49,53 @@ int		unset_cmd(char **args, char ***envp);
 // exit.c
 void	exit_cmd(char **args, char **envp);
 /* ************************************************************************** */
+/*										env									  */
+/* ************************************************************************** */
+// read_env.c
+size_t	count_env_size(char **envp);
+char	**find_env_var(const char *var, char **envp);
+char	*ft_getenv(const char *var, char **envp);
+// write_env.c
+char	**ft_realloc_env(char ***envp, char *new_entry);
+int		create_env_var_void(const char *key, char sep, char ***envp);
+int		create_env_var(const char *key, char sep, const char *value, char ***envp);
+int		update_env_var(const char *key, char sep, const char *value, char ***envp);
+char	**copy_env(char **envp);
+/* ************************************************************************** */
+/*										executor							  */
+/* ************************************************************************** */
+char	*find_path_in_PATH(char *cmd, char **path_split);
+char	*find_exec_path(char *cmd, char **envp);
+int		execute_cmd(char *path, char **args, char **envp);
+int		execve_cmd(char *cmd, char **args, char **envp);
+/* ************************************************************************** */
+/*										parser								  */
+/* ************************************************************************** */
+t_dclst	**tokenize(char *input);
+int		get_token(char **ps, char *es, char **q, char **eq);
+void	clear_dclst_data(t_dclst **head);
+int		check_syntax(t_dclst **head);
+t_tree	*create_tree(t_dclst *first, t_dclst *last);
+void	clear_tree(t_tree *root);
+void	print_tree(t_tree *root); // A retirer avant de rendre
+void	print_a_token(t_token *token); // A retirer avant de rendre
+/* ************************************************************************** */
+/*										signals								  */
+/* ************************************************************************** */
+
+/* ************************************************************************** */
 /*										utils								  */
 /* ************************************************************************** */
+// delete_functions.c
+void	delete_str_tab(char **tab);
 // dollar_manager.c
 char	*find_var_name_end(char *ptr);
 char	*replace_a_dollar(char *str, char *doll_pos, char **envp);
 char	*replace_each_dollar(char *str, char **envp);
 char	*manage_dollar(t_token *token, char **envp);
-// delete_functions.c
-void	delete_str_tab(char **tab);
+// error_msg.c
+void	ft_perror(char *cmd, char *msg);
+int	shell_error_msg(char *cmd, char *msg);
 // initialize minishell
 int	change_shlvl(char ***envp);
 // ft_strtol.c
