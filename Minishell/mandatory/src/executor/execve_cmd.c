@@ -96,15 +96,3 @@ int	execve_cmd(char *cmd, char **args, char **envp)
 	free(path);
 	return (ret);
 }
-
-
-
-
-// int access(const char *pathname, int mode);
-// pathname: The path to the file or directory to be checked.
-// mode: A bitmask that specifies the checks to be performed. It can be one or more of the following values:
-// R_OK: Check if the file is readable.
-// W_OK: Check if the file is writable.
-// X_OK: Check if the file is executable.
-// F_OK: Check if the file exists.
-// Returns: 0 if the specified file exists and the requested access is permitted, or -1 on error with errno set accordingly.
