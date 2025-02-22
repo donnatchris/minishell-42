@@ -39,7 +39,7 @@ void	print_chars(char *start, char *end);
 int		print_exp_var_env(char **envp);
 int		is_valid_var_name(char *str);
 char	*cut_name(char *str);
-void	pwd_cmd(char **args, char **envp);
+int		pwd_cmd(char **args, char **envp);
 // unset.c
 int		my_realloc(void **ptr, int old_size, int new_size);
 int		unset_one_env_var(char *key, char ***envp);
@@ -68,7 +68,11 @@ char	*find_exec_path(char *cmd, char **envp);
 int		execute_cmd(char *path, char **args, char **envp);
 int		execve_cmd(char *cmd, char **args, char **envp);
 // exec_node.c.c
-int	exec_node(t_dclst *node, char ***envp);
+int 	exec_soft_builtin(int (*function)(char **args, char **envp), char **args, char **envp);
+int		(*soft_builtin(char *cmd))(char **args, char **envp);
+int	 	exec_hard_builtin(int (*function)(char **args, char ***envp), char **args, char ***envp);
+int		(*hard_builtin(char *cmd))(char **args, char ***envp);
+int		exec_node(t_dclst *node, char ***envp);
 // extract_cmd_and_args.c
 char	**ft_realloc_str_array(char **tab, size_t new_size);
 char	**extract_args(t_dclst *node, char **envp);

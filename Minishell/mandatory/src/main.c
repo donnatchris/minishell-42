@@ -19,7 +19,7 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 	//	// A DECOMMENTER POUR TESTER LE PROMPT
-		// (void)tree;
+		(void)tree;
 		// (void)head;
 		ft_printf(YELLOW "%s\n" RESET, getcwd(pwd, sizeof(pwd)));
 		input = readline(CYAN "MINISHELL > " RESET);
@@ -30,11 +30,11 @@ int	main(int ac, char **av, char **envp)
 		head = tokenize(input);
 		if (check_syntax(head) == -1)
 			return (clear_dclst_data(head), 1);
-		ft_printf("\nLIST CREATED:\n");
-		print_dclst_tokens(head);
-		tree = create_tree(*head, (*head)->prev->prev);
-		ft_printf("\nTREE CREATED:\n");
-		print_tree(tree);
+		// ft_printf("\nLIST CREATED:\n");
+		// print_dclst_tokens(head);
+		// tree = create_tree(*head, (*head)->prev->prev);
+		// ft_printf("\nTREE CREATED:\n");
+		// print_tree(tree);
 
 		exec_node(*head, &new_envp);
 
