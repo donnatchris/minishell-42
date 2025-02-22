@@ -40,8 +40,8 @@ SRC = \
 	$(SRC_DIR)/builtins/unset.c \
 	$(SRC_DIR)/env/read_env.c \
 	$(SRC_DIR)/env/write_env.c \
+	$(SRC_DIR)/executor/cmd_execve.c \
 	$(SRC_DIR)/executor/exec_node.c \
-	$(SRC_DIR)/executor/execve_cmd.c \
 	$(SRC_DIR)/executor/extract_cmd_and_args.c \
 	$(SRC_DIR)/parser/binary_tree.c \
 	$(SRC_DIR)/parser/check_token_list.c \

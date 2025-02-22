@@ -62,7 +62,7 @@ char	**copy_env(char **envp);
 /* ************************************************************************** */
 /*										executor							  */
 /* ************************************************************************** */
-// execve_cmd.c
+// cmd_execve.c
 char	*find_path_in_PATH(char *cmd, char **path_split);
 char	*find_exec_path(char *cmd, char **envp);
 int		execute_cmd(char *path, char **args, char **envp);
