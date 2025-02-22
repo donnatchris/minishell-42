@@ -62,10 +62,17 @@ char	**copy_env(char **envp);
 /* ************************************************************************** */
 /*										executor							  */
 /* ************************************************************************** */
+// execve_cmd.c
 char	*find_path_in_PATH(char *cmd, char **path_split);
 char	*find_exec_path(char *cmd, char **envp);
 int		execute_cmd(char *path, char **args, char **envp);
 int		execve_cmd(char *cmd, char **args, char **envp);
+// exec_node.c.c
+int	exec_node(t_dclst *node, char ***envp);
+// extract_cmd_and_args.c
+char	**ft_realloc_str_array(char **tab, size_t new_size);
+char	**extract_args(t_dclst *node, char **envp);
+char	*extract_cmd(t_dclst *node, char **envp);
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */

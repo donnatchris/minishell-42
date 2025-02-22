@@ -4,26 +4,26 @@
 void	affect_tokens_priority(t_dclst **head)
 {
 	t_dclst	*current;
-	t_token	*token;
+	t_token	*tok;
 
 	if (!head || !*head)
 		return ;
 	current = *head;
 	while (1)
 	{
-		token = (t_token *) current->data;
-		if (token->type == TOKEN_PARENTHESIS || token->type == TOKEN_EOF)
-			token->priority = 1;
-		else if (token->type >= TOKEN_REDIR_OUT && token->type <= TOKEN_HEREDOC)
-			token->priority = 2;
-		else if (token->type == TOKEN_PIPE)
-			token->priority = 3;
-		else if (token->type >= TOKEN_AND && token->type <= TOKEN_OR)
-			token->priority = 4;
-		else if (token->type == TOKEN_SEMICOLON)
-			token->priority = 5;
+		tok = (t_token *) current->data;
+		if (tok->type == TOKEN_PARENTHESIS || tok->type == TOKEN_EOF || tok->type == TOKEN_ERROR)
+		tok->priority = 1;
+		else if (tok->type >= TOKEN_REDIR_OUT && tok->type <= TOKEN_HEREDOC)
+		tok->priority = 2;
+		else if (tok->type == TOKEN_PIPE)
+		tok->priority = 3;
+		else if (tok->type >= TOKEN_AND && tok->type <= TOKEN_OR)
+		tok->priority = 4;
+		else if (tok->type == TOKEN_SEMICOLON)
+		tok->priority = 5;
 		else
-			token->priority = 6;
+		tok->priority = 6;
 		current = current->next;
 		if (current == *head)
 			break ;
@@ -102,6 +102,9 @@ int	tokenize_to_dclst(char *input, t_dclst **head)
 		token->type = type;
 		token->start = start;
 		token->end = end;
+		token->space = 0;
+		if (ft_strchr(WHITESPACES, *end))
+			token->space = 1;
 		dclst_add_back(head, token);
 	}
 	return (0);

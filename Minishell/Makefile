@@ -40,11 +40,13 @@ SRC = \
 	$(SRC_DIR)/builtins/unset.c \
 	$(SRC_DIR)/env/read_env.c \
 	$(SRC_DIR)/env/write_env.c \
+	$(SRC_DIR)/executor/exec_node.c \
 	$(SRC_DIR)/executor/execve_cmd.c \
+	$(SRC_DIR)/executor/extract_cmd_and_args.c \
 	$(SRC_DIR)/parser/binary_tree.c \
 	$(SRC_DIR)/parser/check_token_list.c \
 	$(SRC_DIR)/parser/get_token.c \
-	$(SRC_DIR)/parser/parser_main_for_test.c \
+	$(SRC_DIR)/parser/tests_to_remove.c \
 	$(SRC_DIR)/parser/tokenizer.c \
 	$(UTILS_DIR)/delete_functions.c \
 	$(UTILS_DIR)/dollar_manager.c \

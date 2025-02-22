@@ -20,6 +20,7 @@ typedef struct s_token
 {
 	int		type;
 	int		priority;
+	int		space;
 	char	*start;
 	char	*end;
 }			t_token;

@@ -72,6 +72,7 @@ char	*replace_each_dollar(char *str, char **envp)
 
 // Function to manage the $ in a token
 // Returns a pointer to the new string or NULL if it fails
+// RETURN MUST BE FREE AFTER USE
 char	*manage_dollar(t_token *token, char **envp)
 {
 	char	*str;
