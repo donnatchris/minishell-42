@@ -3,7 +3,9 @@
 // Function to print the token in error messages
 void	print_token(t_token *token)
 {
-	if (token->type == TOKEN_PIPE)
+	if (token->type == TOKEN_PARENTHESIS)
+		ft_putstr_fd("`()'", 2);
+	else if (token->type == TOKEN_PIPE)
 		ft_putstr_fd("`|'", 2);
 	else if (token->type == TOKEN_AND)
 		ft_putstr_fd("`&&'", 2);

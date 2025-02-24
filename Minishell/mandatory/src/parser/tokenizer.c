@@ -12,15 +12,15 @@ void	affect_tokens_priority(t_dclst **head)
 	while (1)
 	{
 		tok = (t_token *) current->data;
-		if (tok->type == TOKEN_PARENTHESIS || tok->type == TOKEN_EOF || tok->type == TOKEN_ERROR)
+		if (tok->type == TOKEN_PARENTHESIS)
 			tok->priority = 1;
 		else if (tok->type >= TOKEN_REDIR_OUT && tok->type <= TOKEN_HEREDOC)
 			tok->priority = 2;
-		else if (tok->type == TOKEN_PIPE)
+		else if (tok->type == TOKEN_PIPE || tok->type == TOKEN_EOF)
 			tok->priority = 3;
 		else if (tok->type >= TOKEN_AND && tok->type <= TOKEN_OR)
 			tok->priority = 4;
-		else if (tok->type == TOKEN_SEMICOLON)
+		else if (tok->type == TOKEN_SEMICOLON || tok->type == TOKEN_ERROR)
 			tok->priority = 5;
 		else
 			tok->priority = 6;
@@ -51,7 +51,7 @@ void	null_terminate_token(t_dclst **head)
 		else if (token->type == TOKEN_WORD)
 			*token->end = '\0';
 		else
-				token->start = ""; // was null before last modification
+				token->start = NULL; // was "" before last modification
 		token->end = NULL;
 		current = current->next;
 		if (current == *head)

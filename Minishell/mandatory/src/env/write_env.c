@@ -1,18 +1,16 @@
 #include "../../include/minishell.h"
-//test
+
 // Function to reallocate the environment variable array
 // Returns a pointer to the new environment array, or NULL on failure
 // THE RETURNED ARRAY MUST BE DELETED WITH delete_str_tab
 char	**ft_realloc_env(char ***envp, char *new_entry)
 {
 	char	**new_envp;
-	size_t	size;
 	size_t	i;
 
 	if (!envp)
 		return (shell_error_msg("ft_realloc_env", "invalid arguments"), NULL);
-	size = count_env_size(*envp);
-	new_envp = (char **) malloc(sizeof(char *) * (size + 2));
+	new_envp = (char **) malloc(sizeof(char *) * (count_env_size(*envp) + 2));
 	if (!new_envp)
 		return (shell_error_msg("copy_env", "malloc failed"), NULL);
 	i = 0;

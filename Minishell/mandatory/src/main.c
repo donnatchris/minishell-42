@@ -1,17 +1,12 @@
 #include "../include/minishell.h"
 
-// Main function to launch the minishell
+// Function main to launch the minishell
 int	main(int ac, char **av, char **envp)
 {
 	t_general	*gen;
 
-	gen = (t_general *) malloc(sizeof(t_general));
-	if (!gen)
-	{
-		shell_error_msg("main", "malloc failed");
-		exit (1);
-	}
-	init_gen(gen, envp, av, ac);
+	gen = NULL;
+	gen = init_gen(gen, envp, av, ac);
 	while (1)
 	{
 		delete_cmd_line(gen);

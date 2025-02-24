@@ -1,19 +1,30 @@
 #include "../include/minishell.h"
 
 // Function to initilaize the minishell
-void	init_gen(t_general *gen, char **envp, char **av, int ac)
+t_general	*init_gen(t_general *gen, char **envp, char **av, int ac)
 {
 	(void)ac;
 	(void)av;
+	gen = (t_general *) malloc(sizeof(t_general));
+	if (!gen)
+	{
+		shell_error_msg("main", "malloc failed");
+		exit (1);
+	}
 	ft_memset(gen, 0, sizeof(t_general));
 	gen->envp = copy_env(envp);
 	if (!gen->envp)
 	{
 		shell_error_msg("init_minishell", "failed to copy envp");
+		delete_general(gen);
 		exit(1);
 	}
 	if (change_shlvl(&gen->envp) == -1)
+	{
+		delete_general(gen);
 		exit(1);
+	}
+	return (gen);
 }
 
 // // Function to initilaize the minishell
