@@ -15,7 +15,7 @@
 # define CYAN "\033[36m"
 # define WHITE "\033[37m"
 
-// structures
+// structures and enums
 typedef struct s_token
 {
 	int		type;
@@ -24,20 +24,6 @@ typedef struct s_token
 	char	*start;
 	char	*end;
 }			t_token;
-
-typedef struct s_tree
-{
-	t_token			*token;
-	struct s_tree	*left;
-	struct s_tree	*right;
-}					t_tree;
-
-typedef struct s_general
-{
-	char	*input;
-	char	**envp;
-	t_dclst	**head;
-}			t_general;
 
 typedef enum e_token_type
 {
@@ -57,5 +43,36 @@ typedef enum e_token_type
 	TOKEN_EOF,			// Fin d'entrée
 	TOKEN_ERROR			// Erreur
 }	t_token_type;
+
+typedef struct s_tree
+{
+	int				type;
+	t_dclst			*list_node;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}					t_tree;
+
+typedef enum e_tree_type
+{
+	TREE_NOTHING,		// Rien (pour ne pas utiliser la valeur zéro)
+	TREE_PARENTHESIS,	// Parenthèses
+	TREE_REDIR_OUT,		// Redirection de sortie
+	TREE_APPEND,		// Redirection de sortie en ajout
+	TREE_REDIR_IN,		// Redirection d'entrée
+	TREE_HEREDOC,		// Redirection d'entrée en document
+	TREE_PIPE,			// Pipe
+	TREE_AND,			// Et
+	TREE_OR,			// Ou
+	TREE_SEMICOLON,		// Séparateur
+	TREE_COMMAND,		// Commande simple
+	TREE_ERROR			// Erreur
+}	t_tree_type;
+
+typedef struct s_general
+{
+	char	*input;
+	char	**envp;
+	t_dclst	**head;
+}			t_general;
 
 #endif

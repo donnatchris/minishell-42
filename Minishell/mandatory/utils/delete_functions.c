@@ -16,26 +16,17 @@ void	delete_str_tab(char **tab)
 	free(tab);
 }
 
-// Function to free the data from the doubly circular linked list
-// and then free the doubly circular linked list
-// void	clear_dclst_data(t_dclst **head)
-// {
-// 	t_dclst	*current;
-
-// 	if (!head || !*head)
-// 		return ;
-// 	current = *head;
-// 	while (1)
-// 	{
-// 		if (current->data)
-// 			free(current->data);
-// 		current->data = NULL;
-// 		current = current->next;
-// 		if (current == *head)
-// 			break ;
-// 	}
-// 	dclst_clear(head);
-// }
+// Function to delete the binary tree
+void	delete_tree(t_tree *root)
+{
+	if (!root)
+		return ;
+	if (root->left)
+		delete_tree(root->left);
+	if (root->right)
+		delete_tree(root->right);
+	free(root);
+}
 
 // Function to reinitialize the command line
 void	delete_cmd_line(t_general *gen)
