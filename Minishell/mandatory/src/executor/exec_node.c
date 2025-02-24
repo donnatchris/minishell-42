@@ -53,7 +53,7 @@ int	(*hard_builtin(char *cmd))(char **args, char ***envp)
 // Function to execute a command taking a node as the command
 // and the followin nodes as arguments
 // Returns the exit status of the command
-int	exec_node(t_dclst *node, char ***envp)
+int	exec_node(t_dclst *node, char ***envp, t_general *gen)
 {
 	char	**args;
 	int		status;
@@ -66,7 +66,7 @@ int	exec_node(t_dclst *node, char ***envp)
 	if (!args)
 		return (shell_error_msg("exec_node", "extract_args failed"), -1);
 	if (!ft_strncmp(args[0], "exit", 5))
-		exit_cmd(args, *envp);
+		exit_cmd(args, *envp, gen);
 	hard_built_func = hard_builtin(args[0]);
 	soft_built_func = soft_builtin(args[0]);
 	if (hard_built_func)

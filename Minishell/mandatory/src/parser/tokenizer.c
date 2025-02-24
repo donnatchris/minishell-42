@@ -94,13 +94,13 @@ t_dclst	**tokenize(char *input)
 {
 	t_dclst	**head;
 
-	head = NULL;
+	if (!input)
+		return (NULL);
 	head = (t_dclst **) malloc(sizeof(t_dclst *));
 	if (!head)
 		return (NULL);
 	if (tokenize_to_dclst(input, head) == -1)
 	return (dclst_clear(head), NULL);
-	// return (clear_dclst_data(head), NULL);
 	affect_tokens_priority(head);
 	null_terminate_token(head);
 	return (head);

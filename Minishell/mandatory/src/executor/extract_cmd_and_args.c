@@ -42,7 +42,6 @@ char	**extract_args(t_dclst *node, char **envp)
 	char	*next_arg;
 	char	**args;
 	int		i;
-// test
 	args = ft_realloc_str_array(NULL, 1);
 	if (!args)
 		return (shell_error_msg("extract args", "malloc failed"), NULL);
@@ -57,7 +56,6 @@ char	**extract_args(t_dclst *node, char **envp)
 		arg = manage_dollar(tok, envp);
 		while (!tok->space && next_tok->priority == 6)
 		{
-			ft_printf("\n");
 			next_arg = manage_dollar(next_tok, envp);
 			temp = arg;
 			arg = ft_strjoin(arg, next_arg);

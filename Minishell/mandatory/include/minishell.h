@@ -45,7 +45,7 @@ int		my_realloc(void **ptr, int old_size, int new_size);
 int		unset_one_env_var(char *key, char ***envp);
 int		unset_cmd(char **args, char ***envp);
 // exit.c
-void	exit_cmd(char **args, char **envp);
+void	exit_cmd(char **args, char **envp, t_general *gen);
 /* ************************************************************************** */
 /*										env									  */
 /* ************************************************************************** */
@@ -72,7 +72,7 @@ int 	exec_soft_builtin(int (*function)(char **args, char **envp), char **args, c
 int		(*soft_builtin(char *cmd))(char **args, char **envp);
 int	 	exec_hard_builtin(int (*function)(char **args, char ***envp), char **args, char ***envp);
 int		(*hard_builtin(char *cmd))(char **args, char ***envp);
-int		exec_node(t_dclst *node, char ***envp);
+int		exec_node(t_dclst *node, char ***envp, t_general *gen);
 // extract_cmd_and_args.c
 char	**ft_realloc_str_array(char **tab, size_t new_size);
 char	**extract_args(t_dclst *node, char **envp);
@@ -111,7 +111,8 @@ int		ft_perror(char *cmd, char *msg);
 int		shell_error_msg(char *cmd, char *msg);
 int		shell_error_quote(char *cmd, char *msg);
 // initialize minishell
-int	change_shlvl(char ***envp);
+void	init_gen(t_general *gen, char **envp, char **av, int ac);
+int		change_shlvl(char ***envp);
 // ft_strtol.c
 long	ft_strtol(const char *nptr, char **endptr, int base);
 

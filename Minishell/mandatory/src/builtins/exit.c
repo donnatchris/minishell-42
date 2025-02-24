@@ -9,7 +9,7 @@ static int	argslen(char **args)
 		i++;
 	return (i);
 }
-void	exit_cmd(char **args, char **envp)
+void	exit_cmd(char **args, char **envp, t_general *gen)
 {
 	long	exit_status;
 	char	*endptr;
@@ -24,7 +24,7 @@ void	exit_cmd(char **args, char **envp)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
-		// delete_all();
+		delete_general(gen);
 		exit(255);
 	}
 	if (argslen(args) > 2)
@@ -32,7 +32,7 @@ void	exit_cmd(char **args, char **envp)
 		ft_putstr_fd("minishell: exit: too many arguments", 2);
 		return ;
 	}
-	// delete_all();
+	delete_general(gen);
 	exit((exit_status) % 256);
 }
 // changed every args[0] to args[1] in the exit function
