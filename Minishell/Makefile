@@ -43,6 +43,8 @@ SRC = \
 	$(SRC_DIR)/executor/cmd_execve.c \
 	$(SRC_DIR)/executor/exec_node.c \
 	$(SRC_DIR)/executor/extract_cmd_and_args.c \
+	$(SRC_DIR)/operators/logical_operators.c \
+	$(SRC_DIR)/operators/pipe.c \
 	$(SRC_DIR)/parser/binary_tree.c \
 	$(SRC_DIR)/parser/check_token_list.c \
 	$(SRC_DIR)/parser/get_token.c \

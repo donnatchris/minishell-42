@@ -19,6 +19,18 @@ int	main(int ac, char **av, char **envp)
 		if (check_syntax(gen->head) == -1)
 			continue ;
 		exec_node(*gen->head, &gen->envp, gen);
+
+		// to test pipe:
+		// pipe_operator(*gen->head, (*gen->head)->next->next, &gen->envp, gen);
+
+		// to test &&
+		// and_operator(*gen->head, (*gen->head)->next->next, &gen->envp, gen);
+
+		// to test ||
+		// or_operator(*gen->head, (*gen->head)->next->next, &gen->envp, gen);
+
+		// to test ;
+		// semicolon_operator(*gen->head, (*gen->head)->next->next, &gen->envp, gen);
 	}
 	delete_general(gen);
 	return (0);

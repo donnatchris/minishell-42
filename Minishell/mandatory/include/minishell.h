@@ -77,6 +77,19 @@ int		exec_node(t_dclst *node, char ***envp, t_general *gen);
 char	**ft_realloc_str_array(char **tab, size_t new_size);
 char	**extract_args(t_dclst *node, char **envp);
 /* ************************************************************************** */
+/*										operators							  */
+/* ************************************************************************** */
+// logical_operators.c
+int		and_operator(t_dclst *node1, t_dclst *node2, char ***envp, t_general *gen);
+int		or_operator(t_dclst *node1, t_dclst *node2, char ***envp, t_general *gen);
+int		semicolon_operator(t_dclst *node1, t_dclst *node2, char ***envp, t_general *gen);
+// pipe.c
+int		end_pipe(pid_t pid[]);
+void	reading_process(int fd[], t_dclst *node, char ***envp, t_general *gen);
+void	writing_process(int fd[], t_dclst *node, char ***envp, t_general *gen);
+int		fork_fail(int fd[], int pid);
+int		pipe_operator(t_dclst *node1, t_dclst *node2, char ***envp, t_general *gen);
+/* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */
 t_dclst	**tokenize(char *input);

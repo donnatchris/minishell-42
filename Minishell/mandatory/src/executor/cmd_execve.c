@@ -61,11 +61,11 @@ int	execute_cmd(char *path, char **args, char **envp)
 	if (pid == 0)
 	{
 		if (execve(path, args, envp) == -1)
-			return (ft_perror(path, "exec_ve failed"), ret);
+			exit (ft_perror(path, "exec_ve failed"));
 	}
 	else
 		if (waitpid(pid, &ret, 0) == -1)
-			return (ft_perror(path, "waitpid failed"), ret);
+			return (ft_perror(path, "waitpid failed"));
 	return (ret);
 }
 
