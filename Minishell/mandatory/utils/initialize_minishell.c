@@ -15,7 +15,7 @@ int	change_shlvl(char ***envp)
 		i = ft_atoi(shlvl);
 	new_shlvl = ft_itoa(i + 1);
 	if (!new_shlvl)
-		return (-1);
+		return (shell_error_msg("change_shlvl", "ft_itoa failed"), -1);
 	update_env_var("SHLVL", '=', new_shlvl, envp);
 	free(new_shlvl);
 	return (0);

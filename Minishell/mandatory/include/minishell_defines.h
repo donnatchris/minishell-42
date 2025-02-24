@@ -32,6 +32,13 @@ typedef struct s_tree
 	struct s_tree	*right;
 }					t_tree;
 
+typedef struct s_general
+{
+	char	*input;
+	char	**envp;
+	t_dclst	**head;
+}			t_general;
+
 typedef enum e_token_type
 {
 	NOTHING,			// Rien (pour ne pas utiliser la valeur zéro)

@@ -57,7 +57,7 @@ char	**extract_args(t_dclst *node, char **envp)
 		arg = manage_dollar(tok, envp);
 		while (!tok->space && next_tok->priority == 6)
 		{
-			ft_printf("IN LOOP\n");
+			ft_printf("\n");
 			next_arg = manage_dollar(next_tok, envp);
 			temp = arg;
 			arg = ft_strjoin(arg, next_arg);

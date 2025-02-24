@@ -59,27 +59,6 @@ void	null_terminate_token(t_dclst **head)
 	}
 }
 
-// Function to free the data from the doubly circular linked list
-// and then free the doubly circular linked list
-void	clear_dclst_data(t_dclst **head)
-{
-	t_dclst	*current;
-
-	if (!head || !*head)
-		return ;
-	current = *head;
-	while (1)
-	{
-		if (current->data)
-			free(current->data);
-		current->data = NULL;
-		current = current->next;
-		if (current == *head)
-			break ;
-	}
-	dclst_clear(head);
-}
-
 // Function to split the input into tokens and store them in the doubly circular linked list
 int	tokenize_to_dclst(char *input, t_dclst **head)
 {
@@ -120,9 +99,8 @@ t_dclst	**tokenize(char *input)
 	if (!head)
 		return (NULL);
 	if (tokenize_to_dclst(input, head) == -1)
-		return (clear_dclst_data(head), NULL);
-		// atention input à free dans la fonction appelante si retourne NULL
-		// et que input a été allouée dynamiquement (comme avec readline())
+	return (dclst_clear(head), NULL);
+	// return (clear_dclst_data(head), NULL);
 	affect_tokens_priority(head);
 	null_terminate_token(head);
 	return (head);

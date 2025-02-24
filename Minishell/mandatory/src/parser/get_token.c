@@ -10,7 +10,7 @@ int	get_single_quote(char **s, char *es)
 		(*s)++;
 	if (**s != '\'')
 	{
-		ft_putstr_fd("sminishell: syntax error unclosed single quote\n", 2);
+		ft_putstr_fd("minishell: syntax error unclosed single quote\n", 2);
 		ret = TOKEN_ERROR;
 	}
 	else

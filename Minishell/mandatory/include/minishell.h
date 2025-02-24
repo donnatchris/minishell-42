@@ -81,7 +81,6 @@ char	**extract_args(t_dclst *node, char **envp);
 /* ************************************************************************** */
 t_dclst	**tokenize(char *input);
 int		get_token(char **ps, char *es, char **q, char **eq);
-void	clear_dclst_data(t_dclst **head);
 int		check_syntax(t_dclst **head);
 t_tree	*create_tree(t_dclst *first, t_dclst *last);
 void	clear_tree(t_tree *root);
@@ -98,6 +97,9 @@ void	print_dclst_tokens(t_dclst **head); // A retirer avant de rendre
 /* ************************************************************************** */
 // delete_functions.c
 void	delete_str_tab(char **tab);
+// void	clear_dclst_data(t_dclst **head);
+void	delete_cmd_line(t_general *gen);
+void	delete_general(t_general *gen);
 // dollar_manager.c
 char	*find_var_name_end(char *ptr);
 char	*replace_a_dollar(char *str, char *doll_pos, char **envp);

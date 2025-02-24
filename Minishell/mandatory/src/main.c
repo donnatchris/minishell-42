@@ -1,51 +1,96 @@
 #include "../include/minishell.h"
-//test
-// int	run_minishell
+// test
+// int	run_loop(t_dclst **head, char ***envp)
+// {
+// 	while (1)
+// 	{
+// 		input = readline(CYAN "MINISHELL > " RESET);
+// 		if (!input)
+// 			continue ;
+// 		add_history(input);
+// 		if (!input[0] || input[0] == '\n')
+// 		{
+// 			if (input)
+// 				free(input);
+// 			ft_printf("\n");
+// 			continue ;
+// 		}
+// 		head = tokenize(input);
+// 		if (!head)
+// 		{
+// 			free(input);
+// 			continue ;
+// 		}
+// 		if (check_syntax(head) == -1)
+// 		{
+// 			clear_dclst_data(head);
+// 			free(input);
+// 			continue ;
+// 		}
+// 		exec_node(*head, &new_envp);
+// 	}
+// }
 
-
+// Function to initilaize the minishell
+void	init_gen(t_general *gen, char **envp, char **av, int ac)
+{
+	(void)ac;
+	(void)av;
+	ft_memset(gen, 0, sizeof(t_general));
+	gen->envp = copy_env(envp);
+	if (!gen->envp)
+	{
+		shell_error_msg("init_minishell", "failed to copy envp");
+		exit(1);
+	}
+	if (change_shlvl(&gen->envp) == -1)
+		exit(1);
+}
 
 // Main function to launch the minishell
 int	main(int ac, char **av, char **envp)
 {
-	t_dclst	**head;
-	t_tree	*tree;
-	char	**new_envp;
-	char	*input;
+	t_general	*gen;
 
-	(void)ac;
-	(void)av;
-	(void)tree;
-	new_envp = copy_env(envp);
-	if (!new_envp)
-		return (shell_error_msg("main", "failed to copy envp"));
-	change_shlvl(&new_envp);
-	head = NULL;
+	gen = (t_general *) malloc(sizeof(t_general));
+	if (!gen)
+	{
+		shell_error_msg("main", "failed to malloc gen");
+		exit(1);
+	}
+	init_gen(gen, envp, av, ac);
 	while (1)
 	{
-		input = readline(CYAN "MINISHELL > " RESET);
-		if (!input)
+		gen->input = readline(CYAN "MINISHELL > " RESET);
+		if (!gen->input)
 			continue ;
-		add_history(input);
-		if (!input[0] || input[0] == '\n')
+		add_history(gen->input);
+		if (!gen->input[0] || gen->input[0] == '\n')
 		{
-			if (input)
-				free(input);
+			if (gen->input)
+				free(gen->input);
 			ft_printf("\n");
 			continue ;
 		}
-		head = tokenize(input);
-		if (!head)
+		gen->head = tokenize(gen->input);
+		if (!gen->head)
 		{
-			free(input);
+			free(gen->input);
 			continue ;
 		}
-		if (check_syntax(head) == -1)
+		if (check_syntax(gen->head) == -1)
 		{
-			clear_dclst_data(head);
-			free(input);
+			delete_cmd_line(gen);
 			continue ;
 		}
-		exec_node(*head, &new_envp);
+		exec_node(*gen->head, &gen->envp);
+		delete_cmd_line(gen);
+	}
+	delete_general(gen);
+	return (0);
+}
+
+
 		// ft_printf("\nLIST CREATED:\n");
 		// print_dclst_tokens(head);
 		// tree = create_tree(*head, (*head)->prev->prev);
@@ -93,8 +138,3 @@ int	main(int ac, char **av, char **envp)
 		// clear_dclst_data(head);
 		// free(input);
 		
-		free(input);
-	}
-	delete_str_tab(new_envp);
-	return (0);
-}
