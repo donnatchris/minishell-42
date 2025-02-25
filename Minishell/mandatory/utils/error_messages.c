@@ -9,6 +9,33 @@ int	print_token_error(t_token *token)
 	return (-1);
 }
 
+// Function to print the token in error messages
+void	print_token(t_token *token)
+{
+	if (token->type == TOKEN_PARENTHESIS)
+		ft_putstr_fd("`()'", 2);
+	else if (token->type == TOKEN_PIPE)
+		ft_putstr_fd("`|'", 2);
+	else if (token->type == TOKEN_AND)
+		ft_putstr_fd("`&&'", 2);
+	else if (token->type == TOKEN_OR)
+		ft_putstr_fd("`||'", 2);
+	else if (token->type == TOKEN_SEMICOLON)
+		ft_putstr_fd("`;'", 2);
+	else if (token->type == TOKEN_REDIR_OUT)
+		ft_putstr_fd("`>'", 2);
+	else if (token->type == TOKEN_APPEND)
+		ft_putstr_fd("`>>'", 2);
+	else if (token->type == TOKEN_REDIR_IN)
+		ft_putstr_fd("`<'", 2);
+	else if (token->type == TOKEN_HEREDOC)
+		ft_putstr_fd("`<<'", 2);
+	else if (token->type == TOKEN_EOF)
+		ft_putstr_fd("`newline'", 2);
+	else
+		ft_putstr_fd(token->start, 2);
+}
+
 // Function to print perror message with "minishell: " prefix
 int	ft_perror(char *cmd, char *msg)
 {

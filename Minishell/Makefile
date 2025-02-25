@@ -46,10 +46,10 @@ SRC = \
 	$(SRC_DIR)/executor/extract_cmd_and_args.c \
 	$(SRC_DIR)/operators/pipe.c \
 	$(SRC_DIR)/parser/binary_tree.c \
-	$(SRC_DIR)/parser/check_token_list.c \
+	$(SRC_DIR)/parser/check_synthax.c \
 	$(SRC_DIR)/parser/get_token.c \
+	$(SRC_DIR)/parser/lexer.c \
 	$(SRC_DIR)/parser/tests_to_remove.c \
-	$(SRC_DIR)/parser/tokenizer.c \
 	$(UTILS_DIR)/delete_functions.c \
 	$(UTILS_DIR)/dollar_manager.c \
 	$(UTILS_DIR)/error_messages.c \

@@ -74,7 +74,7 @@ int	 		exec_hard_builtin(int (*function)(char **args, char ***envp), char **args
 int			(*hard_builtin(char *cmd))(char **args, char ***envp);
 int			exec_node(t_dclst *node, char ***envp, t_general *gen);
 // exec_tree.c
-int	exec_tree(t_tree *tree_node, char ***envp, t_general *gen);
+int			exec_tree(t_tree *tree_node, char ***envp, t_general *gen);
 // extract_cmd_and_args.c
 char		**extract_args(t_dclst *node, char **envp);
 /* ************************************************************************** */
@@ -95,14 +95,27 @@ int			find_tree_node_type(t_token *token);
 t_tree		*create_tree_node(t_dclst *list_node);
 t_dclst		*find_lowest_priority(t_dclst *first_node, t_dclst *last_node);
 t_tree		*create_tree(t_dclst *first, t_dclst *last);
-//
-t_dclst		**tokenize(char *input);
-int			get_token(char **ps, char *es, char **q, char **eq);
+// check_synthax.c
 int			check_syntax(t_dclst **head);
-t_tree		*create_tree(t_dclst *first, t_dclst *last);
-void		print_token(t_token *token);
-void		print_tree(t_tree *root); // A retirer avant de rendre
-void		print_a_token(t_token *token); // A retirer avant de rendre
+// get_token.c
+int			get_single_quote(char **s, char *es);
+int			double_quote(char **s, char *es);
+int			get_semi_colon(char **s);
+int			get_amperstand(char **s, char *es);
+int			get_vertical_bar(char **s);
+int			get_parenthesis(char **s, char *es);
+int			get_angle_bracket(char **s);
+int			get_symbol(char **s, char *es);
+int			get_word(char **s, char *es);
+int			get_token(char **ps, char *es, char **q, char **eq);
+// lexer.c
+void		affect_tokens_priority(t_dclst **head);
+void		null_terminate_token(t_dclst **head);
+int			tokenize_to_dclst(char *input, t_dclst **head);
+t_dclst		**tokenize(char *input);
+// tests_to_remove.c							// A retirer avant de rendre
+void		print_tree(t_tree *root); 			// A retirer avant de rendre
+void		print_a_token(t_token *token); 		// A retirer avant de rendre
 void		print_dclst_tokens(t_dclst **head); // A retirer avant de rendre
 /* ************************************************************************** */
 /*										signals								  */
@@ -123,6 +136,7 @@ char		*replace_each_dollar(char *str, char **envp);
 char		*manage_dollar(t_token *token, char **envp);
 // error_msg.c
 int			print_token_error(t_token *token);
+void		print_token(t_token *token);
 int			ft_perror(char *cmd, char *msg);
 int			shell_error_msg(char *cmd, char *msg);
 int			shell_error_quote(char *cmd, char *msg);

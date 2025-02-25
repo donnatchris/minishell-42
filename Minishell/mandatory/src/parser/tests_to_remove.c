@@ -3,6 +3,7 @@
 // Function to print a string from one pointer to another
 void	print_string(char *start, char *end)
 {
+	// function to remove before submitting
 	while (start != end)
 	{
 		ft_printf("%c", *start);
@@ -14,6 +15,7 @@ void	print_string(char *start, char *end)
 // Function to print priorities
 void	print_priorities(t_dclst **head)
 {
+		// function to remove before submitting
 	t_dclst	*current;
 	t_token	*token;
 
@@ -36,6 +38,7 @@ void	print_priorities(t_dclst **head)
 // Function to print a token
 void	print_a_token(t_token *token)
 {
+	// function to remove before submitting
 	if (!token)
 	{
 		ft_printf("No tokens to print\n");
@@ -77,6 +80,7 @@ void	print_a_token(t_token *token)
 // Function to print the doubly circular linked list of tokens
 void	print_dclst_tokens(t_dclst **head)
 {
+	// function to remove before submitting
 	t_dclst	*current;
 	t_token	*token;
 
