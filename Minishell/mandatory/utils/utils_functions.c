@@ -27,3 +27,39 @@ char	**ft_realloc_str_array(char **tab, size_t new_size)
 	free(tab);
 	return (new_tab);
 }
+
+// Function to cut the variable name from the string
+// Returns the variable name or NULL if the string is invalid
+char	*cut_name(char *str)
+{
+	char	*name;
+	int		i;
+
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (str[i] && str[i] != '=')
+		i++;
+	name = ft_substr(str, 0, i);
+	if (!name)
+		return (shell_error_msg("cut_name", "ft_sustr failed"), NULL);
+	return (name);
+}
+
+// Function to check is the string is a valid variable name
+// Return 1 if the string is valid, 0 if not
+int	is_valid_var_name(char *str)
+{
+	if (!str)
+		return (0);
+	if (!ft_isalpha(*str) && *str != '_')
+		return (0);
+	str++;
+	while (*str && *str != '=')
+	{
+		if (!ft_isalnum(*str) && *str != '_')
+			return (0);
+		str++;
+	}
+	return (1);
+}

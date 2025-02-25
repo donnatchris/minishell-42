@@ -64,42 +64,6 @@ int	print_exp_var_env(char **envp)
 	return (0);
 }
 
-// Function to check is the string is a valid variable name
-// Return 1 if the string is valid, 0 if not
-int	is_valid_var_name(char *str)
-{
-	if (!str)
-		return (0);
-	if (!ft_isalpha(*str) && *str != '_')
-		return (0);
-	str++;
-	while (*str && *str != '=')
-	{
-		if (!ft_isalnum(*str) && *str != '_')
-			return (0);
-		str++;
-	}
-	return (1);
-}
-
-// Function to cut the variable name from the string
-// Returns the variable name or NULL if the string is invalid
-char	*cut_name(char *str)
-{
-	char	*name;
-	int		i;
-
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (str[i] && str[i] != '=')
-		i++;
-	name = ft_substr(str, 0, i);
-	if (!name)
-		return (shell_error_msg("export", "ft_sustr failed"), NULL);
-	return (name);
-}
-
 // Function to export variables and store them in the envp
 // or update the value of an existing variable
 // or print the value of existing variables in the envp

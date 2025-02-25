@@ -32,6 +32,9 @@ char		*find_parent_dir(void);
 char		*find_cd_path(char *input, char **envp, char *home, char *old);
 int			cd_cmd(char **args, char ***envp);
 // export.c
+char		*find_next_lowest_var(char *var, char **envp);
+void		print_chars(char *start, char *end);
+int			print_exp_var_env(char **envp);
 int			export_cmd(char **args, char ***envp);
 // pwd.c
 char		*find_next_lowest_var(char *var, char **envp);
@@ -90,7 +93,7 @@ int			pipe_operator(t_dclst *node1, t_dclst *node2, char ***envp, t_general *gen
 /*										parser								  */
 /* ************************************************************************** */
 // binary_tree.c
-void		print_tree(t_tree *root);
+void		print_tree(t_tree *root);			// A retirer avant de rendre
 int			find_tree_node_type(t_token *token);
 t_tree		*create_tree_node(t_dclst *list_node);
 t_dclst		*find_lowest_priority(t_dclst *first_node, t_dclst *last_node);
@@ -145,7 +148,9 @@ t_general	*init_gen(t_general *gen, char **envp, char **av, int ac);
 int			change_shlvl(char ***envp);
 // utils_functions.c
 char		**ft_realloc_str_array(char **tab, size_t new_size);
+char		*cut_name(char *str);
+int			is_valid_var_name(char *str);
 // ft_strtol.c
-long		ft_strtol(const char *nptr, char **endptr, int base);
+long		ft_strtol(const char *nptr, char **endptr, int base);	// A corriger
 
 #endif

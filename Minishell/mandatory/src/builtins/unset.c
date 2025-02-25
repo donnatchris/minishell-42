@@ -70,7 +70,7 @@ int	unset_cmd(char **args, char ***envp)
 	char	**key;
 	char	*name;
 
-	if (!envp || !*envp || !args || !args[0])
+	if (!envp || !*envp || !args)
 		return (shell_error_msg("unset", "invalid arguments"));
 	i = 1;
 	while (args[i])
@@ -82,7 +82,7 @@ int	unset_cmd(char **args, char ***envp)
 			{
 				name = cut_name(*key);
 				if (!name)
-					return (shell_error_msg("unset", "cut_name failed"));
+					return (-1);
 				unset_one_env_var(name, envp);
 				free(name);
 			}
