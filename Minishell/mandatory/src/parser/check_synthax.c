@@ -11,7 +11,7 @@ int	check_syntax(t_dclst **head)
 
 	if (!head || !*head)
 		return (-1);
-		current = *head;
+	current = *head;
 	if (dclst_count_nodes(*head) < 2 || ((t_token *)current->data)->priority != 6)
 		return (print_token_error((t_token *)current->data));
 	while (1)

@@ -50,6 +50,7 @@ SRC = \
 	$(SRC_DIR)/parser/get_token.c \
 	$(SRC_DIR)/parser/lexer.c \
 	$(SRC_DIR)/parser/tests_to_remove.c \
+	$(SRC_DIR)/signals/signal_handler.c \
 	$(UTILS_DIR)/delete_functions.c \
 	$(UTILS_DIR)/dollar_manager.c \
 	$(UTILS_DIR)/error_messages.c \

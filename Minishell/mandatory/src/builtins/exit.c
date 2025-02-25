@@ -25,11 +25,11 @@ void	exit_cmd(char **args, char **envp, t_general *gen)
 		ft_putstr_fd(args[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
 		delete_general(gen);
-		exit(255);
+		exit(2);
 	}
 	if (argslen(args) > 2)
 	{
-		ft_putstr_fd("minishell: exit: too many arguments", 2);
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		return ;
 	}
 	delete_general(gen);

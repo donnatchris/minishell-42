@@ -46,12 +46,12 @@ void	null_terminate_token(t_dclst **head)
 		{
 			token->start++;
 			token->end--;
-			*token->end = '\0';
+			*(token)->end = '\0';
 		}
 		else if (token->type == TOKEN_WORD)
 			*token->end = '\0';
 		else
-				token->start = NULL; // was "" before last modification
+			token->start = NULL; // was "" before last modification
 		token->end = NULL;
 		current = current->next;
 		if (current == *head)
@@ -75,7 +75,7 @@ int	tokenize_to_dclst(char *input, t_dclst **head)
 		type = get_token(&string, input + ft_strlen(input), &start, &end);
 		if (type == TOKEN_ERROR)
 			return (-1);
-		token = (t_token *) malloc(sizeof(t_token));
+		token = (t_token *) malloc(sizeof(t_token) + 1);
 		if (!token)
 			return (-1);
 		token->type = type;
@@ -99,8 +99,9 @@ t_dclst	**tokenize(char *input)
 	head = (t_dclst **) malloc(sizeof(t_dclst *));
 	if (!head)
 		return (NULL);
+	ft_memset(head, 0, sizeof(t_dclst **));
 	if (tokenize_to_dclst(input, head) == -1)
-	return (dclst_clear(head), NULL);
+		return (dclst_clear(head), NULL);
 	affect_tokens_priority(head);
 	null_terminate_token(head);
 	return (head);
