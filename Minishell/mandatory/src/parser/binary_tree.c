@@ -32,7 +32,7 @@ t_tree	*create_tree_node(t_dclst *list_node)
 
 	tree_node = (t_tree *) malloc(sizeof(t_tree));
 	if (!tree_node)
-		return (NULL);
+		return (shell_error_msg("create_tree_node", "malloc failed"), NULL);
 	ft_memset(tree_node, 0, sizeof(t_tree));
 	tree_node->list_node = list_node;
 	tree_node->type = find_tree_node_type((t_token *) list_node->data);
@@ -42,52 +42,51 @@ t_tree	*create_tree_node(t_dclst *list_node)
 // Function to find the priority token in the doubly circular linked list
 // Returns the node with the lowest priority or NULL if an error occurs
 // THE RETURNED NODE MUST BE FREED AFTER USE
-t_dclst	*find_lowest_priority(t_dclst *first_node, t_dclst *last_node)
+t_dclst	*find_lowest_priority(t_dclst *left, t_dclst *right)
 {
 	t_dclst	*current;
 	t_dclst	*lowest;
 	t_token	*token;
 	t_token	*lowest_token;
 
-	if (!first_node || !last_node)
-		return (NULL);
-	current = last_node;
-	lowest = last_node;
+	if (!left || !right)
+		return (shell_error_msg("find_lowest_priority", "invalid arguments"), NULL);
+	current = right;
+	lowest = left;
 	while (1)
 	{
 		lowest_token = (t_token *) lowest->data;
 		token = (t_token *) current->data;
-		if (token->priority < lowest_token->priority)
+		if (token->priority < lowest_token->priority && token->priority < 6)
 			lowest = current;
-		if (current == first_node)
+		if (current == left)
 			break ;
 		current = current->prev;
 	}
 	return (lowest);
 }
-
+//test
 // Function to create the binary tree from the doubly circular linked list
 // Returns the root of the binary tree or NULL if an error occurs
-t_tree	*create_tree(t_dclst *first, t_dclst *last)
+t_tree	*create_tree(t_dclst *left, t_dclst *right)
 {
 	t_tree	*tree_node;
 	t_dclst	*lowest;
 
-	if (!first || !last)
-		return (NULL);
-	lowest = find_lowest_priority(first, last);
+	if (!left || !right)
+		return (shell_error_msg("create tree", "invalid arguments"), NULL);
+	lowest = find_lowest_priority(left, right);
 	
 	ft_printf("Lowest priority: ");
 	print_a_token((t_token *) lowest->data);
-
 	tree_node = create_tree_node(lowest);
 	if (!tree_node)
 		return (NULL);
-	if (first == last)
+	if (left == right)
 		return (tree_node);
-	if (lowest != first)
-		tree_node->left = create_tree(first, lowest->prev);
-	if (lowest != last)
-		tree_node->right = create_tree(lowest->next, last);
+	if (lowest != left && ((t_token *) (lowest->data))->priority != 6)
+		tree_node->left = create_tree(left, lowest->prev);
+	if (lowest != right && ((t_token *) (lowest->data))->priority != 6)
+		tree_node->right = create_tree(lowest->next, right);
 	return (tree_node);
 }

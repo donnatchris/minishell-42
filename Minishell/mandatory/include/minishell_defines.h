@@ -29,13 +29,13 @@ typedef enum e_token_type
 {
 	NOTHING,			// Rien (pour ne pas utiliser la valeur zéro)
 	TOKEN_PARENTHESIS,	// (...) / Prio1
-	TOKEN_REDIR_OUT,	// > / Prio2
-	TOKEN_APPEND,		// >> / Prio2
-	TOKEN_REDIR_IN,		// < / Prio2
-	TOKEN_HEREDOC,		// << / Prio2
-	TOKEN_PIPE,			// | / Prio3
-	TOKEN_AND,			// && / Prio4
-	TOKEN_OR,			// || / Prio4
+	TOKEN_PIPE,			// | / Prio2
+	TOKEN_AND,			// && / Prio3
+	TOKEN_OR,			// || / Prio3
+	TOKEN_REDIR_OUT,	// > / Prio4
+	TOKEN_APPEND,		// >> / Prio4
+	TOKEN_REDIR_IN,		// < / Prio4
+	TOKEN_HEREDOC,		// << / Prio4
 	TOKEN_SEMICOLON,	// ;  / Prio5
 	TOKEN_STRING,		// "texte" (variable autorisée) / Prio6
 	TOKEN_WORD,			// Un mot (variable autorisée) / Prio6
