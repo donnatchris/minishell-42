@@ -1,5 +1,8 @@
 #include "../include/minishell.h"
 
+// Global variable for handling signals
+int	g_signals;
+
 // Function main to launch the minishell
 int	main(int ac, char **av, char **envp)
 {
@@ -7,8 +10,12 @@ int	main(int ac, char **av, char **envp)
 
 	gen = NULL;
 	gen = init_gen(gen, envp, av, ac);
-	while (1)
+	signal(SIGINT, signal_handler);
+	signal(EOF, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
+	while (g_signals != EOF)
 	{
+		g_signals = 0;
 		delete_cmd_line(gen);
 		gen->input = readline(CYAN "MINISHELL > " RESET);
 		if (gen->input)
@@ -23,13 +30,13 @@ int	main(int ac, char **av, char **envp)
 		// exec_node(*gen->head, &gen->envp, gen);
 
 		// to see the created tokens:
-		ft_printf("\nPrinting tokens:\n");
-		print_dclst_tokens(gen->head);
+		// ft_printf("\nPrinting tokens:\n");
+		// print_dclst_tokens(gen->head);
 
 		// to see the created tree:
 		t_tree *tree = create_tree(*gen->head, (*gen->head)->prev->prev);
-		ft_printf("\nPrinting tree:\n");
-		print_tree(tree);
+		// ft_printf("\nPrinting tree:\n");
+		// print_tree(tree);
 
 		// to test the tree execution:
 		exec_tree(tree, &gen->envp, gen);

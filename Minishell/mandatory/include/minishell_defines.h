@@ -15,6 +15,9 @@
 # define CYAN "\033[36m"
 # define WHITE "\033[37m"
 
+// Global variable
+extern int	g_signals;
+
 // structures and enums
 typedef struct s_token
 {

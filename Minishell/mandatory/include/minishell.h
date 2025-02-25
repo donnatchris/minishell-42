@@ -6,6 +6,7 @@
 # include <stdio.h>
 # include <errno.h>
 # include <limits.h>
+# include <signal.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <readline/readline.h>
@@ -124,7 +125,8 @@ void		print_dclst_tokens(t_dclst **head); // A retirer avant de rendre
 /* ************************************************************************** */
 /*										signals								  */
 /* ************************************************************************** */
-
+// signal_handler..c
+void	signal_handler(int signum);
 /* ************************************************************************** */
 /*										utils								  */
 /* ************************************************************************** */

@@ -78,9 +78,9 @@ t_tree	*create_tree(t_dclst *left, t_dclst *right)
 		return (shell_error_msg("create tree", "invalid arguments"), NULL);
 	lowest = find_lowest_priority(left, right);
 	priority = ((t_token *) lowest->data)->priority;
-	
-	ft_printf("Lowest priority: ");
-	print_a_token((t_token *) lowest->data);
+
+	// ft_printf("Lowest priority: ");
+	// print_a_token((t_token *) lowest->data);
 
 	tree_node = create_tree_node(lowest);
 	if (!tree_node)
