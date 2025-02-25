@@ -18,6 +18,8 @@ int	main(int ac, char **av, char **envp)
 		g_signals = 0;
 		delete_cmd_line(gen);
 		gen->input = readline(CYAN "MINISHELL > " RESET);
+		if (!gen->input)
+			break ;
 		if (gen->input)
 			add_history(gen->input);
 		if (!gen->input[0] || gen->input[0] == '\n')
