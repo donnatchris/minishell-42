@@ -1,33 +1,5 @@
 #include "../../include/minishell.h"
 
-// Function to reallocate a string array
-// Returns the new string array
-// RETURN MUST BE FREED AFTER USE
-char	**ft_realloc_str_array(char **tab, size_t new_size)
-{
-	char	**new_tab;
-	size_t	i;
-
-	if (!tab)
-		return ((char **) malloc(sizeof(char *) * new_size));
-	new_tab = (char **) malloc(sizeof(char *) * new_size);
-	if (!new_tab)
-		return (NULL);
-	i = 0;
-	while (tab[i] && i < new_size - 1)
-	{
-		new_tab[i] = tab[i];
-		i++;
-	}
-	while (i < new_size)
-	{
-		new_tab[i] = NULL;
-		i++;
-	}
-	free(tab);
-	return (new_tab);
-}
-
 // Function to create an array of arguments after a dclst node
 // Returns the array of arguments
 // RETURN MUST BE FREED AFTER USE
@@ -78,4 +50,9 @@ char	**extract_args(t_dclst *node, char **envp)
 	}
 	args[i] = NULL;
 	return (args);
+	// Attention: si le noeud suivant est priority == 4,
+	// il faut le skip et skip le noeud suivant aussi
+	// et continuer à lire les arguments
+	// jusqu'à ce qu'on tombe sur un noeud priority != 6
+	// ou qu'on revienne au noeud de départ
 }

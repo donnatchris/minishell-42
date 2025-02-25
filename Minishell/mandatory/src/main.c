@@ -22,23 +22,17 @@ int	main(int ac, char **av, char **envp)
 		// to test a line of command without any operator:
 		// exec_node(*gen->head, &gen->envp, gen);
 
+		// to see the created tokens:
 		ft_printf("\nPrinting tokens:\n");
 		print_dclst_tokens(gen->head);
-		t_tree *tree = create_tree(*gen->head, (*gen->head)->prev->prev->prev);
+
+		// to see the created tree:
+		t_tree *tree = create_tree(*gen->head, (*gen->head)->prev->prev);
 		ft_printf("\nPrinting tree:\n");
 		print_tree(tree);
 
-		// to test pipe:
-		// pipe_operator(*gen->head, (*gen->head)->next->next, &gen->envp, gen);
-
-		// to test &&
-		// and_operator(*gen->head, (*gen->head)->next->next, &gen->envp, gen);
-
-		// to test ||
-		// or_operator(*gen->head, (*gen->head)->next->next, &gen->envp, gen);
-
-		// to test ;
-		// semicolon_operator(*gen->head, (*gen->head)->next->next, &gen->envp, gen);
+		// to test the tree execution:
+		exec_tree(tree, &gen->envp, gen);
 	}
 	delete_general(gen);
 	return (0);

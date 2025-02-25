@@ -28,6 +28,7 @@ void	print_token(t_token *token)
 }
 
 // Function to check the syntax of tokens in the doubly circular linked list
+// Returns 0 if the syntax is correct, -1 otherwise
 int	check_syntax(t_dclst **head)
 {
 	t_dclst	*current;
@@ -48,7 +49,7 @@ int	check_syntax(t_dclst **head)
 		if (token->priority != 6 && token->priority != 1)
 		{
 			if ((next_tok->priority !=6 && next_tok->priority != 1) || (prev_tok->priority !=6 && prev_tok->priority != 1))
-				return (print_token_error(token));
+				return (print_token_error(token));	//next_tok?
 		}
 		if (next_tok->type == TOKEN_EOF || current->next == *head)
 			break ;

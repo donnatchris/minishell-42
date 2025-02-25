@@ -109,18 +109,20 @@ char	*cut_name(char *str)
 int export_cmd(char **args, char ***envp)
 {
 	int		i;
+	int		status;
 	char	*name;
 	char	*value;
 
 	if (!envp || !*envp || !args || !args[0])
-		return (shell_error_msg("export", "invalid arguments"));	
+		return (shell_error_msg("export", "invalid arguments"));
+	status = 0;	
 	if (!args || !args[1])
-		return (print_exp_var_env(*envp), 0);
+		return (print_exp_var_env(*envp), status);
 	i = 1;
 	while (args[i])
 	{
 		if (!is_valid_var_name(args[i]))
-			shell_error_quote("export", args[i]);
+			status = shell_error_quote("export", args[i]);
 		else
 		{
 			name = cut_name(args[i]);
@@ -137,5 +139,5 @@ int export_cmd(char **args, char ***envp)
 		}
 		args++;
 	}
-	return (0);
+	return (status);
 }

@@ -57,7 +57,7 @@ t_dclst	*find_lowest_priority(t_dclst *left, t_dclst *right)
 	{
 		lowest_token = (t_token *) lowest->data;
 		token = (t_token *) current->data;
-		if (token->priority < lowest_token->priority && token->priority < 6)
+		if (token->priority < lowest_token->priority && token->priority < 6 && token->priority != 0)
 			lowest = current;
 		if (current == left)
 			break ;
@@ -72,21 +72,28 @@ t_tree	*create_tree(t_dclst *left, t_dclst *right)
 {
 	t_tree	*tree_node;
 	t_dclst	*lowest;
+	int		priority;
 
 	if (!left || !right)
 		return (shell_error_msg("create tree", "invalid arguments"), NULL);
 	lowest = find_lowest_priority(left, right);
+	priority = ((t_token *) lowest->data)->priority;
 	
 	ft_printf("Lowest priority: ");
 	print_a_token((t_token *) lowest->data);
+
 	tree_node = create_tree_node(lowest);
 	if (!tree_node)
 		return (NULL);
 	if (left == right)
 		return (tree_node);
-	if (lowest != left && ((t_token *) (lowest->data))->priority != 6)
+	// if (priority == 4)
+	// {
+	// 	left = left->next;
+	// }
+	if (lowest != left && priority != 6)
 		tree_node->left = create_tree(left, lowest->prev);
-	if (lowest != right && ((t_token *) (lowest->data))->priority != 6)
+	if (lowest != right && priority != 6)
 		tree_node->right = create_tree(lowest->next, right);
 	return (tree_node);
 }

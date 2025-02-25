@@ -56,13 +56,13 @@ typedef enum e_tree_type
 {
 	TREE_NOTHING,		// Rien (pour ne pas utiliser la valeur zéro)
 	TREE_PARENTHESIS,	// Parenthèses
+	TREE_PIPE,			// Pipe
+	TREE_AND,			// Et
+	TREE_OR,			// Ou
 	TREE_REDIR_OUT,		// Redirection de sortie
 	TREE_APPEND,		// Redirection de sortie en ajout
 	TREE_REDIR_IN,		// Redirection d'entrée
 	TREE_HEREDOC,		// Redirection d'entrée en document
-	TREE_PIPE,			// Pipe
-	TREE_AND,			// Et
-	TREE_OR,			// Ou
 	TREE_SEMICOLON,		// Séparateur
 	TREE_COMMAND,		// Commande simple
 	TREE_ERROR			// Erreur

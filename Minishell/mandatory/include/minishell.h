@@ -67,22 +67,19 @@ char		*find_path_in_PATH(char *cmd, char **path_split);
 char		*find_exec_path(char *cmd, char **envp);
 int			execute_cmd(char *path, char **args, char **envp);
 int			execve_cmd(char *cmd, char **args, char **envp);
-// exec_node.c.c
+// exec_node.c
 int 		exec_soft_builtin(int (*function)(char **args, char **envp), char **args, char **envp);
 int			(*soft_builtin(char *cmd))(char **args, char **envp);
 int	 		exec_hard_builtin(int (*function)(char **args, char ***envp), char **args, char ***envp);
 int			(*hard_builtin(char *cmd))(char **args, char ***envp);
 int			exec_node(t_dclst *node, char ***envp, t_general *gen);
+// exec_tree.c
+int	exec_tree(t_tree *tree_node, char ***envp, t_general *gen);
 // extract_cmd_and_args.c
-char		**ft_realloc_str_array(char **tab, size_t new_size);
 char		**extract_args(t_dclst *node, char **envp);
 /* ************************************************************************** */
 /*										operators							  */
 /* ************************************************************************** */
-// logical_operators.c
-int			and_operator(t_dclst *node1, t_dclst *node2, char ***envp, t_general *gen);
-int			or_operator(t_dclst *node1, t_dclst *node2, char ***envp, t_general *gen);
-int			semicolon_operator(t_dclst *node1, t_dclst *node2, char ***envp, t_general *gen);
 // pipe.c
 int			end_pipe(pid_t pid[]);
 void		reading_process(int fd[], t_dclst *node, char ***envp, t_general *gen);
@@ -132,6 +129,8 @@ int			shell_error_quote(char *cmd, char *msg);
 // initialize minishell
 t_general	*init_gen(t_general *gen, char **envp, char **av, int ac);
 int			change_shlvl(char ***envp);
+// utils_functions.c
+char		**ft_realloc_str_array(char **tab, size_t new_size);
 // ft_strtol.c
 long		ft_strtol(const char *nptr, char **endptr, int base);
 
