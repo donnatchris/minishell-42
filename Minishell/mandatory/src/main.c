@@ -35,7 +35,6 @@ int	main(int ac, char **av, char **envp)
 		// print_dclst_tokens(gen->head);
 
 		// to see the created tree:
-		t_tree *tree = create_tree(*gen->head, (*gen->head)->prev->prev);
 		// ft_printf("\nPrinting tree:\n");
 		// print_tree(tree);
 
