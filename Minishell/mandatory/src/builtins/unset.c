@@ -1,14 +1,5 @@
 #include "../../include/minishell.h"
 
-// Function to print error message of unset_cmd
-// Returns -1
-void	print_unset_error(char *arg)
-{
-	ft_putstr_fd("unset : `", 2);
-	ft_putstr_fd(arg, 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
-}
-
 // Function to realloc memory
 // Returns 0 on success, -1 on failure
 int	my_realloc(void **ptr, int old_size, int new_size)
@@ -67,7 +58,7 @@ int	unset_one_env_var(char *key, char ***envp)
 		}
 		i++;
 	}
-	return (ft_putstr_fd ("unset_one_env var: key not found", 2), -1);
+	return (shell_error_msg ("unset_one_env var", "key not found"));
 }
 
 // Function to remove environment variables from the environment variable list
@@ -79,9 +70,9 @@ int	unset_cmd(char **args, char ***envp)
 	char	**key;
 	char	*name;
 
-	if (!envp || !args)
-		return (ft_putstr_fd("unset: invalid arguments\n", 2), -1);
-	i = 0;
+	if (!envp || !*envp || !args)
+		return (shell_error_msg("unset", "invalid arguments"));
+	i = 1;
 	while (args[i])
 	{
 		if (is_valid_var_name(args[i]))
@@ -91,15 +82,11 @@ int	unset_cmd(char **args, char ***envp)
 			{
 				name = cut_name(*key);
 				if (!name)
-					return (ft_putstr_fd("unset_cmd: cut_name failed\n", 2), -1);
+					return (-1);
 				unset_one_env_var(name, envp);
 				free(name);
 			}
-			else
-				print_unset_error(args[i]);
 		}
-		else
-			print_unset_error(args[i]);
 		i++;
 	}
 	return (0);

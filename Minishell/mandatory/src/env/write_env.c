@@ -1,19 +1,18 @@
 #include "../../include/minishell.h"
-//test
+
 // Function to reallocate the environment variable array
 // Returns a pointer to the new environment array, or NULL on failure
+// THE RETURNED ARRAY MUST BE DELETED WITH delete_str_tab
 char	**ft_realloc_env(char ***envp, char *new_entry)
 {
 	char	**new_envp;
-	size_t	size;
 	size_t	i;
 
 	if (!envp)
-		return (ft_putstr_fd("ft_realloc_env: invalid arguments", 2), NULL);
-	size = count_env_size(*envp);
-	new_envp = (char **) malloc(sizeof(char *) * (size + 2));
+		return (shell_error_msg("ft_realloc_env", "invalid arguments"), NULL);
+	new_envp = (char **) malloc(sizeof(char *) * (count_env_size(*envp) + 2));
 	if (!new_envp)
-		return (perror("copy_env: malloc failed\n"), NULL);
+		return (shell_error_msg("copy_env", "malloc failed"), NULL);
 	i = 0;
 	while ((*envp)[i])
 	{
@@ -21,17 +20,17 @@ char	**ft_realloc_env(char ***envp, char *new_entry)
 		if (!new_envp[i])
 		{
 			delete_str_tab(new_envp);
-			return (ft_putstr_fd("copy_env: ft_strdup failed\n", 2), NULL);
+			return (shell_error_msg("copy_env", "ft_strdup failed"), NULL);
 		}
 		i++;
 	}
 	new_envp[i] = ft_strdup(new_entry);
 	new_envp[i + 1] = NULL;
-	// delete_str_tab(*envp);
+	delete_str_tab(*envp);
 	*envp = new_envp;
 	return (*envp);
 }
-//test
+
 // Function to add a new variable to the environment
 // from a key but without a value
 // Returns 0 on success, -1 on failure
@@ -40,13 +39,13 @@ int	create_env_var_void(const char *key, char sep, char ***envp)
 	char	*new_entry;
 
 	if (!envp || !key)
-		return (ft_putstr_fd("create_env_var_void: invalid arguments\n", 2), -1);
+		return (shell_error_msg("create_env_var_void", "invalid arguments"));
 	if (sep == '=')
 		new_entry = ft_strjoin(key, "=");
 	else
 		new_entry = ft_strdup(key);
 	if (!new_entry)
-		return (ft_putstr_fd("create_env_var_void: ft_strjoin or ft_strdup failed\n", 2), -1);
+		return (shell_error_msg("create_env_var_void", "ft_strjoin or ft_strdup failed"));
 	if (!ft_realloc_env(envp, new_entry))
 		return (free(new_entry), -1);
 	free(new_entry);
@@ -64,22 +63,20 @@ int	create_env_var(const char *key, char sep, const char *value, char ***envp)
 	size_t	size;
 
 	if (!envp || !key)
-		return (ft_putstr_fd("create_env_var: invalid arguments\n", 2), -1);
+		return (shell_error_msg("create_env_var", "invalid arguments"));
 	if (!value)
 		return (create_env_var_void(key, sep, envp));
 	temp = ft_strjoin(key, "=");
 	if (!temp)
-		return (ft_putstr_fd("create_env_var: ft_strjoin or ft_strdup failed\n", 2), -1);
+		return (shell_error_msg("create_env_var", "ft_strjoin or ft_strdup failed"));
 	new_entry = ft_strjoin(temp, value);
 	free(temp);
 	if (!new_entry)
-		return (ft_putstr_fd("create_env_var: strjoin failed\n", 2), -1);
+		return (shell_error_msg("create_env_var", "strjoin failed"));
 	size = count_env_size(*envp);
 	new_envp = ft_realloc_env(envp, new_entry);
 	if (!new_envp)
-		return (free(new_entry), ft_putstr_fd("create_env_var: realloc failed\n", 2), -1);
-	// new_envp = copy_env(*envp);
-	// delete_str_tab(*envp);
+		return (free(new_entry), shell_error_msg("create_env_var", "realloc failed"));
 	new_envp[size] = new_entry;
 	new_envp[size + 1] = NULL;
 	*envp = new_envp;
@@ -95,20 +92,20 @@ int	update_env_var(const char *key, char sep, const char *value, char ***envp)
 	char	*new_entry;
 
 	if (!envp || !key)
-		return (ft_putstr_fd("update_env_var: invalid arguments\n", 2), -1);
+		return (shell_error_msg("update_env_var", "invalid arguments"));
 	var = find_env_var(key, *envp);
 	if (!var)
 		return(create_env_var(key, sep, value, envp));
 	temp = ft_strjoin(key, "=");
 	if (!temp)
-		return (ft_putstr_fd("update_env_var: strjoin failed\n", 2), -1);
+		return (shell_error_msg("update_env_var", "strjoin failed"));
 	if (!value)
 		new_entry = ft_strdup(temp);
 	else
 		new_entry = ft_strjoin(temp, value);
 	free(temp);
 	if (!new_entry)
-		return (ft_putstr_fd("update_env_var: strjoin failed\n", 2), -1);
+		return (shell_error_msg("update_env_var", "strjoin failed"));
 	free(*var);
 	*var = new_entry;
 	return (0);
@@ -116,6 +113,7 @@ int	update_env_var(const char *key, char sep, const char *value, char ***envp)
 
 // Function to make a dynamicly allocated copy of the environment
 // Returns a pointer to the new environment array, or NULL on failure
+// THE RETURNED ARRAY MUST BE DELETED WITH delete_str_tab
 char	**copy_env(char **envp)
 {
 	char	**new_envp;
@@ -123,11 +121,11 @@ char	**copy_env(char **envp)
 	size_t	i;
 
 	if (!envp)
-		return (ft_putstr_fd("copy_env: invalid arguments", 2), NULL);
+		return (shell_error_msg("copy_env", "invalid arguments"), NULL);
 	size = count_env_size(envp);
 	new_envp = (char **) malloc(sizeof(char *) * (size + 1));
 	if (!new_envp)
-		return (perror("copy_env: malloc failed"), NULL);
+		return (shell_error_msg("copy_env:", "malloc failed"), NULL);
 	i = 0;
 	while (envp[i])
 	{
@@ -135,7 +133,7 @@ char	**copy_env(char **envp)
 		if (!new_envp[i])
 		{
 			delete_str_tab(new_envp);
-			return (ft_putstr_fd("copy_env: ft_strdup failed\n", 2), NULL);
+			return (shell_error_msg("copy_env", "ft_strdup failed"), NULL);
 		}
 		i++;
 	}

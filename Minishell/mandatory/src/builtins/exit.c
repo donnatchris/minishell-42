@@ -9,29 +9,31 @@ static int	argslen(char **args)
 		i++;
 	return (i);
 }
-void	exit_cmd(char **args, char **envp)
+void	exit_cmd(char **args, char **envp, t_general *gen)
 {
 	long	exit_status;
 	char	*endptr;
 
 	(void)envp;
 	ft_putstr_fd("exit\n", 1);
-	if (!args[0])
+	if (!args[1])
 		exit(0);
-	exit_status = strtol(args[0], &endptr, 10);
+	exit_status = strtol(args[1], &endptr, 10);
 	if (*endptr != '\0' || errno == ERANGE)
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
-		ft_putstr_fd(args[0], 2);
+		ft_putstr_fd(args[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
-		// delete_all();
+		delete_general(gen);
 		exit(2);
 	}
-	if (argslen(args) > 1)
+	if (argslen(args) > 2)
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		return ;
 	}
-	// delete_all();
+	delete_general(gen);
 	exit((exit_status) % 256);
 }
+// changed every args[0] to args[1] in the exit function
+// and if (argslen(args) > 1) to if (argslen(args) > 2)

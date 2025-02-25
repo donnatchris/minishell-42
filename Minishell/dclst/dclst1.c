@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 08:58:54 by christophed       #+#    #+#             */
-/*   Updated: 2025/02/15 16:22:45 by christophed      ###   ########.fr       */
+/*   Updated: 2025/02/24 09:58:54 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,35 +67,74 @@ t_dclst	*dclst_add(t_dclst **head, void *data)
 	return (new);
 }
 
+// // Function to remove a node from the doubly circular linked list
+// void	dclst_remove_node(t_dclst **head, t_dclst *node)
+// {
+// 	if (head && *head && node)
+// 	{
+// 		if (node->data)
+// 			free(node->data);
+// 		if (node == *head)
+// 		{
+// 			if ((*head)->next == *head)
+// 			{
+// 				free (*head);
+// 				*head = NULL;
+// 				return ;
+// 			}
+// 			*head = node->next;
+// 		}
+// 		node->next->prev = node->prev;
+// 		node->prev->next = node->next;
+// 		free(node);
+// 	}
+// }
+
+// // Function to clear the entire doubly circular linked list
+// void	dclst_clear(t_dclst **head)
+// {
+// 	if (!head)
+// 		return ;
+// 	while (*head)
+// 		dclst_remove_node(head, *head);
+// 	free(head);
+// }
+
 // Function to remove a node from the doubly circular linked list
 void	dclst_remove_node(t_dclst **head, t_dclst *node)
 {
-	if (head && *head && node)
+	if (!head || !*head || !node)
+		return ;
+	if (node->data)
+		free(node->data);
+	if (node == *head)
 	{
-		if (node->data)
-			free(node->data);
-		if (node == *head)
+		if ((*head)->next == *head)
 		{
-			if ((*head)->next == *head)
-			{
-				free (*head);
-				*head = NULL;
-				return ;
-			}
-			*head = node->next;
+			free(*head);
+			*head = NULL;
+			return ;
 		}
-		node->next->prev = node->prev;
-		node->prev->next = node->next;
-		free(node);
+		*head = node->next;
 	}
+	node->next->prev = node->prev;
+	node->prev->next = node->next;
+	free(node);
 }
 
 // Function to clear the entire doubly circular linked list
 void	dclst_clear(t_dclst **head)
 {
-	if (!head)
+	if (!head || !*head)
 		return ;
-	while (*head)
-		dclst_remove_node(head, *head);
-	free(head);
+	t_dclst *current = *head;
+	t_dclst *next;
+	while (current)
+	{
+		next = current->next;
+		dclst_remove_node(head, current);
+		if (*head == NULL)
+			break;
+		current = next;
+	}
 }

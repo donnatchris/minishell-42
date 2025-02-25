@@ -6,8 +6,10 @@ int	echo_cmd(char **args, char **envp)
 	int		i;
 
 	(void)envp;
+	if (args[1] == NULL)
+		return (ft_putchar_fd('\n', 1), 0);
 	newline = 0;
-	i = 0;
+	i = 1;
 	while (newline_flag(args[i]) == 0)
 	{
 		newline = 1;
