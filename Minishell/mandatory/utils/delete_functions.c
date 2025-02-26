@@ -28,6 +28,7 @@ void	delete_tree(t_tree *root)
 	if (root->right)
 		delete_tree(root->right);
 	free(root);
+	root = NULL;
 }
 
 // Function to reinitialize the command line
@@ -39,8 +40,11 @@ void	delete_cmd_line(t_general *gen)
 		free(gen->input);
 	if (gen->head)
 		dclst_clear(gen->head);
+	if (gen->tree)
+		delete_tree(gen->tree);
 	gen->input = NULL;
 	gen->head = NULL;
+	gen->tree = NULL;
 }
 
 // Function to delete the general structure
@@ -52,4 +56,5 @@ void	delete_general(t_general *gen)
 	if (gen->envp)
 		delete_str_tab(gen->envp);
 	free(gen);
+	gen = NULL;
 }

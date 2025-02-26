@@ -1,3 +1,6 @@
+# Find the operating system
+UNAME := $(shell uname)
+
 # Name of the executable for mandatory part
 NAME = minishell
 
@@ -45,6 +48,7 @@ SRC = \
 	$(SRC_DIR)/executor/exec_tree.c \
 	$(SRC_DIR)/executor/extract_cmd_and_args.c \
 	$(SRC_DIR)/operators/pipe.c \
+	$(SRC_DIR)/operators/redirections.c \
 	$(SRC_DIR)/parser/binary_tree.c \
 	$(SRC_DIR)/parser/check_synthax.c \
 	$(SRC_DIR)/parser/get_token.c \
@@ -68,9 +72,16 @@ OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 # Objects files for bonus part
 BONUS_OBJ = $(BONUS_SRC:$(BONUS_SRC_DIR)/%.c=$(BONUS_OBJ_DIR)/%.o)
 
-# Compilation options
-CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR)/headers
-LDFLAGS = -lreadline -L$(LIBFT_DIR) -lft_inc
+# Compilation options (for Linux and MacOS)
+ifeq ($(UNAME), Linux)
+	CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR)/headers
+	LDFLAGS = -lreadline -L$(LIBFT_DIR) -lft_inc
+else ifeq ($(UNAME), Darwin)
+	CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR)/headers -I/opt/homebrew/opt/readline/include
+	LDFLAGS = -L$(LIBFT_DIR) -lft_inc -L/opt/homebrew/opt/readline/lib -lreadline
+else
+	$(error Unsupported OS)
+endif
 
 # Compiler
 CC = gcc

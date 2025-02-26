@@ -76,6 +76,7 @@ typedef struct s_general
 	char	*input;
 	char	**envp;
 	t_dclst	**head;
+	t_tree	*tree;
 }			t_general;
 
 #endif

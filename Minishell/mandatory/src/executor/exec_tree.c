@@ -30,13 +30,9 @@ int	exec_tree(t_tree *tree_node, char ***envp, t_general *gen)
         return (status);
     }
     if (tree_node->type == TREE_SEMICOLON)
-    {
-        exec_tree(tree_node->left, envp, gen);
         return (exec_tree(tree_node->right, envp, gen));
-    }
     if (tree_node->type == TREE_REDIR_OUT || tree_node->type == TREE_APPEND)
-		return (0);
-		// return redir_out(tree_node, envp, gen);
+		return (redir_out(tree_node, envp, gen));
     if (tree_node->type == TREE_REDIR_IN)
 		return (0);
 		// return redir_in(tree_node, envp, gen);

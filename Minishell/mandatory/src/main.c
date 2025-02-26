@@ -27,21 +27,21 @@ int	main(int ac, char **av, char **envp)
 		gen->head = tokenize(gen->input);
 		if (check_syntax(gen->head) == -1)
 			continue ;
-		t_tree *tree = create_tree(*gen->head, (*gen->head)->prev->prev);
+		gen->tree = create_tree(*gen->head, (*gen->head)->prev->prev);
 
 		// to test a line of command without any operator:
 		// exec_node(*gen->head, &gen->envp, gen);
 
 		// to see the created tokens:
-		// ft_printf("\nPrinting tokens:\n");
-		// print_dclst_tokens(gen->head);
+		ft_printf("\nPrinting tokens:\n");
+		print_dclst_tokens(gen->head);
 
 		// to see the created tree:
-		// ft_printf("\nPrinting tree:\n");
-		// print_tree(tree);
+		ft_printf("\nPrinting tree:\n");
+		print_tree(gen->tree);
 
 		// to test the tree execution:
-		exec_tree(tree, &gen->envp, gen);
+		exec_tree(gen->tree, &gen->envp, gen);
 	}
 	delete_general(gen);
 	return (0);
