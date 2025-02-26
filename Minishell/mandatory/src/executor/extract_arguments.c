@@ -14,6 +14,7 @@ char	**extract_args(t_dclst *node, char **envp)
 	char	*next_arg;
 	char	**args;
 	int		i;
+
 	args = ft_realloc_str_array(NULL, 1);
 	if (!args)
 		return (shell_error_msg("extract args", "malloc failed"), NULL);
@@ -41,8 +42,11 @@ char	**extract_args(t_dclst *node, char **envp)
 		args = ft_realloc_str_array(args, i + 2);
 		args[i] = arg;
 		current_node = current_node->next;
-		next_node = next_node->next;
 		tok = (t_token *) current_node->data;
+		if (tok->priority == 4)
+			current_node = current_node->next->next;
+		tok = (t_token *) current_node->data;
+		next_node = current_node->next->next;
 		next_tok = (t_token *) next_node->data;
 		i++;
 		if (tok->priority != 6 || current_node == node)

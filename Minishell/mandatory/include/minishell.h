@@ -82,17 +82,19 @@ int			(*hard_builtin(char *cmd))(char **args, char ***envp);
 int			exec_node(t_dclst *node, char ***envp, t_general *gen);
 // exec_tree.c
 int			exec_tree(t_tree *tree_node, char ***envp, t_general *gen);
-// extract_cmd_and_args.c
+// extract_arguments.c
 char		**extract_args(t_dclst *node, char **envp);
 /* ************************************************************************** */
 /*										operators							  */
 /* ************************************************************************** */
 // pipe.c
 int			pipe_operator(t_tree *tree, char ***envp, t_general *gen);
+int			writing_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
+int			reading_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
 // redirections.c
-int			open_error(char *filename);
-int			end_redir_out(t_tree *tree, char ***envp, t_general *gen, int stdout_backup);
 int			redir_out(t_tree *tree, char ***envp, t_general *gen, int flag);
+int			end_redir_out(t_tree *tree, char ***envp, t_general *gen, int stdout_backup);
+int			open_error(char *filename);
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */
@@ -127,7 +129,7 @@ void		print_dclst_tokens(t_dclst **head); // A retirer avant de rendre
 /* ************************************************************************** */
 /*										signals								  */
 /* ************************************************************************** */
-// signal_handler..c
+// signal_handler.c
 void	signal_handler(int signum);
 /* ************************************************************************** */
 /*										utils								  */

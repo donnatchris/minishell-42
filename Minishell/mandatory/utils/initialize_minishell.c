@@ -10,6 +10,7 @@ void	init_signals(void)
 }
 
 // Function to initilaize the minishell
+// Returns a pointer to the general structure or NULL if it fails
 t_general	*init_gen(t_general *gen, char **envp, char **av, int ac)
 {
 	(void)ac;
