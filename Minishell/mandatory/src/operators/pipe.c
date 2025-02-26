@@ -1,33 +1,26 @@
 #include "../../include/minishell.h"
 
-// Function to handle the pipe operator
-// Returns exec_tree(tree->right) on success, -1 on error
-int	pipe_operator(t_tree *tree, char ***envp, t_general *gen)
+// Function to handle the child process (the writing process)
+// Returns 0 on success, -1 on error
+int	writing_proc(int fd[], t_tree *tree, char ***envp, t_general *gen)
 {
-	int		fd[2];
+	close(fd[0]);
+	if (dup2(fd[1], STDOUT_FILENO) == -1)
+	{
+		close(fd[1]);
+		exit(ft_perror("handle_pipe", "dup2 failed"));
+	}
+	close(fd[1]);
+	exit(exec_tree(tree->left, envp, gen));
+}
+
+// Function to handle the parent process (the reading process)
+// Returns the status of the command or -1 if waitpid fails
+int	reading_proc(int fd[], t_tree *tree, char ***envp, t_general *gen)
+{
 	int		stdin_backup;
-	pid_t	pid;
 	int		status;
 
-	if (!tree || !envp || !gen || !tree->left || !tree->right)
-		return (shell_error_msg("handle_pipe", "invalid arguments"));
-	if (pipe(fd) == -1)
-		return (ft_perror("handle_pipe", "pipe failed"));
-	pid = fork();
-	if (pid == -1)
-		return (close(fd[0]), close(fd[1]), ft_perror("handle_pipe", "fork failed"));
-	if (pid == 0)
-	{
-		close(fd[0]);
-		if (dup2(fd[1], STDOUT_FILENO) == -1)
-		{
-			close(fd[1]);
-			exit(ft_perror("handle_pipe", "dup2 failed"));
-		}
-		close(fd[1]);
-		exit(exec_tree(tree->left, envp, gen));
-	}
-		//test
 	close(fd[1]);
 	stdin_backup = dup(STDIN_FILENO);
 	if (stdin_backup == -1)
@@ -39,11 +32,31 @@ int	pipe_operator(t_tree *tree, char ***envp, t_general *gen)
 	if (dup2(stdin_backup, STDIN_FILENO) == -1)
 		return (close(stdin_backup), ft_perror("handle_pipe", "dup2 failed"));
 	close(stdin_backup);
-	if (waitpid(pid, &status, 0) == -1)
+	return (status);
+}
+
+// Function to handle the pipe operator
+// Returns exec_tree(tree->right) on success, -1 on error
+int	pipe_operator(t_tree *tree, char ***envp, t_general *gen)
+{
+	int		fd[2];
+	pid_t	pid;
+	int		child_status;
+	int		status;
+
+	if (!tree || !envp || !gen || !tree->left || !tree->right)
+		return (shell_error_msg("handle_pipe", "invalid arguments"));
+	if (pipe(fd) == -1)
+		return (ft_perror("handle_pipe", "pipe failed"));
+	pid = fork();
+	if (pid == -1)
+		return (close(fd[0]), close(fd[1]), ft_perror("handle_pipe", "fork failed"));
+	if (pid == 0)
+		writing_proc(fd, tree, envp, gen);
+	status = reading_proc(fd, tree, envp, gen);
+	if (waitpid(pid, &child_status, 0) == -1)
 		return (ft_perror("handle_pipe", "waitpid failed"));
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
+	if (WIFSIGNALED(child_status))
+		return (128 + WTERMSIG(child_status));
 	return (status);
 }
