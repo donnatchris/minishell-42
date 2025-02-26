@@ -87,6 +87,9 @@ char		**extract_args(t_dclst *node, char **envp);
 /* ************************************************************************** */
 /*										operators							  */
 /* ************************************************************************** */
+// parenthesis.c
+int			mini_minishell(t_dclst **head, char **envp, t_general *gen);
+int			run_parenthesis(t_tree *tree, char ***envp, t_general *gen);
 // pipe.c
 int			pipe_operator(t_tree *tree, char ***envp, t_general *gen);
 int			writing_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);

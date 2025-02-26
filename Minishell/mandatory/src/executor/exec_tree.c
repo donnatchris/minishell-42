@@ -11,8 +11,17 @@ int	exec_tree(t_tree *tree_node, char ***envp, t_general *gen)
 	status = 0;
     if (!tree_node)
         return (0);
+	if (tree_node->type == TREE_PARENTHESIS)
+	{
+		status = run_parenthesis(tree_node, envp, gen);
+		if (tree_node->left)
+			status = exec_tree(tree_node->left, envp, gen);
+		if (tree_node->right)
+			status = exec_tree(tree_node->right, envp, gen);
+		return (status);
+	}
     if (tree_node->type == TREE_COMMAND)
-        return exec_node(tree_node->list_node, envp, gen);
+        return (exec_node(tree_node->list_node, envp, gen));
     if (tree_node->type == TREE_PIPE)
         return (pipe_operator(tree_node, envp, gen));
     if (tree_node->type == TREE_AND)

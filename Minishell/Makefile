@@ -47,6 +47,7 @@ SRC = \
 	$(SRC_DIR)/executor/exec_node.c \
 	$(SRC_DIR)/executor/exec_tree.c \
 	$(SRC_DIR)/executor/extract_arguments.c \
+	$(SRC_DIR)/operators/parenthesis.c \
 	$(SRC_DIR)/operators/pipe.c \
 	$(SRC_DIR)/operators/redirections.c \
 	$(SRC_DIR)/parser/binary_tree.c \

@@ -46,7 +46,7 @@ void	null_terminate_token(t_dclst **head)
 		{
 			token->start++;
 			token->end--;
-			*(token)->end = '\0';
+			*token->end = '\0';
 		}
 		else if (token->type == TOKEN_WORD)
 			*token->end = '\0';
