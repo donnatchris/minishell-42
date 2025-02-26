@@ -43,9 +43,11 @@ char	**extract_args(t_dclst *node, char **envp)
 		args[i] = arg;
 		current_node = current_node->next;
 		tok = (t_token *) current_node->data;
-		if (tok->priority == 4)
+		while (tok->priority == 4)
+		{
 			current_node = current_node->next->next;
-		tok = (t_token *) current_node->data;
+			tok = (t_token *) current_node->data;
+		}
 		next_node = current_node->next->next;
 		next_tok = (t_token *) next_node->data;
 		i++;
