@@ -8,11 +8,9 @@ int	main(int ac, char **av, char **envp)
 {
 	t_general	*gen;
 
+	init_signals();
 	gen = NULL;
 	gen = init_gen(gen, envp, av, ac);
-	signal(SIGINT, signal_handler);
-	signal(EOF, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
 	while (g_signals != EOF)
 	{
 		g_signals = 0;

@@ -149,6 +149,7 @@ int			ft_perror(char *cmd, char *msg);
 int			shell_error_msg(char *cmd, char *msg);
 int			shell_error_quote(char *cmd, char *msg);
 // initialize minishell
+void		init_signals(void);
 t_general	*init_gen(t_general *gen, char **envp, char **av, int ac);
 int			change_shlvl(char ***envp);
 // utils_functions.c

@@ -1,5 +1,14 @@
 #include "../include/minishell.h"
 
+// Function to initialize the signal handling
+void	init_signals(void)
+{
+	g_signals = 0;
+	signal(SIGINT, signal_handler);
+	signal(EOF, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
 // Function to initilaize the minishell
 t_general	*init_gen(t_general *gen, char **envp, char **av, int ac)
 {
@@ -26,22 +35,6 @@ t_general	*init_gen(t_general *gen, char **envp, char **av, int ac)
 	}
 	return (gen);
 }
-
-// // Function to initilaize the minishell
-// void	init_gen(t_general *gen, char **envp, char **av, int ac)
-// {
-// 	(void)ac;
-// 	(void)av;
-// 	ft_memset(gen, 0, sizeof(t_general));
-// 	gen->envp = copy_env(envp);
-// 	if (!gen->envp)
-// 	{
-// 		shell_error_msg("init_minishell", "failed to copy envp");
-// 		exit(1);
-// 	}
-// 	if (change_shlvl(&gen->envp) == -1)
-// 		exit(1);
-// }
 
 // Function to increment the value of the SHLVL variable
 // Returns 0 on success, -1 on error
