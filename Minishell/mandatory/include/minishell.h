@@ -88,13 +88,11 @@ char		**extract_args(t_dclst *node, char **envp);
 /*										operators							  */
 /* ************************************************************************** */
 // pipe.c
-int			end_pipe(pid_t pid[]);
-void		reading_process(int fd[], t_dclst *node, char ***envp, t_general *gen);
-void		writing_process(int fd[], t_dclst *node, char ***envp, t_general *gen);
-int			fork_fail(int fd[], int pid);
-int			pipe_operator(t_dclst *node1, t_dclst *node2, char ***envp, t_general *gen);
+int			pipe_operator(t_tree *tree, char ***envp, t_general *gen);
 // redirections.c
-int			redir_out(t_tree *tree, char ***envp, t_general *gen, int open_flag);
+int			open_error(char *filename);
+int			end_redir_out(t_tree *tree, char ***envp, t_general *gen, int stdout_backup);
+int			redir_out(t_tree *tree, char ***envp, t_general *gen, int flag);
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */

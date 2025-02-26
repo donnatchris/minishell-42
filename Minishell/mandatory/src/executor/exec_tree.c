@@ -14,7 +14,7 @@ int	exec_tree(t_tree *tree_node, char ***envp, t_general *gen)
     if (tree_node->type == TREE_COMMAND)
         return exec_node(tree_node->list_node, envp, gen);
     if (tree_node->type == TREE_PIPE)
-        return (pipe_operator(tree_node->left->list_node, tree_node->right->list_node, envp, gen));
+        return (pipe_operator(tree_node, envp, gen));
     if (tree_node->type == TREE_AND)
     {
         status = exec_tree(tree_node->left, envp, gen);
