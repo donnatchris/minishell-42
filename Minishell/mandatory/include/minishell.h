@@ -94,8 +94,7 @@ void		writing_process(int fd[], t_dclst *node, char ***envp, t_general *gen);
 int			fork_fail(int fd[], int pid);
 int			pipe_operator(t_dclst *node1, t_dclst *node2, char ***envp, t_general *gen);
 // redirections.c
-int			redir_out(t_tree *tree, char ***envp, t_general *gen);
-int			append(t_tree *tree, char ***envp, t_general *gen);
+int			redir_out(t_tree *tree, char ***envp, t_general *gen, int open_flag);
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */

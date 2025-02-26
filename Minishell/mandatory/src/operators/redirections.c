@@ -2,7 +2,7 @@
 
 // Function to handle the redirection '>'
 // Returns exec_tree on success, -1 on error
-int	redir_out(t_tree *tree, char ***envp, t_general *gen)
+int	redir_out(t_tree *tree, char ***envp, t_general *gen, int open_flag)
 {
 	t_token	*token;
 	char	*filename;
@@ -18,7 +18,7 @@ int	redir_out(t_tree *tree, char ***envp, t_general *gen)
 	filename = manage_dollar(token, *envp);
 	if (!filename)
 		return (shell_error_msg("redir_out", "filename is NULL"));
-	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	fd = open(filename, O_CREAT | O_WRONLY | open_flag, 0644);
 	free(filename);
 	if (fd == -1)
 		return (ft_perror("redir_out", "open failed"));
