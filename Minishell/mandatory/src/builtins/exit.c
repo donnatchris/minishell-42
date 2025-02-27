@@ -18,7 +18,7 @@ void	exit_cmd(char **args, char **envp, t_general *gen)
 	ft_putstr_fd("exit\n", 1);
 	if (!args[1])
 		exit(0);
-	exit_status = strtol(args[1], &endptr, 10);
+	exit_status = ft_strtol(args[1], &endptr, 10);
 	if (*endptr != '\0' || errno == ERANGE)
 	{
 		ft_putstr_fd("minishell: exit: ", 2);

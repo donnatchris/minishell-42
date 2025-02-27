@@ -61,6 +61,7 @@ SRC = \
 	$(UTILS_DIR)/error_messages.c \
 	$(UTILS_DIR)/initialize_minishell.c \
 	$(UTILS_DIR)/utils_functions.c \
+	$(UTILS_DIR)/ft_strtol.c \
 	$(MAIN)
 
 # Sources files for bonus part

@@ -11,7 +11,7 @@ int	exec_tree(t_tree *tree_node, char ***envp, t_general *gen)
 	status = 0;
     if (!tree_node)
         return (0);
-	if (tree_node->type == TREE_PARENTHESIS)
+    if (tree_node->type == TREE_PARENTHESIS)
 	{
 		status = run_parenthesis(tree_node, envp, gen);
 		if (tree_node->left)

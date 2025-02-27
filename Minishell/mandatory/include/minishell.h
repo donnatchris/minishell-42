@@ -162,6 +162,6 @@ char		**ft_realloc_str_array(char **tab, size_t new_size);
 char		*cut_name(char *str);
 int			is_valid_var_name(char *str);
 // ft_strtol.c
-long		ft_strtol(const char *nptr, char **endptr, int base);	// A corriger
+long		ft_strtol(const char *nptr, char **endptr, int base);
 
 #endif
