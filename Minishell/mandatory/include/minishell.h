@@ -95,9 +95,14 @@ int			pipe_operator(t_tree *tree, char ***envp, t_general *gen);
 int			writing_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
 int			reading_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
 // redirections.c
+int	        end_redir_in(t_tree *tree, char ***envp, t_general *gen, int stdin_backup);
+int         redir_in(t_tree *tree, char ***envp, t_general *gen);
 int			redir_out(t_tree *tree, char ***envp, t_general *gen, int flag);
 int			end_redir_out(t_tree *tree, char ***envp, t_general *gen, int stdout_backup);
 int			open_error(char *filename);
+// heredoc.c
+void        redir_heredoc_child(int pipefd[2], char *delimiter);
+int         redir_heredoc(t_tree *tree, char ***envp, t_general *gen);
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */

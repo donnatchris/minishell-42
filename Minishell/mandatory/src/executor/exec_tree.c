@@ -51,11 +51,9 @@ int	exec_tree(t_tree *tree_node, char ***envp, t_general *gen)
 	if (tree_node->type == TREE_APPEND)
 		return (redir_out(tree_node, envp, gen, O_APPEND));
     if (tree_node->type == TREE_REDIR_IN)
-		return (0);
-		// return redir_in(tree_node, envp, gen);
+		return (redir_in(tree_node, envp, gen));
     if (tree_node->type == TREE_HEREDOC)
-		return (0);
-		// return heredoc(tree_node, envp, gen);
+		return (redir_heredoc(tree_node, envp, gen));
     return (-1);
 // 	Gestion des redirections
 // Actuellement, tu appelles redir_out(), redir_in(), heredoc(), mais sans vérifier si l’enfant gauche contient bien une commande.
