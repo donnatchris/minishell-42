@@ -101,7 +101,7 @@ int			redir_out(t_tree *tree, char ***envp, t_general *gen, int flag);
 int			end_redir_out(t_tree *tree, char ***envp, t_general *gen, int stdout_backup);
 int			open_error(char *filename);
 // heredoc.c
-void        redir_heredoc_child(int pipefd[2], char *delimiter);
+void        redir_heredoc_read(int pipefd[2], char *delimiter);
 int         redir_heredoc(t_tree *tree, char ***envp, t_general *gen);
 /* ************************************************************************** */
 /*										parser								  */
