@@ -81,7 +81,8 @@ int	 		exec_hard_builtin(int (*function)(char **args, char ***envp), char **args
 int			(*hard_builtin(char *cmd))(char **args, char ***envp);
 int			exec_node(t_dclst *node, char ***envp, t_general *gen);
 // exec_tree.c
-int			exec_tree(t_tree *tree_node, char ***envp, t_general *gen);
+int			exec_control_operator(t_tree *tree, char ***envp, t_general *gen);
+int			exec_tree(t_tree *tree, char ***envp, t_general *gen);
 // extract_arguments.c
 char		**extract_args(t_dclst *node, char **envp, t_general *gen);
 /* ************************************************************************** */

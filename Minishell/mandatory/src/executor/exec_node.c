@@ -74,7 +74,7 @@ int	exec_node(t_dclst *node, char ***envp, t_general *gen)
 	else if (soft_built_func)
 		status = exec_soft_builtin(soft_built_func, args, *envp);
 	else
-		status = execve_cmd(args[0], args, *envp, gen);
+		status = execve_cmd(args[0], args, *envp);
 	delete_str_tab(args);
 	return (status);
 }
