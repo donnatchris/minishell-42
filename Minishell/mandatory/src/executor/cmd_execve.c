@@ -52,21 +52,27 @@ char*	find_exec_path(char *cmd, char **envp)
 int	execute_cmd(char *path, char **args, char **envp)
 {
 	pid_t	pid;
-	int		ret;
+	int		status;
 
-	ret = -1;
+	status = -1;
 	pid = fork();
 	if (pid == -1)
 		return (ft_perror(path, "fork failed"), -1);
 	if (pid == 0)
 	{
 		if (execve(path, args, envp) == -1)
-			exit (ft_perror(path, "exec_ve failed"));
+			return (ft_perror(path, "exec_ve failed"), status);
 	}
 	else
-		if (waitpid(pid, &ret, 0) == -1)
-			return (ft_perror(path, "waitpid failed"));
-	return (ret);
+	{
+		if (waitpid(pid, &status, 0) == -1)
+			return (ft_perror(path, "waitpid failed"), status);
+		if (WIFEXITED(status))
+    		return WEXITSTATUS(status);
+		if (WIFSIGNALED(status))
+   			return 128 + WTERMSIG(status);
+	}
+	return (status);
 }
 
 // Function to execute a non-built-in command using execve

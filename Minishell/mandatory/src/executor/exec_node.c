@@ -62,7 +62,7 @@ int	exec_node(t_dclst *node, char ***envp, t_general *gen)
 
 	if (!node || !envp)
 		return (shell_error_msg("exec_node", "invalid argument"));
-	args = extract_args(node, *envp);
+	args = extract_args(node, *envp, gen);
 	if (!args)
 		return (shell_error_msg("exec_node", "extract_args failed"), -1);
 	if (!ft_strncmp(args[0], "exit", 5))
@@ -74,7 +74,7 @@ int	exec_node(t_dclst *node, char ***envp, t_general *gen)
 	else if (soft_built_func)
 		status = exec_soft_builtin(soft_built_func, args, *envp);
 	else
-		status = execve_cmd(args[0], args, *envp);
+		status = execve_cmd(args[0], args, *envp, gen);
 	delete_str_tab(args);
 	return (status);
 }

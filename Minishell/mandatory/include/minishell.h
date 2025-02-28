@@ -83,7 +83,7 @@ int			exec_node(t_dclst *node, char ***envp, t_general *gen);
 // exec_tree.c
 int			exec_tree(t_tree *tree_node, char ***envp, t_general *gen);
 // extract_arguments.c
-char		**extract_args(t_dclst *node, char **envp);
+char		**extract_args(t_dclst *node, char **envp, t_general *gen);
 /* ************************************************************************** */
 /*										operators							  */
 /* ************************************************************************** */
@@ -150,8 +150,9 @@ void		delete_general(t_general *gen);
 // dollar_manager.c
 char		*find_var_name_end(char *ptr);
 char		*replace_a_dollar(char *str, char *doll_pos, char **envp);
-char		*replace_each_dollar(char *str, char **envp);
-char		*manage_dollar(t_token *token, char **envp);
+char		*replace_with_exit_status(char *str, char *doll_pos, char **envp, int exit_status);
+char		*replace_each_dollar(char *str, char **envp, int exit_status);
+char		*manage_dollar(t_token *token, char **envp, int exit_status);
 // error_msg.c
 int			print_token_error(t_token *token);
 void		print_token(t_token *token);
