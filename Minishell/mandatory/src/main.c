@@ -31,13 +31,13 @@ int	main(int ac, char **av, char **envp)
 		// exec_node(*gen->head, &gen->envp, gen);
 
 		// to see the created tokens:
-		ft_printf("\nPrinting tokens:\n");
-		print_dclst_tokens(gen->head);
+		// ft_printf("\nPrinting tokens:\n");
+		// print_dclst_tokens(gen->head);
 
 		// to see the created tree:
-		ft_printf("\nPrinting tree:\n");
-		print_tree(gen->tree);
-		ft_printf("\n");
+		// ft_printf("\nPrinting tree:\n");
+		// print_tree(gen->tree);
+		// ft_printf("\n");
 
 		// to test the tree execution:
 		exec_tree(gen->tree, &gen->envp, gen);

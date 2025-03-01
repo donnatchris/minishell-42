@@ -101,7 +101,7 @@ int         redir_in(t_tree *tree, char ***envp, t_general *gen);
 // redirection_out.c
 int			redir_out(t_tree *tree, char ***envp, t_general *gen);
 // heredoc.c
-void        redir_heredoc_read(int pipefd[2], char *delimiter);
+void		redir_heredoc_read(int pipefd[2], char *delimiter, char **envp, int exit_status);
 int         redir_heredoc(t_tree *tree, char ***envp, t_general *gen);
 /* ************************************************************************** */
 /*										parser								  */
