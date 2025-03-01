@@ -49,7 +49,8 @@ SRC = \
 	$(SRC_DIR)/executor/extract_arguments.c \
 	$(SRC_DIR)/operators/parenthesis.c \
 	$(SRC_DIR)/operators/pipe.c \
-	$(SRC_DIR)/operators/redirections.c \
+	$(SRC_DIR)/operators/redirection_in.c \
+	$(SRC_DIR)/operators/redirection_out.c \
 	$(SRC_DIR)/operators/heredoc.c \
 	$(SRC_DIR)/parser/binary_tree.c \
 	$(SRC_DIR)/parser/check_synthax.c \
@@ -61,6 +62,7 @@ SRC = \
 	$(UTILS_DIR)/dollar_manager.c \
 	$(UTILS_DIR)/error_messages.c \
 	$(UTILS_DIR)/initialize_minishell.c \
+	$(UTILS_DIR)/node_token_info.c \
 	$(UTILS_DIR)/utils_functions.c \
 	$(UTILS_DIR)/ft_strtol.c \
 	$(MAIN)

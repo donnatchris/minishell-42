@@ -69,3 +69,13 @@ int	shell_error_quote(char *cmd, char *msg)
 	ft_putstr_fd("': not a valid identifier\n", 2);
 	return (-1);
 }
+
+// Function to print error message after open() fails
+// Returns -1
+int	open_error(char *filename)
+{
+	ft_putstr_fd("minishell: ", 2);
+	perror(filename);
+	free(filename);
+	return (-1);
+}

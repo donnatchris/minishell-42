@@ -50,8 +50,8 @@ void	null_terminate_token(t_dclst **head)
 		}
 		else if (token->type == TOKEN_WORD)
 			*token->end = '\0';
-		else
-			token->start = NULL; // was "" before last modification
+		// else
+		// 	token->start = NULL; // was "" before last modification
 		token->end = NULL;
 		current = current->next;
 		if (current == *head)

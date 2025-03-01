@@ -40,10 +40,8 @@ int	exec_tree(t_tree *tree, char ***envp, t_general *gen)
 		gen->exit_status = exec_node(tree->list_node, envp, gen);
 	else if (tree->type == TREE_PIPE)
 		gen->exit_status = pipe_operator(tree, envp, gen);
-	else if (tree->type == TREE_REDIR_OUT)
-		gen->exit_status = redir_out(tree, envp, gen, O_TRUNC);
-	else if (tree->type == TREE_APPEND)
-		gen->exit_status = redir_out(tree, envp, gen, O_APPEND);
+	else if (tree->type == TREE_REDIR_OUT || tree->type == TREE_APPEND)
+		gen->exit_status = redir_out(tree, envp, gen);
 	else if (tree->type == TREE_REDIR_IN)
 		gen->exit_status = redir_in(tree, envp, gen);
 	else if (tree->type == TREE_HEREDOC)

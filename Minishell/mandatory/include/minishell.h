@@ -95,12 +95,11 @@ int			run_parenthesis(t_tree *tree, char ***envp, t_general *gen);
 int			pipe_operator(t_tree *tree, char ***envp, t_general *gen);
 int			writing_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
 int			reading_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
-// redirections.c
+// redirection_in.c
 int	        end_redir_in(t_tree *tree, char ***envp, t_general *gen, int stdin_backup);
 int         redir_in(t_tree *tree, char ***envp, t_general *gen);
-int			redir_out(t_tree *tree, char ***envp, t_general *gen, int flag);
-int			end_redir_out(t_tree *tree, char ***envp, t_general *gen, int stdout_backup);
-int			open_error(char *filename);
+// redirection_out.c
+int			redir_out(t_tree *tree, char ***envp, t_general *gen);
 // heredoc.c
 void        redir_heredoc_read(int pipefd[2], char *delimiter);
 int         redir_heredoc(t_tree *tree, char ***envp, t_general *gen);
@@ -160,15 +159,20 @@ void		print_token(t_token *token);
 int			ft_perror(char *cmd, char *msg);
 int			shell_error_msg(char *cmd, char *msg);
 int			shell_error_quote(char *cmd, char *msg);
+int			open_error(char *filename);
+// ft_strtol.c
+long		ft_strtol(const char *nptr, char **endptr, int base);
 // initialize minishell
 void		init_signals(void);
 t_general	*init_gen(t_general *gen, char **envp, char **av, int ac);
 int			change_shlvl(char ***envp);
+// node_token_info.c
+int			has_space(t_dclst *node);
+int			is_text(t_dclst *node);
+int			is_redir(t_dclst *node);
 // utils_functions.c
 char		**ft_realloc_str_array(char **tab, size_t new_size);
 char		*cut_name(char *str);
 int			is_valid_var_name(char *str);
-// ft_strtol.c
-long		ft_strtol(const char *nptr, char **endptr, int base);
 
 #endif

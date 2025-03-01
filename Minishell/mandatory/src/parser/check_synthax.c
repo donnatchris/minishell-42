@@ -19,7 +19,7 @@ int	check_syntax(t_dclst **head)
 		prev_tok = (t_token *) current->prev->data;
 		if (token->priority != 6 && token->priority != 1)
 		{
-			if ((next_tok->priority !=6 && next_tok->priority != 1) || (prev_tok->priority !=6 && prev_tok->priority != 1))
+			if ((next_tok->priority !=6 && next_tok->priority != 1) && (prev_tok->priority !=6 && prev_tok->priority != 1))
 				return (print_token_error(token));	//next_tok?
 		}
 		if (next_tok->type == TOKEN_EOF || current->next == *head)
