@@ -1,6 +1,22 @@
 #include "../../include/minishell.h"
 
+// Function to check recursively the syntax inside a parenthesis
+// Returns 0 if the syntax is correct, -1 otherwise
+int	check_inside_parenthesis(t_dclst *node)
+{// à retirer?
+	t_dclst	**head;
+	t_token	*token;
+	int		res;
 
+	token = (t_token *) node->data;
+	head = tokenize(token->start);
+	res = check_syntax(head);
+	dclst_clear(head);
+	return (res);
+}
+
+// Function to check syntax around an operator token
+// Returns 0 if the syntax is correct, -1 otherwise
 int	check_operator(t_dclst *node)
 {
 	t_token	*token;
@@ -36,9 +52,11 @@ int	check_syntax(t_dclst **head)
 		{
 			if (is_parenthesis(current->next))
 				return (print_token_error((t_token *) current->data));
+			// if (check_inside_parenthesis(current) == -1)
+			// 	return (-1);
 		}
 		current = current->next;
-		if (is_eof(current) || current->next == *head)
+		if (is_eof(current))
 			break ;
 	}
 	return (0);
