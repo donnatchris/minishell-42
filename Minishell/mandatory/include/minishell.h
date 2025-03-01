@@ -170,6 +170,10 @@ int			change_shlvl(char ***envp);
 int			has_space(t_dclst *node);
 int			is_text(t_dclst *node);
 int			is_redir(t_dclst *node);
+int			is_logical_operator(t_dclst *node);
+int			is_parenthesis(t_dclst *node);
+int 		is_eof(t_dclst *node);
+int			is_pipe(t_dclst *node);
 // utils_functions.c
 char		**ft_realloc_str_array(char **tab, size_t new_size);
 char		*cut_name(char *str);

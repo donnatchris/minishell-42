@@ -35,6 +35,8 @@ int	find_tree_node_type(t_token *token)
 		return (TREE_HEREDOC);
 	else if (token->type == TOKEN_SEMICOLON)
 		return (TREE_SEMICOLON);
+	else if (token->type == TOKEN_PARENTHESIS)
+		return (TREE_PARENTHESIS);
 	return (TREE_ERROR);
 }
 
@@ -62,7 +64,7 @@ t_dclst	*find_lowest_priority(t_dclst *left, t_dclst *right)
 	t_dclst	*lowest;
 	t_token	*token;
 	t_token	*lowest_token;
-	//test
+	
 	if (!left || !right)
 		return (shell_error_msg("find_lowest_priority", "invalid arguments"), NULL);
 	current = left;
@@ -71,7 +73,9 @@ t_dclst	*find_lowest_priority(t_dclst *left, t_dclst *right)
 	{
 		lowest_token = (t_token *) lowest->data;
 		token = (t_token *) current->data;
-		if (token->priority < lowest_token->priority && token->priority < 6 && token->priority != 0)
+		if (token->priority < lowest_token->priority && !is_text(current))
+			lowest = current;
+		else if (is_logical_operator(lowest) && is_logical_operator(current))
 			lowest = current;
 		if (current == right)
 			break ;

@@ -42,4 +42,3 @@ int	run_parenthesis(t_tree *tree, char ***envp, t_general *gen)
 		return (128 + WTERMSIG(status));
 	return (WEXITSTATUS(status));
 }
-
