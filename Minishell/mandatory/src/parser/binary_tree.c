@@ -17,11 +17,18 @@ void	print_tree(t_tree *root)
 // Returns the type of the tree node
 int	find_tree_node_type(t_token *token)
 {
-	if (token->type > NOTHING && token->type < TOKEN_STRING)
-		return (token->type);
-	if (token->type >= TOKEN_STRING && token->type <= TOKEN_LITTERAL)
+	if (token->type == TOKEN_PIPE)
+		return (TREE_PIPE);
+	else if (token->type == TOKEN_AND)
+		return (TREE_AND);
+	else if (token->type == TOKEN_OR)
+		return (TREE_OR);
+	else if (token->type == TOKEN_SEMICOLON)
+		return (TREE_SEMICOLON);
+	else if (token->type == TOKEN_PARENTHESIS)
+		return (TREE_PARENTHESIS);
+	else
 		return (TREE_COMMAND);
-	return (TREE_ERROR);
 }
 
 // Function to create a new node in the binary tree
@@ -48,7 +55,7 @@ t_dclst	*find_lowest_priority(t_dclst *left, t_dclst *right)
 	t_dclst	*lowest;
 	t_token	*token;
 	t_token	*lowest_token;
-
+	
 	if (!left || !right)
 		return (shell_error_msg("find_lowest_priority", "invalid arguments"), NULL);
 	current = right;
@@ -57,7 +64,7 @@ t_dclst	*find_lowest_priority(t_dclst *left, t_dclst *right)
 	{
 		lowest_token = (t_token *) lowest->data;
 		token = (t_token *) current->data;
-		if (token->priority < lowest_token->priority && token->priority < 6 && token->priority != 0)
+		if (is_tree_branch(current) && token->priority < lowest_token->priority)
 			lowest = current;
 		if (current == left)
 			break ;
@@ -65,35 +72,26 @@ t_dclst	*find_lowest_priority(t_dclst *left, t_dclst *right)
 	}
 	return (lowest);
 }
-//test
+
 // Function to create the binary tree from the doubly circular linked list
 // Returns the root of the binary tree or NULL if an error occurs
 t_tree	*create_tree(t_dclst *left, t_dclst *right)
 {
 	t_tree	*tree_node;
 	t_dclst	*lowest;
-	int		priority;
 
 	if (!left || !right)
 		return (shell_error_msg("create tree", "invalid arguments"), NULL);
 	lowest = find_lowest_priority(left, right);
-	priority = ((t_token *) lowest->data)->priority;
-
-	// ft_printf("Lowest priority: ");
-	// print_a_token((t_token *) lowest->data);
-
 	tree_node = create_tree_node(lowest);
 	if (!tree_node)
 		return (NULL);
-	if (left == right)
-		return (tree_node);
-	// if (priority == 4)
-	// {
-	// 	left = left->next;
-	// }
-	if (lowest != left && priority != 6)
-		tree_node->left = create_tree(left, lowest->prev);
-	if (lowest != right && priority != 6)
-		tree_node->right = create_tree(lowest->next, right);
+	if (is_tree_branch(lowest))
+	{
+		if (lowest != left)
+			tree_node->left = create_tree(left, lowest->prev);
+		if (lowest != right)
+			tree_node->right = create_tree(lowest->next, right);
+	}
 	return (tree_node);
 }

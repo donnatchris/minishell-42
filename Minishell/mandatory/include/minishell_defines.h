@@ -77,6 +77,7 @@ typedef struct s_general
 	char	**envp;
 	t_dclst	**head;
 	t_tree	*tree;
+	int		exit_status;
 }			t_general;
 
 #endif

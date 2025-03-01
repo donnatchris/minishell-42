@@ -1,11 +1,12 @@
 #include "../../include/minishell.h"
-
+//test
 // Function to read lines on the child process until delimiter is found
 // return nothing
-void    redir_heredoc_read(int pipefd[2], char *delimiter)
+void    redir_heredoc_read(int pipefd[2], char *delimiter, char **envp, int exit_status)
 {
     int     i;
     char    *line;
+	char	*temp; // to test
 
     line = NULL;
     i = 0;
@@ -22,9 +23,15 @@ void    redir_heredoc_read(int pipefd[2], char *delimiter)
             ft_putstr_fd(delimiter, 1);
             ft_putstr_fd("')\n", 1);
         }
-        if (strcmp(line, delimiter) == 0)
+        if (strcmp(line, delimiter) == 0)	// à remplacer par ft_strncmp
             break;
-        ft_putstr_fd(line, pipefd[1]);
+		//to test
+		temp = replace_each_dollar(line, envp, exit_status);
+        ft_putstr_fd(temp, pipefd[1]);
+		free(temp);
+
+
+        // ft_putstr_fd(line, pipefd[1]);
         ft_putstr_fd("\n", pipefd[1]);
         free(line);
     }
@@ -35,16 +42,15 @@ void    redir_heredoc_read(int pipefd[2], char *delimiter)
 
 // Function to handle the redirection '<<'
 // return exec_tree on success, return -1 on failure
-int redir_heredoc(t_tree *tree, char ***envp, t_general *gen)
+int redir_heredoc(t_dclst *node, char ***envp, t_general *gen)
 {
     t_token *token;
     pid_t   pid;
     int     pipefd[2];
-    int     stdin_backup;
 
-    if (!tree || !envp || !gen)
+    if (!node || !envp || !gen)
         return (shell_error_msg("redir_heredoc", "invalid arguments"));
-    token = (t_token *)tree->list_node->next->data;
+    token = (t_token *) node->next->data;
     if (!token || token->priority != 6 || !token->start)
         return (shell_error_msg("redir_heredoc", "invalid arguments"));
     if (pipe(pipefd) == -1)
@@ -53,14 +59,11 @@ int redir_heredoc(t_tree *tree, char ***envp, t_general *gen)
     if (pid == -1)
         return (ft_perror("redir_heredoc", "fork failed"));
     if (pid == 0)
-        redir_heredoc_read(pipefd, token->start);
+        redir_heredoc_read(pipefd, token->start, *envp, gen->exit_status);
     waitpid(pid, NULL, 0);
     close(pipefd[1]); // ferme l'ecriture
-    stdin_backup = dup(STDIN_FILENO);
-    if (stdin_backup == -1)
-        return (close(pipefd[0]), ft_perror("redir_heredoc", "dup failed"));
     if (dup2(pipefd[0], STDIN_FILENO) == -1)
-        return (close(pipefd[0]), close(stdin_backup), ft_perror("redir_heredoc", "dup2 failed"));
+        return (close(pipefd[0]), ft_perror("redir_heredoc", "dup2 failed"));
     close(pipefd[0]); // ferme la lecture
-    return (end_redir_in(tree, envp, gen, stdin_backup));
+    return (0);
 }

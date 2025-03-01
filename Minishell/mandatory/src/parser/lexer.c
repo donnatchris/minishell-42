@@ -1,5 +1,5 @@
 #include "../../include/minishell.h"
-
+//test
 // Function to affect the priority to each token in the doubly circular linked list
 void	affect_tokens_priority(t_dclst **head)
 {
@@ -12,18 +12,22 @@ void	affect_tokens_priority(t_dclst **head)
 	while (1)
 	{
 		tok = (t_token *) current->data;
-		if (tok->type <= TOKEN_AND)
-			tok->priority = tok->type;
-		else if (tok->type == TOKEN_OR)
-			tok->priority = 3;
-		else if (tok->type >= TOKEN_REDIR_OUT && tok->type <= TOKEN_HEREDOC)
-			tok->priority = 4;
-		else if (tok->type == TOKEN_SEMICOLON)
-			tok->priority = 5;
-		else if (tok->type >= TOKEN_STRING && tok->type <= TOKEN_LITTERAL)
+		if (tok->type >= TOKEN_STRING && tok->type <= TOKEN_LITTERAL)
 			tok->priority = 6;
-		else
+		else if (tok->type == TOKEN_PIPE)
+			tok->priority = 1;
+		else if (tok->type == TOKEN_AND || tok->type == TOKEN_OR || tok->type == TOKEN_SEMICOLON)
 			tok->priority = 0;
+		else if (tok->type == TOKEN_PARENTHESIS)
+			tok->priority = 2;
+		else if (tok->type == TOKEN_HEREDOC)
+			tok->priority = 4;
+		else if (tok->type == TOKEN_REDIR_IN)
+			tok->priority = 4;
+		else if (tok->type == TOKEN_REDIR_OUT || tok->type == TOKEN_APPEND)
+			tok->priority = 4;
+		else
+			tok->priority = 10;
 		current = current->next;
 		if (current == *head)
 			break ;
@@ -50,8 +54,8 @@ void	null_terminate_token(t_dclst **head)
 		}
 		else if (token->type == TOKEN_WORD)
 			*token->end = '\0';
-		else
-			token->start = NULL; // was "" before last modification
+		// else
+		// 	token->start = NULL; // was "" before last modification
 		token->end = NULL;
 		current = current->next;
 		if (current == *head)

@@ -1,33 +1,63 @@
 #include "../../include/minishell.h"
 
+// Function to check recursively the syntax inside a parenthesis
+// Returns 0 if the syntax is correct, -1 otherwise
+int	check_inside_parenthesis(t_dclst *node)
+{// à retirer?
+	t_dclst	**head;
+	t_token	*token;
+	int		res;
+
+	token = (t_token *) node->data;
+	head = tokenize(token->start);
+	res = check_syntax(head);
+	dclst_clear(head);
+	return (res);
+}
+
+// Function to check syntax around an operator token
+// Returns 0 if the syntax is correct, -1 otherwise
+int	check_operator(t_dclst *node)
+{
+	t_token	*token;
+
+	token = (t_token *) node->data;
+	if (!is_text(node->prev) && !is_parenthesis(node->prev))
+		return (print_token_error(token));
+	if (!is_text(node->next) && !is_parenthesis(node->next))
+		return (print_token_error(token));
+	return (0);
+}
+
 // Function to check the syntax of tokens in the doubly circular linked list
 // Returns 0 if the syntax is correct, -1 otherwise
 int	check_syntax(t_dclst **head)
 {
 	t_dclst	*current;
-	t_token	*token;
-	t_token	*next_tok;
-	t_token	*prev_tok;
 
 	if (!head || !*head)
 		return (-1);
 	current = *head;
-	if (dclst_count_nodes(*head) < 2 || ((t_token *)current->data)->priority != 6)
-		return (print_token_error((t_token *)current->data));
 	while (1)
 	{
-		token = (t_token *) current->data;
-		next_tok = (t_token *) current->next->data;
-		prev_tok = (t_token *) current->prev->data;
-		if (token->priority != 6 && token->priority != 1)
+		if (is_logical_operator(current) || is_pipe(current))
+			if (check_operator(current) == -1)
+				return (-1);
+		if (is_redir(current))
 		{
-			if ((next_tok->priority !=6 && next_tok->priority != 1) || (prev_tok->priority !=6 && prev_tok->priority != 1))
-				return (print_token_error(token));	//next_tok?
+			if (!is_text(current->next))
+				return (print_token_error((t_token *) current->data));
 		}
-		if (next_tok->type == TOKEN_EOF || current->next == *head)
-			break ;
+		if (is_parenthesis(current))
+		{
+			if (is_parenthesis(current->next))
+				return (print_token_error((t_token *) current->data));
+			// if (check_inside_parenthesis(current) == -1)
+			// 	return (-1);
+		}
 		current = current->next;
-		token = (t_token *) current->data;
+		if (is_eof(current))
+			break ;
 	}
 	return (0);
 }

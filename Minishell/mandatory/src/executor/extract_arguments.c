@@ -3,7 +3,7 @@
 // Function to create an array of arguments after a dclst node
 // Returns the array of arguments
 // RETURN MUST BE FREED AFTER USE
-char	**extract_args(t_dclst *node, char **envp)
+char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 {
 	t_dclst	*current_node;
 	t_dclst	*next_node;
@@ -26,10 +26,10 @@ char	**extract_args(t_dclst *node, char **envp)
 	i = 0;
 	while (tok->priority == 6)
 	{
-		arg = manage_dollar(tok, envp);
+		arg = manage_dollar(tok, envp, gen->exit_status);
 		while (!tok->space && next_tok->priority == 6)
 		{
-			next_arg = manage_dollar(next_tok, envp);
+			next_arg = manage_dollar(next_tok, envp, gen->exit_status);
 			temp = arg;
 			arg = ft_strjoin(arg, next_arg);
 			free(temp);
@@ -43,7 +43,7 @@ char	**extract_args(t_dclst *node, char **envp)
 		args[i] = arg;
 		current_node = current_node->next;
 		tok = (t_token *) current_node->data;
-		while (tok->priority == 4)
+		while (is_redir(current_node))
 		{
 			current_node = current_node->next->next;
 			tok = (t_token *) current_node->data;

@@ -27,9 +27,6 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		gen->tree = create_tree(*gen->head, (*gen->head)->prev->prev);
 
-		// to test a line of command without any operator:
-		// exec_node(*gen->head, &gen->envp, gen);
-
 		// to see the created tokens:
 		// ft_printf("\nPrinting tokens:\n");
 		// print_dclst_tokens(gen->head);
@@ -37,6 +34,7 @@ int	main(int ac, char **av, char **envp)
 		// to see the created tree:
 		// ft_printf("\nPrinting tree:\n");
 		// print_tree(gen->tree);
+		// ft_printf("\n");
 
 		// to test the tree execution:
 		exec_tree(gen->tree, &gen->envp, gen);

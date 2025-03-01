@@ -74,16 +74,18 @@ char		*find_path_in_PATH(char *cmd, char **path_split);
 char		*find_exec_path(char *cmd, char **envp);
 int			execute_cmd(char *path, char **args, char **envp);
 int			execve_cmd(char *cmd, char **args, char **envp);
-// exec_node.c
+// exec_cmd.c
 int 		exec_soft_builtin(int (*function)(char **args, char **envp), char **args, char **envp);
 int			(*soft_builtin(char *cmd))(char **args, char **envp);
 int	 		exec_hard_builtin(int (*function)(char **args, char ***envp), char **args, char ***envp);
 int			(*hard_builtin(char *cmd))(char **args, char ***envp);
-int			exec_node(t_dclst *node, char ***envp, t_general *gen);
+int			exec_cmd(t_dclst *node, char ***envp, t_general *gen);
+// exec_leaf.c
+int			exec_leaf(t_dclst *node, char*** envp, t_general *gen);
 // exec_tree.c
-int			exec_tree(t_tree *tree_node, char ***envp, t_general *gen);
+int			exec_tree(t_tree *tree, char ***envp, t_general *gen);
 // extract_arguments.c
-char		**extract_args(t_dclst *node, char **envp);
+char		**extract_args(t_dclst *node, char **envp, t_general *gen);
 /* ************************************************************************** */
 /*										operators							  */
 /* ************************************************************************** */
@@ -94,15 +96,15 @@ int			run_parenthesis(t_tree *tree, char ***envp, t_general *gen);
 int			pipe_operator(t_tree *tree, char ***envp, t_general *gen);
 int			writing_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
 int			reading_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
-// redirections.c
-int	        end_redir_in(t_tree *tree, char ***envp, t_general *gen, int stdin_backup);
-int         redir_in(t_tree *tree, char ***envp, t_general *gen);
-int			redir_out(t_tree *tree, char ***envp, t_general *gen, int flag);
-int			end_redir_out(t_tree *tree, char ***envp, t_general *gen, int stdout_backup);
-int			open_error(char *filename);
+// redirection_in.c
+void        end_redir_in(int stdin_backup);
+int         redir_in(t_dclst *node, char ***envp, t_general *gen);
+// redirection_out.c
+void		end_redir_out(int stdout_backup);
+int			redir_out(t_dclst *node, char ***envp, t_general *gen);
 // heredoc.c
-void        redir_heredoc_read(int pipefd[2], char *delimiter);
-int         redir_heredoc(t_tree *tree, char ***envp, t_general *gen);
+void		redir_heredoc_read(int pipefd[2], char *delimiter, char **envp, int exit_status);
+int         redir_heredoc(t_dclst *node, char ***envp, t_general *gen);
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */
@@ -150,23 +152,37 @@ void		delete_general(t_general *gen);
 // dollar_manager.c
 char		*find_var_name_end(char *ptr);
 char		*replace_a_dollar(char *str, char *doll_pos, char **envp);
-char		*replace_each_dollar(char *str, char **envp);
-char		*manage_dollar(t_token *token, char **envp);
+char		*replace_with_exit_status(char *str, char *doll_pos, char **envp, int exit_status);
+char		*replace_each_dollar(char *str, char **envp, int exit_status);
+char		*manage_dollar(t_token *token, char **envp, int exit_status);
 // error_msg.c
 int			print_token_error(t_token *token);
 void		print_token(t_token *token);
 int			ft_perror(char *cmd, char *msg);
 int			shell_error_msg(char *cmd, char *msg);
 int			shell_error_quote(char *cmd, char *msg);
+int			open_error(char *filename);
+// ft_strtol.c
+long		ft_strtol(const char *nptr, char **endptr, int base);
 // initialize minishell
 void		init_signals(void);
 t_general	*init_gen(t_general *gen, char **envp, char **av, int ac);
 int			change_shlvl(char ***envp);
+// node_token_info.c
+int			has_space(t_dclst *node);
+int			is_text(t_dclst *node);
+int			is_redir(t_dclst *node);
+int			is_heredoc(t_dclst *node);
+int			is_redir_in(t_dclst *node);
+int			is_redir_out(t_dclst *node);
+int			is_logical_operator(t_dclst *node);
+int			is_parenthesis(t_dclst *node);
+int 		is_eof(t_dclst *node);
+int			is_pipe(t_dclst *node);
+int			is_tree_branch(t_dclst *node);
 // utils_functions.c
 char		**ft_realloc_str_array(char **tab, size_t new_size);
 char		*cut_name(char *str);
 int			is_valid_var_name(char *str);
-// ft_strtol.c
-long		ft_strtol(const char *nptr, char **endptr, int base);
 
 #endif

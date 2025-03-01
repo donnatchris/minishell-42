@@ -44,9 +44,37 @@ char	*replace_a_dollar(char *str, char *doll_pos, char **envp)
 	return (new_str);
 }
 
+// Function to replace a $? with the last exit status in a string
+// Returns a pointer to the new string or NULL if it fails
+char	*replace_with_exit_status(char *str, char *doll_pos, char **envp, int exit_status)
+{
+	char	*value;
+	char	*remainder;
+	char	*temp_str;
+	char	*new_str;
+
+	if (!str || !envp)
+		return (NULL);
+	remainder = doll_pos + 2;
+	value = ft_itoa(exit_status);
+	if (!value)
+		return (shell_error_msg("replace_with_exit_status", "ft_itoa failed"), NULL);
+	str[doll_pos - str] = '\0';
+	temp_str = ft_strjoin(str, value);
+	free(value);
+	if (!temp_str)
+		return (shell_error_msg("replace_with_exit_status", "ft_strjoin failed"), NULL);
+	new_str = ft_strjoin(temp_str, remainder);
+	free(temp_str);
+	if (!new_str)
+		return (shell_error_msg("replace_with_exit_status", "ft_strjoin failed"), NULL);
+	return (new_str);
+}
+
+
 // Function to replace every $ of a string with the corresponding variable in the envp
 // Returns a pointer to the new string or NULL if it fails
-char	*replace_each_dollar(char *str, char **envp)
+char	*replace_each_dollar(char *str, char **envp, int exit_status)
 {
 	char	*ptr;
 	char	*res;
@@ -61,7 +89,10 @@ char	*replace_each_dollar(char *str, char **envp)
 	{
 		ptr = ft_strchr(res, '$');
 		str = res;
-		res = replace_a_dollar(str, ptr, envp);
+		if (*(ptr + 1) == '?' && *(ptr + 2) == '\0')
+			res = replace_with_exit_status(str, ptr, envp, exit_status);
+		else
+			res = replace_a_dollar(str, ptr, envp);
 		free(str);
 		if (!res)
 			return (NULL);
@@ -73,7 +104,7 @@ char	*replace_each_dollar(char *str, char **envp)
 // Function to manage the $ in a token
 // Returns a pointer to the new string or NULL if it fails
 // RETURN MUST BE FREE AFTER USE
-char	*manage_dollar(t_token *token, char **envp)
+char	*manage_dollar(t_token *token, char **envp, int exit_status)
 {
 	char	*str;
 
@@ -88,7 +119,7 @@ char	*manage_dollar(t_token *token, char **envp)
 			return (shell_error_msg("manage_dollar", "ft_strdup failed"), NULL);
 	}
 	else
-		str = replace_each_dollar(token->start, envp);
+		str = replace_each_dollar(token->start, envp, exit_status);
 	if (!str)
 		return (NULL);
 	return (str);
