@@ -43,7 +43,7 @@ char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 		args[i] = arg;
 		current_node = current_node->next;
 		tok = (t_token *) current_node->data;
-		while (tok->priority == 4)
+		while (is_redir(current_node))
 		{
 			current_node = current_node->next->next;
 			tok = (t_token *) current_node->data;

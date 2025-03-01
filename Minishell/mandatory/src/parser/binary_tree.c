@@ -105,7 +105,7 @@ t_tree	*create_tree(t_dclst *left, t_dclst *right)
 		return (tree_node);
 	if (lowest != left && !is_text(lowest))
 		tree_node->left = create_tree(left, lowest->prev);
-	if (lowest != right && !is_redir(lowest) && !is_text(lowest))
+	if (lowest != right && !is_text(lowest))
 		tree_node->right = create_tree(lowest->next, right);
 	return (tree_node);
 }
