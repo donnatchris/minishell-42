@@ -74,14 +74,15 @@ char		*find_path_in_PATH(char *cmd, char **path_split);
 char		*find_exec_path(char *cmd, char **envp);
 int			execute_cmd(char *path, char **args, char **envp);
 int			execve_cmd(char *cmd, char **args, char **envp);
-// exec_node.c
+// exec_cmd.c
 int 		exec_soft_builtin(int (*function)(char **args, char **envp), char **args, char **envp);
 int			(*soft_builtin(char *cmd))(char **args, char **envp);
 int	 		exec_hard_builtin(int (*function)(char **args, char ***envp), char **args, char ***envp);
 int			(*hard_builtin(char *cmd))(char **args, char ***envp);
-int			exec_node(t_dclst *node, char ***envp, t_general *gen);
+int			exec_cmd(t_dclst *node, char ***envp, t_general *gen);
+// exec_leaf.c
+int			exec_leaf(t_dclst *node, char*** envp, t_general *gen);
 // exec_tree.c
-int			exec_control_operator(t_tree *tree, char ***envp, t_general *gen);
 int			exec_tree(t_tree *tree, char ***envp, t_general *gen);
 // extract_arguments.c
 char		**extract_args(t_dclst *node, char **envp, t_general *gen);
@@ -96,13 +97,14 @@ int			pipe_operator(t_tree *tree, char ***envp, t_general *gen);
 int			writing_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
 int			reading_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
 // redirection_in.c
-int	        end_redir_in(t_tree *tree, char ***envp, t_general *gen, int stdin_backup);
-int         redir_in(t_tree *tree, char ***envp, t_general *gen);
+void        end_redir_in(int stdin_backup);
+int         redir_in(t_dclst *node, char ***envp, t_general *gen);
 // redirection_out.c
-int			redir_out(t_tree *tree, char ***envp, t_general *gen);
+void		end_redir_out(int stdout_backup);
+int			redir_out(t_dclst *node, char ***envp, t_general *gen);
 // heredoc.c
 void		redir_heredoc_read(int pipefd[2], char *delimiter, char **envp, int exit_status);
-int         redir_heredoc(t_tree *tree, char ***envp, t_general *gen);
+int         redir_heredoc(t_dclst *node, char ***envp, t_general *gen);
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */
@@ -170,10 +172,14 @@ int			change_shlvl(char ***envp);
 int			has_space(t_dclst *node);
 int			is_text(t_dclst *node);
 int			is_redir(t_dclst *node);
+int			is_heredoc(t_dclst *node);
+int			is_redir_in(t_dclst *node);
+int			is_redir_out(t_dclst *node);
 int			is_logical_operator(t_dclst *node);
 int			is_parenthesis(t_dclst *node);
 int 		is_eof(t_dclst *node);
 int			is_pipe(t_dclst *node);
+int			is_tree_branch(t_dclst *node);
 // utils_functions.c
 char		**ft_realloc_str_array(char **tab, size_t new_size);
 char		*cut_name(char *str);

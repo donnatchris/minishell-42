@@ -21,11 +21,11 @@ void	affect_tokens_priority(t_dclst **head)
 		else if (tok->type == TOKEN_PARENTHESIS)
 			tok->priority = 2;
 		else if (tok->type == TOKEN_HEREDOC)
-			tok->priority = 3;
+			tok->priority = 4;
 		else if (tok->type == TOKEN_REDIR_IN)
 			tok->priority = 4;
 		else if (tok->type == TOKEN_REDIR_OUT || tok->type == TOKEN_APPEND)
-			tok->priority = 5;
+			tok->priority = 4;
 		else
 			tok->priority = 10;
 		current = current->next;

@@ -17,27 +17,18 @@ void	print_tree(t_tree *root)
 // Returns the type of the tree node
 int	find_tree_node_type(t_token *token)
 {
-	if (token->type >= TOKEN_STRING && token->type <= TOKEN_LITTERAL)
-		return (TREE_COMMAND);
-	else if (token->type == TOKEN_PIPE)
+	if (token->type == TOKEN_PIPE)
 		return (TREE_PIPE);
 	else if (token->type == TOKEN_AND)
 		return (TREE_AND);
 	else if (token->type == TOKEN_OR)
 		return (TREE_OR);
-	else if (token->type == TOKEN_REDIR_OUT)
-		return (TREE_REDIR_OUT);
-	else if (token->type == TOKEN_APPEND)
-		return (TREE_APPEND);
-	else if (token->type == TOKEN_REDIR_IN)
-		return (TREE_REDIR_IN);
-	else if (token->type == TOKEN_HEREDOC)
-		return (TREE_HEREDOC);
 	else if (token->type == TOKEN_SEMICOLON)
 		return (TREE_SEMICOLON);
 	else if (token->type == TOKEN_PARENTHESIS)
 		return (TREE_PARENTHESIS);
-	return (TREE_ERROR);
+	else
+		return (TREE_COMMAND);
 }
 
 // Function to create a new node in the binary tree
@@ -67,23 +58,21 @@ t_dclst	*find_lowest_priority(t_dclst *left, t_dclst *right)
 	
 	if (!left || !right)
 		return (shell_error_msg("find_lowest_priority", "invalid arguments"), NULL);
-	current = left;
+	current = right;
 	lowest = left;
 	while (1)
 	{
 		lowest_token = (t_token *) lowest->data;
 		token = (t_token *) current->data;
-		if (token->priority < lowest_token->priority && !is_text(current))
+		if (is_tree_branch(current) && token->priority < lowest_token->priority)
 			lowest = current;
-		else if (is_logical_operator(lowest) && is_logical_operator(current))
-			lowest = current;
-		if (current == right)
+		if (current == left)
 			break ;
-		current = current->next;
+		current = current->prev;
 	}
 	return (lowest);
 }
-//test
+
 // Function to create the binary tree from the doubly circular linked list
 // Returns the root of the binary tree or NULL if an error occurs
 t_tree	*create_tree(t_dclst *left, t_dclst *right)
@@ -94,18 +83,15 @@ t_tree	*create_tree(t_dclst *left, t_dclst *right)
 	if (!left || !right)
 		return (shell_error_msg("create tree", "invalid arguments"), NULL);
 	lowest = find_lowest_priority(left, right);
-
-	// ft_printf("Lowest priority: ");
-	// print_a_token((t_token *) lowest->data);
-
 	tree_node = create_tree_node(lowest);
 	if (!tree_node)
 		return (NULL);
-	if (left == right)
-		return (tree_node);
-	if (lowest != left && !is_text(lowest))
-		tree_node->left = create_tree(left, lowest->prev);
-	if (lowest != right && !is_text(lowest))
-		tree_node->right = create_tree(lowest->next, right);
+	if (is_tree_branch(lowest))
+	{
+		if (lowest != left)
+			tree_node->left = create_tree(left, lowest->prev);
+		if (lowest != right)
+			tree_node->right = create_tree(lowest->next, right);
+	}
 	return (tree_node);
 }

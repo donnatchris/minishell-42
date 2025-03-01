@@ -38,6 +38,36 @@ int	is_redir(t_dclst *node)
 	return (0);
 }
 
+int	is_heredoc(t_dclst *node)
+{
+	t_token	*tok;
+
+	tok = (t_token *) node->data;
+	if (tok->type == TOKEN_HEREDOC)
+		return (1);
+	return (0);
+}
+
+int	is_redir_in(t_dclst *node)
+{
+	t_token	*tok;
+
+	tok = (t_token *) node->data;
+	if (tok->type == TOKEN_REDIR_IN)
+		return (1);
+	return (0);
+}
+
+int	is_redir_out(t_dclst *node)
+{
+	t_token	*tok;
+
+	tok = (t_token *) node->data;
+	if (tok->type == TOKEN_REDIR_OUT || tok->type == TOKEN_APPEND)
+		return (1);
+	return (0);
+}
+
 // Function to check if the token of the node is a logical operator
 // (TOKEN_AND or TOKEN_OR or TOKEN_SEMICOLON)
 // Returns 1 if the token is a logical operator, 0 otherwise
@@ -86,6 +116,15 @@ int	is_pipe(t_dclst *node)
 
 	tok = (t_token *) node->data;
 	if (tok->type == TOKEN_PIPE)
+		return (1);
+	return (0);
+}
+
+int	is_tree_branch(t_dclst *node)
+{
+	if (!node)
+		return (0);
+	if (is_logical_operator(node) || is_pipe(node) || is_parenthesis(node))
 		return (1);
 	return (0);
 }

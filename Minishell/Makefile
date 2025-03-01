@@ -44,7 +44,8 @@ SRC = \
 	$(SRC_DIR)/env/read_env.c \
 	$(SRC_DIR)/env/write_env.c \
 	$(SRC_DIR)/executor/cmd_execve.c \
-	$(SRC_DIR)/executor/exec_node.c \
+	$(SRC_DIR)/executor/exec_cmd.c \
+	$(SRC_DIR)/executor/exec_leaf.c \
 	$(SRC_DIR)/executor/exec_tree.c \
 	$(SRC_DIR)/executor/extract_arguments.c \
 	$(SRC_DIR)/operators/parenthesis.c \

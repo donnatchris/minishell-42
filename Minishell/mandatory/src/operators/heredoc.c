@@ -42,16 +42,15 @@ void    redir_heredoc_read(int pipefd[2], char *delimiter, char **envp, int exit
 
 // Function to handle the redirection '<<'
 // return exec_tree on success, return -1 on failure
-int redir_heredoc(t_tree *tree, char ***envp, t_general *gen)
+int redir_heredoc(t_dclst *node, char ***envp, t_general *gen)
 {
     t_token *token;
     pid_t   pid;
     int     pipefd[2];
-    int     stdin_backup;
 
-    if (!tree || !envp || !gen)
+    if (!node || !envp || !gen)
         return (shell_error_msg("redir_heredoc", "invalid arguments"));
-    token = (t_token *)tree->list_node->next->data;
+    token = (t_token *) node->next->data;
     if (!token || token->priority != 6 || !token->start)
         return (shell_error_msg("redir_heredoc", "invalid arguments"));
     if (pipe(pipefd) == -1)
@@ -63,11 +62,8 @@ int redir_heredoc(t_tree *tree, char ***envp, t_general *gen)
         redir_heredoc_read(pipefd, token->start, *envp, gen->exit_status);
     waitpid(pid, NULL, 0);
     close(pipefd[1]); // ferme l'ecriture
-    stdin_backup = dup(STDIN_FILENO);
-    if (stdin_backup == -1)
-        return (close(pipefd[0]), ft_perror("redir_heredoc", "dup failed"));
     if (dup2(pipefd[0], STDIN_FILENO) == -1)
-        return (close(pipefd[0]), close(stdin_backup), ft_perror("redir_heredoc", "dup2 failed"));
+        return (close(pipefd[0]), ft_perror("redir_heredoc", "dup2 failed"));
     close(pipefd[0]); // ferme la lecture
-    return (end_redir_in(tree, envp, gen, stdin_backup));
+    return (0);
 }

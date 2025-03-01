@@ -53,7 +53,7 @@ int	(*hard_builtin(char *cmd))(char **args, char ***envp)
 // Function to execute a command taking a node as the command
 // and the followin nodes as arguments
 // Returns the exit status of the command
-int	exec_node(t_dclst *node, char ***envp, t_general *gen)
+int	exec_cmd(t_dclst *node, char ***envp, t_general *gen)
 {
 	char	**args;
 	int		status;
