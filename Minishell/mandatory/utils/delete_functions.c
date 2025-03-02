@@ -18,7 +18,7 @@ void	delete_str_tab(char **tab)
 	tab = NULL;
 }
 
-// Function to delete the binary tree
+// Function to free the binary tree
 void	delete_tree(t_tree *root)
 {
 	if (!root)
@@ -47,7 +47,7 @@ void	delete_cmd_line(t_general *gen)
 	gen->tree = NULL;
 }
 
-// Function to delete the general structure
+// Function to free the general structure
 void	delete_general(t_general *gen)
 {
 	if (!gen)

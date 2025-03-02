@@ -1,0 +1,21 @@
+TO DO LIST:
+
+- nettoyage de certaines fonctions qui peuvent être simplifiées en utilisant les fonctions du fichier
+	/utils/node_token_info.c (comme extract_args par exemple)
+
+- remplacer strcmp par un ft_strncmp dans heredoc et redir_in
+
+- ft_exit: récupère la valeur de retour de la dernière commande?
+
+- control C: ne doit rien afficher à l'écran?
+
+- cd builtin: gérer le cas où le repertoire courant est supprimé
+	(à chaque utilisation de getcwd, mettre à jour une variable dans gen
+	et utiliser cette variable pour connaitre le repertoire actuel et le précédent)
+
+- check_input: de la parenthèses dès le premier parsing
+	(actuellement cela fait planter le preogramme en boucle infinie)
+
+- implémenter les multiples redir_in (déjà fait pour redir_out et append)
+
+- *: implémenter la gestion du * (dans manage_asterisk)
