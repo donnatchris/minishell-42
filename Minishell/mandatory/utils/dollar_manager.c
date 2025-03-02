@@ -102,7 +102,8 @@ char	*replace_each_dollar(char *str, char **envp, int exit_status)
 }
 
 // Function to manage the $ in a token
-// Returns a pointer to the new string or NULL if it fails
+// Takes a token with a non allocated string (start)
+// Returns a pointer to the dynamically allocated new string or NULL if it fails
 // RETURN MUST BE FREE AFTER USE
 char	*manage_dollar(t_token *token, char **envp, int exit_status)
 {

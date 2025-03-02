@@ -1,5 +1,5 @@
 #include "../../include/minishell.h"
-//test
+
 // Function to affect the priority to each token in the doubly circular linked list
 void	affect_tokens_priority(t_dclst **head)
 {
@@ -35,6 +35,8 @@ void	affect_tokens_priority(t_dclst **head)
 }
 
 // Function to fill the data string in the doubly circular linked list
+// with the corresponding token type
+// Returns the type of the token
 void	null_terminate_token(t_dclst **head)
 {
 	t_dclst	*current;
@@ -64,6 +66,7 @@ void	null_terminate_token(t_dclst **head)
 }
 
 // Function to split the input into tokens and store them in the doubly circular linked list
+// Returns 0 if the function succeeds or -1 if an error occurs
 int	tokenize_to_dclst(char *input, t_dclst **head)
 {
 	t_token	*token;
@@ -94,6 +97,7 @@ int	tokenize_to_dclst(char *input, t_dclst **head)
 }
 
 // Function to create a doubly circular linked list of tokens from the input
+// Returns the head of the doubly circular linked list or NULL if an error occurs
 t_dclst	**tokenize(char *input)
 {
 	t_dclst	**head;
