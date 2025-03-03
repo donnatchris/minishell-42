@@ -9,10 +9,6 @@ TO DO LIST:
 
 - control C: ne doit rien afficher à l'écran?
 
-- cd builtin: gérer le cas où le repertoire courant est supprimé
-	(à chaque utilisation de getcwd, mettre à jour une variable dans gen
-	et utiliser cette variable pour connaitre le repertoire actuel et le précédent)
-
 - check_input: de la parenthèses dès le premier parsing
 	(actuellement cela fait planter le preogramme en boucle infinie)
 
