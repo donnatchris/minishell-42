@@ -1,63 +1,80 @@
 #include "../../include/minishell.h"
 
-char	**replace_one_arg(char *arg, char **args, char **file_array, size_t size)
+// Function to moves the lines of an array of strings up
+// from the index arg_index to the index new_size
+void	move_lines_up(char **arg_array, size_t arg_index, size_t new_size)
 {
 	size_t	i;
-	char	*ptr1;
-	char	*ptr2;
-	char	**new_args;
 
-	ptr1 = ft_strchr(arg, '*');
-	ptr2 = ft_strrchr(arg, '*');
-	if (ptr1 && ptr2 && ptr1 == ptr2)
-		ptr2 = NULL;
-	new_args = (char *) malloc(sizeof(char *) * 1);
-	if (new_args)
-		return (ft_perror("replace_one_arg", "malloc failed"));
-	new_args[0] = NULL;
-	i = 0;
-	while (file_array[i])
+	i = new_size;
+	while (i > arg_index)
 	{
-		manage_file_line(arg, file_array[i], ptr1, ptr2);
-		i++;
+		arg_array[i] = arg_array[i - 1];
+		i--;
 	}
 }
 
-void	manage_one_arg(char *arg, char **args)
+// Function to replace an argument in the arg_array with the matching filenames
+void	replace_arg(char **arg_array, size_t arg_index, char **matching_array)
 {
-	int		mode;
-	char	**file_array;
-	size_t	file_array_size;
+	size_t	new_size;
 
-	if (arg[0] == '.')
-		mode = W_HIDDEN;
-	else
-		mode = NO_HIDDEN;
-	file_array = get_files_in_dir(".", mode);
-	if (!file_array)
+	new_size = count_env_size(arg_array) + count_env_size(matching_array) - 1;
+	arg_array = ft_realloc_str_array(arg_array, new_size + 1);
+	if (!arg_array)
+	{
+		delete_str_tab(matching_array);
+		shell_error_msg("replace_arg", "ft_realloc_str_array failed");
 		return ;
-	file_array_size = count_env_size(file_array);
-	replace_one_arg(arg, args, file_array, file_array_size);
-	delete_str_tab(file_array);
+	}
+	if (*matching_array)
+	{
+		free(arg_array[arg_index]);
+		arg_array[arg_index] = ft_strdup(*matching_array);
+		arg_index++;
+		matching_array++;
+	}
+	while (*matching_array)
+	{
+		move_lines_up(arg_array, arg_index, new_size);
+		arg_array[arg_index] = ft_strdup(*matching_array);
+		arg_index++;
+		matching_array++;
+	}
+}
+
+// Function to find the mode for the extract_matching_filenames() function
+// Returns W_HIDDEN if the argument starts with a '.', NO_HIDDEN otherwise
+int	find_mode(char *arg)
+{
+	if (arg[0] == '.')
+		return (W_HIDDEN);
+	return (NO_HIDDEN);
 }
 
 // Function to manage the wildcards in a dynamicallly allocated array of strings
-void	manage_wildcards(char **args)
+void	manage_wildcards(char **arg_array)
 {
+	size_t	i;
+	char	**file_array;
+	char	**matching_array;
 
-	int		i;
-
-	if (!args)
+	i = -1;
+	while (arg_array[++i])
 	{
-		shell_error_msg("manage_asterisk", "invalid arg");
-		return ;
-	}
-	i = 0;
-	while (args[i])
-	{
-		if (ft_strchr(args[i], '*'))
-			manage_one_arg(args[i], args);
-		i++;
+		if (ft_strchr(arg_array[i], '*'))
+		{
+			file_array = get_files_in_dir(arg_array[i], find_mode(arg_array[i]));
+			if (!file_array)
+				continue ;
+			matching_array = extract_matching_filenames(arg_array[i], file_array);
+			delete_str_tab(file_array);
+			if (matching_array)
+			{
+				replace_arg(arg_array, i, matching_array);
+				delete_str_tab(matching_array);
+			}
+		}
 	}
 }
 

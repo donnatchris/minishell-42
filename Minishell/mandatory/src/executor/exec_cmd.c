@@ -61,6 +61,7 @@ int	exec_cmd(t_dclst *node, char ***envp, t_general *gen)
 
 	if (!node || !envp)
 		return (shell_error_msg("exec_node", "invalid argument"));
+	status = 0;
 	args = extract_args(node, *envp, gen);
 	if (!args)
 		return (shell_error_msg("exec_node", "extract_args failed"), -1);
