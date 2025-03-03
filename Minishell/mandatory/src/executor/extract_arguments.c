@@ -48,7 +48,7 @@ char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 			current_node = current_node->next->next;
 			tok = (t_token *) current_node->data;
 		}
-		next_node = current_node->next->next;
+		next_node = current_node->next;
 		next_tok = (t_token *) next_node->data;
 		i++;
 		if (tok->priority != 6 || current_node == node)
@@ -56,9 +56,4 @@ char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 	}
 	args[i] = NULL;
 	return (args);
-	// Attention: si le noeud suivant est priority == 4,
-	// il faut le skip et skip le noeud suivant aussi
-	// et continuer à lire les arguments
-	// jusqu'à ce qu'on tombe sur un noeud priority != 6
-	// ou qu'on revienne au noeud de départ
 }

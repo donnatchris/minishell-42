@@ -20,5 +20,3 @@ TO DO LIST:
 
 - *: implémenter la gestion du * (dans manage_asterisk)
 
-- "" et '': cat Makefil"e" doit afficher le Makefile
-

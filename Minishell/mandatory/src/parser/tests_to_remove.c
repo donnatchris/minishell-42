@@ -74,6 +74,10 @@ void	print_a_token(t_token *token)
 		ft_printf("TOKEN_ERROR: ");
 	// print_string(token->start, token->end);
 	ft_printf("%s\n", token->start);
+	if (token->space)
+		ft_printf("\thas space\n");
+	if (!token->space)
+		ft_printf("\tno space\n");
 	// printf("avec printf: %s /priority %d\n", token->start, token->priority);
 	}
 
