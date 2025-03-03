@@ -19,3 +19,6 @@ TO DO LIST:
 - implémenter les multiples redir_in (déjà fait pour redir_out et append)
 
 - *: implémenter la gestion du * (dans manage_asterisk)
+
+- "" et '': cat Makefil"e" doit afficher le Makefile
+

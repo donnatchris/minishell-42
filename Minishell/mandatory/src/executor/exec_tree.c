@@ -8,7 +8,7 @@ int	exec_tree(t_tree *tree_node, char ***envp, t_general *gen)
 {	
     if (!tree_node)
         return (0);
-	if (tree_node->type == TREE_COMMAND)
+	else if (tree_node->type == TREE_COMMAND)
 		gen->exit_status = exec_leaf(tree_node->list_node, envp, gen);
 	else if (tree_node->type == TREE_PARENTHESIS)
 	{
