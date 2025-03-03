@@ -104,6 +104,7 @@ int         redir_in(t_dclst *node, char ***envp, t_general *gen);
 void		end_redir_out(int stdout_backup);
 int			redir_out(t_dclst *node, char ***envp, t_general *gen);
 // heredoc.c
+void		redir_heredoc_eofmsg(int c, char *delimiter);
 void		redir_heredoc_read(int pipefd[2], char *delimiter, char **envp, int exit_status);
 int         redir_heredoc(t_dclst *node, char ***envp, t_general *gen);
 /* ************************************************************************** */
@@ -141,7 +142,10 @@ void		print_dclst_tokens(t_dclst **head); // A retirer avant de rendre
 /*										signals								  */
 /* ************************************************************************** */
 // signal_handler.c
-void	signal_handler(int signum);
+void	init_main_signals(int option);
+void	init_heredoc_signals(void);
+void	main_signal_handler(int signum);
+void	heredoc_signal_handler(int signum);
 /* ************************************************************************** */
 /*										utils								  */
 /* ************************************************************************** */
@@ -166,7 +170,6 @@ int			open_error(char *filename);
 // ft_strtol.c
 long		ft_strtol(const char *nptr, char **endptr, int base);
 // initialize minishell
-void		init_signals(void);
 t_general	*init_gen(t_general *gen, char **envp, char **av, int ac);
 int			change_shlvl(char ***envp);
 // node_token_info.c

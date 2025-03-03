@@ -1,14 +1,5 @@
 #include "../include/minishell.h"
 
-// Function to initialize the signal handling
-void	init_signals(void)
-{
-	g_signals = 0;
-	signal(SIGINT, signal_handler);
-	signal(EOF, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
-}
-
 // Function to initilaize the minishell
 // Returns a pointer to the general structure or NULL if it fails
 t_general	*init_gen(t_general *gen, char **envp, char **av, int ac)
