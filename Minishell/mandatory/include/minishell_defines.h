@@ -78,4 +78,7 @@ typedef struct s_general
 	int		exit_status;
 }			t_general;
 
+# define NO_HIDDEN 0
+# define W_HIDDEN 1
+
 #endif

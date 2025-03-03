@@ -3,7 +3,7 @@
 // Function to get the size of a directory
 // (excluding hidden files)
 // Returns: The number of files in the directory
-size_t	dirsize(char *dirpath)
+size_t	dirsize(char *dirpath, int mode)
 {
 	DIR				*dir;
 	size_t			size;
@@ -18,7 +18,9 @@ size_t	dirsize(char *dirpath)
 		entry = readdir(dir);
 		if (!entry)
 			break ;
-		if (entry->d_name[0] != '.')
+		if (mode == NO_HIDDEN && entry->d_name[0] != '.')
+			size++;
+		else
 			size++;
 	}
 	if (closedir(dir) == -1)
@@ -58,14 +60,14 @@ void	copy_file_names(char **file_array, DIR *dir, size_t len)
 // Function to get the files in the current directory
 // Returns: A string array with the names of the files in the directory
 // or NULL if an error occurs
-// RETURN MUST BE FREED AFTER USE
-char	**get_files_in_dir(char *path)
+// RETURN MUST BE FREED AFTER USE with delete_str_tab
+char	**get_files_in_dir(char *path, int mode)
 {
 	char			**file_array;
 	DIR				*dir;
 	size_t			len;
 	
-	len = dirsize(path);
+	len = dirsize(path, mode);
 	file_array = (char **) malloc(sizeof(char *) * (len + 1));
 	if (!file_array)
 		return (ft_perror("get_files_in_dir", "malloc failed"), NULL);

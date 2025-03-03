@@ -1,25 +1,50 @@
 #include "../../include/minishell.h"
 
-void	replace_a_line(char *line, char **args, char **file_array, size_t file_array_size)
+char	**replace_one_arg(char *arg, char **args, char **file_array, size_t size)
 {
-	char	new_line;
-	size_t	line_len;
+	size_t	i;
+	char	*ptr1;
+	char	*ptr2;
+	char	**new_args;
 
-	line_len = ft_strlen(line);
-	if (line_len == 1)
+	ptr1 = ft_strchr(arg, '*');
+	ptr2 = ft_strrchr(arg, '*');
+	if (ptr1 && ptr2 && ptr1 == ptr2)
+		ptr2 = NULL;
+	new_args = (char *) malloc(sizeof(char *) * 1);
+	if (new_args)
+		return (ft_perror("replace_one_arg", "malloc failed"));
+	new_args[0] = NULL;
+	i = 0;
+	while (file_array[i])
+	{
+		manage_file_line(arg, file_array[i], ptr1, ptr2);
+		i++;
+	}
+}
 
-		
+void	manage_one_arg(char *arg, char **args)
+{
+	int		mode;
+	char	**file_array;
+	size_t	file_array_size;
 
-
-
+	if (arg[0] == '.')
+		mode = W_HIDDEN;
+	else
+		mode = NO_HIDDEN;
+	file_array = get_files_in_dir(".", mode);
+	if (!file_array)
+		return ;
+	file_array_size = count_env_size(file_array);
+	replace_one_arg(arg, args, file_array, file_array_size);
+	delete_str_tab(file_array);
 }
 
 // Function to manage the wildcards in a dynamicallly allocated array of strings
-// Returns a pointer to the new array or NULL if it fails
 void	manage_wildcards(char **args)
 {
-	char	**file_array;
-	size_t	file_array_size;
+
 	int		i;
 
 	if (!args)
@@ -27,15 +52,11 @@ void	manage_wildcards(char **args)
 		shell_error_msg("manage_asterisk", "invalid arg");
 		return ;
 	}
-	file_array = get_files_in_current_dir(".");
-	if (!file_array)
-		return ;
-	file_array_size = count_env_size(file_array);
 	i = 0;
 	while (args[i])
 	{
 		if (ft_strchr(args[i], '*'))
-			replace_a_line(args[i], args, file_array, file_array_size);
+			manage_one_arg(args[i], args);
 		i++;
 	}
 }
