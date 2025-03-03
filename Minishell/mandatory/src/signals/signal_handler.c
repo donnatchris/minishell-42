@@ -1,5 +1,14 @@
 #include "../../include/minishell.h"
 
+// Function to initialize the signal handling
+void	init_signals(void)
+{
+	g_signals = 0;
+	signal(SIGINT, signal_handler);
+	signal(EOF, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
 void	signal_handler(int signum)
 {
 	g_signals = signum;

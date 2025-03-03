@@ -55,6 +55,10 @@ void	delete_general(t_general *gen)
 	delete_cmd_line(gen);
 	if (gen->envp)
 		delete_str_tab(gen->envp);
+	if (gen->pwd)
+		free(gen->pwd);
+	if (gen->home)
+		free(gen->home);
 	free(gen);
 	gen = NULL;
 }

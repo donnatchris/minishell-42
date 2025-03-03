@@ -11,6 +11,9 @@ int	main(int ac, char **av, char **envp)
 	init_signals();
 	gen = NULL;
 	gen = init_gen(gen, envp, av, ac);
+
+	ft_printf("pwd: %s\n", gen->pwd);
+
 	while (g_signals != EOF)
 	{
 		g_signals = 0;

@@ -31,11 +31,10 @@ int			env_cmd(char **args, char **envp);
 int			echo_cmd(char **args, char **envp);
 int			newline_flag(char *str);
 // cd.c
-void		actualize_cd_env(char *oldpwd, char ***envp);
+void	    actualize_cd_env(char *oldpwd, char ***envp, t_general *gen, char *pwd);
 char		*find_actual_dir(void);
-char		*find_parent_dir(void);
 char		*find_cd_path(char *input, char **envp, char *home, char *old);
-int			cd_cmd(char **args, char ***envp);
+int			cd_cmd(char **args, char ***envp, t_general *gen);
 // export.c
 char		*find_next_lowest_var(char *var, char **envp);
 void		print_chars(char *start, char *end);
@@ -141,7 +140,8 @@ void		print_dclst_tokens(t_dclst **head); // A retirer avant de rendre
 /*										signals								  */
 /* ************************************************************************** */
 // signal_handler.c
-void	signal_handler(int signum);
+void		init_signals(void);
+void	    signal_handler(int signum);
 /* ************************************************************************** */
 /*										utils								  */
 /* ************************************************************************** */
@@ -166,7 +166,6 @@ int			open_error(char *filename);
 // ft_strtol.c
 long		ft_strtol(const char *nptr, char **endptr, int base);
 // initialize minishell
-void		init_signals(void);
 t_general	*init_gen(t_general *gen, char **envp, char **av, int ac);
 int			change_shlvl(char ***envp);
 // node_token_info.c

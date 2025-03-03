@@ -41,9 +41,9 @@ int	(*hard_builtin(char *cmd))(char **args, char ***envp)
 	size_t	len;
 
 	len = ft_strlen(cmd);
-	if (!ft_strncmp(cmd, "cd", 2) && len == 2)
-		return (cd_cmd);
-	else if (!ft_strncmp(cmd, "export", 6) && len == 6)
+	// if (!ft_strncmp(cmd, "cd", 2) && len == 2)
+	// 	return (cd_cmd);
+	if (!ft_strncmp(cmd, "export", 6) && len == 6)
 		return (export_cmd);
 	else if (!ft_strncmp(cmd, "unset", 5) && len == 5)
 		return (unset_cmd);
@@ -65,16 +65,21 @@ int	exec_cmd(t_dclst *node, char ***envp, t_general *gen)
 	args = extract_args(node, *envp, gen);
 	if (!args)
 		return (shell_error_msg("exec_node", "extract_args failed"), -1);
-	if (!ft_strncmp(args[0], "exit", 5))
+	if (!ft_strncmp(args[0], "exit", 4) && ft_strlen(args[0]) == 4)
 		exit_cmd(args, *envp, gen);
-	hard_built_func = hard_builtin(args[0]);
-	soft_built_func = soft_builtin(args[0]);
-	if (hard_built_func)
-		status = exec_hard_builtin(hard_built_func, args, envp);
-	else if (soft_built_func)
-		status = exec_soft_builtin(soft_built_func, args, *envp);
+	else if (!ft_strncmp(args[0], "cd", 2) && ft_strlen(args[0]) == 2)
+		cd_cmd(args, envp, gen);
 	else
-		status = execve_cmd(args[0], args, *envp);
+	{
+		hard_built_func = hard_builtin(args[0]);
+		soft_built_func = soft_builtin(args[0]);
+		if (hard_built_func)
+			status = exec_hard_builtin(hard_built_func, args, envp);
+		else if (soft_built_func)
+			status = exec_soft_builtin(soft_built_func, args, *envp);
+		else
+			status = execve_cmd(args[0], args, *envp);
+	}
 	delete_str_tab(args);
 	return (status);
 }
