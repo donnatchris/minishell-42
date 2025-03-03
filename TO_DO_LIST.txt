@@ -7,12 +7,9 @@ TO DO LIST:
 
 - ft_exit: récupère la valeur de retour de la dernière commande?
 
-- control C: ne doit rien afficher à l'écran?
-
 - check_input: de la parenthèses dès le premier parsing
 	(actuellement cela fait planter le preogramme en boucle infinie)
 
 - implémenter les multiples redir_in (déjà fait pour redir_out et append)
 
 - *: implémenter la gestion du * (dans manage_asterisk)
-
