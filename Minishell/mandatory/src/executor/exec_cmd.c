@@ -41,8 +41,7 @@ int	(*hard_builtin(char *cmd))(char **args, char ***envp)
 	size_t	len;
 
 	len = ft_strlen(cmd);
-	// if (!ft_strncmp(cmd, "cd", 2) && len == 2)
-	// 	return (cd_cmd);
+
 	if (!ft_strncmp(cmd, "export", 6) && len == 6)
 		return (export_cmd);
 	else if (!ft_strncmp(cmd, "unset", 5) && len == 5)
@@ -68,7 +67,7 @@ int	exec_cmd(t_dclst *node, char ***envp, t_general *gen)
 	if (!ft_strncmp(args[0], "exit", 4) && ft_strlen(args[0]) == 4)
 		exit_cmd(args, *envp, gen);
 	else if (!ft_strncmp(args[0], "cd", 2) && ft_strlen(args[0]) == 2)
-		cd_cmd(args, envp, gen);
+		status = cd_cmd(args, envp, gen);
 	else
 	{
 		hard_built_func = hard_builtin(args[0]);

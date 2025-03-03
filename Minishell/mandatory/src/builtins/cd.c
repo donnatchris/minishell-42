@@ -70,8 +70,6 @@ int	cd_cmd(char **args, char ***envp, t_general *gen)
 	if (chdir(new_pwd) == -1)
 		return  (free(new_pwd), ft_perror("cd", args[1]));
 	actualize_cd_env(gen->pwd, envp, gen, new_pwd);
-
-	ft_printf("CURRENT DIR: %s\n", gen->pwd);
 	free(new_pwd);
 	return (0);
 }
