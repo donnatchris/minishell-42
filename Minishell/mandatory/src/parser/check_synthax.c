@@ -13,7 +13,10 @@ int	check_parenthesis(t_dclst *node, t_general *gen)
 		return (ft_perror("check_parenthesis", "ft_strdup failed"));
 	head = tokenize(line);
 	if (!head)
-		return (free(line), shell_error_msg("check_parenthesis", "tokenize failed"));
+	{
+		free(line);
+		return (shell_error_msg("check_parenthesis", "tokenize failed"));
+	}
 	res = check_syntax(head, gen, IN_PARENTHESIS);
 	dclst_clear(head);
 	free(line);
@@ -24,8 +27,8 @@ int	check_parenthesis(t_dclst *node, t_general *gen)
 // Returns 0 on success, -1 on error
 int	append_input(t_general *gen, t_dclst *node)
 {
-	char *line;
-	char*join;
+	char	*line;
+	char	*join;
 
 	if (!gen || !gen->input_cpy || !node)
 		return (shell_error_msg("append_input", "invalid arguments"));
@@ -65,15 +68,8 @@ int	check_operator(t_dclst *node, int mode)
 	return (0);
 }
 
-// Function to check the syntax of tokens in the doubly circular linked list
-// Returns 0 if the syntax is correct, -1 otherwise
-int	check_syntax(t_dclst **head, t_general *gen, int mode)
+int	check_nodes(t_dclst *current, t_general *gen, int mode)
 {
-	t_dclst	*current;
-
-	if (!head || !*head)
-		return (-1);
-	current = *head;
 	while (1)
 	{
 		if (is_logical_operator(current) || is_pipe(current))
@@ -84,20 +80,30 @@ int	check_syntax(t_dclst **head, t_general *gen, int mode)
 				return (append_input(gen, current));
 		}
 		if (is_redir(current))
-		{
 			if (!is_text(current->next))
 				return (print_token_error((t_token *) current->data));
-		}
 		if (is_parenthesis(current))
 		{
-			if (!is_eof(current->prev) && !is_logical_operator(current->prev) && !is_pipe(current->prev))
+			if (!is_eof(current->prev) && !is_logical_operator(current->prev)
+				&& !is_pipe(current->prev))
 				return (print_token_error((t_token *) current->data));
 			if (check_parenthesis(current, gen) == -1)
 				return (-1);
 		}
 		current = current->next;
 		if (is_eof(current))
-			break ;
+			return (0);
 	}
-	return (0);
+}
+
+// Function to check the syntax of tokens in the doubly circular linked list
+// Returns 0 if the syntax is correct, -1 otherwise
+int	check_syntax(t_dclst **head, t_general *gen, int mode)
+{
+	t_dclst	*current;
+
+	if (!head || !*head)
+		return (-1);
+	current = *head;
+	return (check_nodes(current, gen, mode));
 }
