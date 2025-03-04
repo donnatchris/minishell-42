@@ -7,9 +7,8 @@ TO DO LIST:
 
 - ft_exit: récupère la valeur de retour de la dernière commande?
 
-- check_input: de la parenthèses dès le premier parsing
-	(actuellement cela fait planter le preogramme en boucle infinie)
-
 - implémenter les multiples redir_in (déjà fait pour redir_out et append)
 
 - *: implémenter la gestion du * (dans manage_asterisk)
+
+- gérer les signaux dans append_input comme pour heredoc?
