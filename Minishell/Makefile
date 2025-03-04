@@ -59,6 +59,9 @@ SRC = \
 	$(SRC_DIR)/parser/lexer.c \
 	$(SRC_DIR)/parser/tests_to_remove.c \
 	$(SRC_DIR)/signals/signal_handler.c \
+	$(SRC_DIR)/wildcard_manager/find_matching_filenames.c \
+	$(SRC_DIR)/wildcard_manager/get_files_in_dir.c \
+	$(SRC_DIR)/wildcard_manager/wildcard_manager.c \
 	$(UTILS_DIR)/delete_functions.c \
 	$(UTILS_DIR)/dollar_manager.c \
 	$(UTILS_DIR)/error_messages.c \

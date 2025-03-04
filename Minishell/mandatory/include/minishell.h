@@ -143,6 +143,12 @@ void		print_dclst_tokens(t_dclst **head); // A retirer avant de rendre
 void		init_signals(void);
 void	    signal_handler(int signum);
 /* ************************************************************************** */
+/*									wildcard_manager						  */
+/* ************************************************************************** */
+char		**extract_matching_filenames(char *arg, char **file_array);
+char		**get_files_in_dir(char *path, int mode);
+char		**manage_wildcards(char **arg_array);
+/* ************************************************************************** */
 /*										utils								  */
 /* ************************************************************************** */
 // delete_functions.c
