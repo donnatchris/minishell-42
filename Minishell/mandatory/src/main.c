@@ -11,9 +11,6 @@ int	main(int ac, char **av, char **envp)
 	init_signals();
 	gen = NULL;
 	gen = init_gen(gen, envp, av, ac);
-
-	ft_printf("pwd: %s\n", gen->pwd);
-
 	while (g_signals != EOF)
 	{
 		g_signals = 0;
@@ -25,23 +22,22 @@ int	main(int ac, char **av, char **envp)
 			add_history(gen->input);
 		if (!gen->input[0] || gen->input[0] == '\n')
 			continue ;
+		gen->input_cpy = ft_strdup(gen->input);
 		gen->head = tokenize(gen->input);
-		if (check_syntax(gen->head) == -1)
+		if (check_syntax(gen->head, gen, NO_PARENTHESIS) == -1)
 			continue ;
 		gen->tree = create_tree(*gen->head, (*gen->head)->prev->prev);
-
-		// to see the created tokens:
-		// ft_printf("\nPrinting tokens:\n");
-		// print_dclst_tokens(gen->head);
-
-		// to see the created tree:
-		// ft_printf("\nPrinting tree:\n");
-		// print_tree(gen->tree);
-		// ft_printf("\n");
-
-		// to test the tree execution:
 		exec_tree(gen->tree, &gen->envp, gen);
 	}
 	delete_general(gen);
 	return (0);
 }
+
+// to see the created tokens:
+// ft_printf("\nPrinting tokens:\n");
+// print_dclst_tokens(gen->head);
+
+// to see the created tree:
+// ft_printf("\nPrinting tree:\n");
+// print_tree(gen->tree);
+// ft_printf("\n");

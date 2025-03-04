@@ -38,11 +38,14 @@ void	delete_cmd_line(t_general *gen)
 		return ;
 	if (gen->input)
 		free(gen->input);
+	if (gen->input_cpy)
+		free(gen->input_cpy);
 	if (gen->head)
 		dclst_clear(gen->head);
 	if (gen->tree)
 		delete_tree(gen->tree);
 	gen->input = NULL;
+	gen->input_cpy = NULL;
 	gen->head = NULL;
 	gen->tree = NULL;
 }

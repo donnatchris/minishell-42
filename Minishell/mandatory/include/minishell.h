@@ -115,7 +115,7 @@ t_tree		*create_tree_node(t_dclst *list_node);
 t_dclst		*find_lowest_priority(t_dclst *first_node, t_dclst *last_node);
 t_tree		*create_tree(t_dclst *first, t_dclst *last);
 // check_synthax.c
-int			check_syntax(t_dclst **head);
+int			check_syntax(t_dclst **head, t_general *gen, int mode);
 // get_token.c
 int			get_single_quote(char **s, char *es);
 int			double_quote(char **s, char *es);

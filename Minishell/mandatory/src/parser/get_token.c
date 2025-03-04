@@ -97,7 +97,7 @@ int	get_parenthesis(char **s, char *es)
 	while (1)
 	{
 		if (*s == es)
-			return (ft_putstr_fd("minishell: syntax error unclosed bracket\n", 2), TOKEN_ERROR);
+			return (ft_putstr_fd("minishell: syntax error near unexpected token `('\n", 2), TOKEN_ERROR);
 		else if (**s == '(')
 			depth++;
 		else if (**s == ')')

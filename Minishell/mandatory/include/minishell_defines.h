@@ -72,6 +72,7 @@ typedef struct s_general
 	char	*pwd;
 	char	*home;
 	char	*input;
+	char	*input_cpy;
 	char	**envp;
 	t_dclst	**head;
 	t_tree	*tree;
@@ -80,5 +81,7 @@ typedef struct s_general
 
 # define NO_HIDDEN 0
 # define W_HIDDEN 1
+# define NO_PARENTHESIS 0
+# define IN_PARENTHESIS 1
 
 #endif

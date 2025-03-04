@@ -30,8 +30,6 @@ int	run_parenthesis(t_tree *tree, char ***envp, t_general *gen)
 	if (pid == 0)
 	{
 		head = tokenize(((t_token *) tree->list_node->data)->start);
-		if (check_syntax(head) == -1)
-			return (-1);
 		status = mini_minishell(head, *envp, gen);
 		dclst_clear(head);
 		exit(status);
