@@ -60,7 +60,7 @@ int	exec_cmd(t_dclst *node, char ***envp, t_general *gen)
 	int		(*soft_built_func)(char **, char **);
 
 	if (!node || !envp)
-		return (shell_error_msg("exec_node", "invalid argument"));
+		return (0);
 	status = 0;
 	args = extract_args(node, *envp, gen);
 	// args = manage_wildcards(args);
