@@ -6,9 +6,9 @@ TO DO LIST:
 
 - implémenter les multiples redir_in (déjà fait pour redir_out et append)
 
-- *: les fonctions qui cherchent et crééent un tableau de char avec les noms de fichiers
-	à insérer dans les arguments sont ok, mais il faut désormais que le remplacement intervienne
-	au niveau des tokens (pour prendre en compte 'string litteral')
+- dans unset : utiliser realloc
+
+- wildcards ok mais allocation de la mémoire du nouveau token->start pas free
 
 - gérer les signaux dans append_input comme pour heredoc?
 

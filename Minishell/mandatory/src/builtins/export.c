@@ -3,7 +3,7 @@
 // Function to find the lowest variable in the environment (alphabetically)
 // above the variable passed as an argument
 // Returns the address of the variable in the environment or NULL if not found
-char *find_next_lowest_var(char *var, char **envp)
+static char *find_next_lowest_var(char *var, char **envp)
 {
     int i;
     char *temp;
@@ -24,7 +24,7 @@ char *find_next_lowest_var(char *var, char **envp)
 }
 
 // Function to print characters of a string from pointer start to pointer end
-void	print_chars(char *start, char *end)
+static void	print_chars(char *start, char *end)
 {
 	while (start < end)
 	{
@@ -35,7 +35,7 @@ void	print_chars(char *start, char *end)
 
 // Function to print all the variables in the environment
 // sorted alphabetically
-int	print_exp_var_env(char **envp)
+static int	print_exp_var_env(char **envp)
 {
 	char	*var;
 	char	*eq;
@@ -64,6 +64,22 @@ int	print_exp_var_env(char **envp)
 	return (0);
 }
 
+// Function to export a variable in the environment
+// or update the value of an existing variable
+static void   export_var(char *arg, char *name, char ***envp)
+{
+	char *value;
+
+	value = ft_strchr(arg, '=');
+	if (!value)
+		update_env_var(name, ' ', NULL, envp);
+	else if (*(value + 1) == '\0')
+		update_env_var(name, '=', NULL, envp);
+	else
+		update_env_var(name, '=', value + 1, envp);
+	free(name);
+}
+
 // Function to export variables and store them in the envp
 // or update the value of an existing variable
 // or print the value of existing variables in the envp
@@ -75,7 +91,6 @@ int export_cmd(char **args, char ***envp)
 	int		i;
 	int		status;
 	char	*name;
-	char	*value;
 
 	if (!envp || !*envp || !args || !args[0])
 		return (shell_error_msg("export", "invalid arguments"));
@@ -92,14 +107,7 @@ int export_cmd(char **args, char ***envp)
 			name = cut_name(args[i]);
 			if (!name)
 				return (-1);
-			value = ft_strchr(args[i], '=');
-			if (!value)
-				update_env_var(name, ' ', NULL, envp);
-			else if (*(value + 1) == '\0')
-				update_env_var(name, '=', NULL, envp);
-			else
-				update_env_var(name, '=', value + 1, envp);
-			free(name);
+			export_var(args[i], name, envp);
 		}
 		args++;
 	}

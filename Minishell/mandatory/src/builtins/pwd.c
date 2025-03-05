@@ -2,6 +2,7 @@
 
 // Function to print the actual working directory
 // like the pwd comand in bash
+// Returns 0 on success, -1 on failure
 int	pwd_cmd(char **args, char **envp)
 {
 	char	current_dir[PATH_MAX];
