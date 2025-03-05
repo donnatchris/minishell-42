@@ -70,15 +70,8 @@ char		**copy_env(char **envp);
 /*										executor							  */
 /* ************************************************************************** */
 // cmd_execve.c
-char		*find_path_in_PATH(char *cmd, char **path_split);
-char		*find_exec_path(char *cmd, char **envp);
-int			execute_cmd(char *path, char **args, char **envp);
 int			execve_cmd(char *cmd, char **args, char **envp);
 // exec_cmd.c
-int 		exec_soft_builtin(int (*function)(char **args, char **envp), char **args, char **envp);
-int			(*soft_builtin(char *cmd))(char **args, char **envp);
-int	 		exec_hard_builtin(int (*function)(char **args, char ***envp), char **args, char ***envp);
-int			(*hard_builtin(char *cmd))(char **args, char ***envp);
 int			exec_cmd(t_dclst *node, char ***envp, t_general *gen);
 // exec_leaf.c
 int			exec_leaf(t_dclst *node, char*** envp, t_general *gen);

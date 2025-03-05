@@ -3,7 +3,7 @@
 // Function to get the size of a directory
 // (excluding hidden files)
 // Returns: The number of files in the directory
-size_t	dirsize(char *dirpath, int mode)
+static size_t	dirsize(char *dirpath, int mode)
 {
 	DIR				*dir;
 	size_t			size;
@@ -30,7 +30,7 @@ size_t	dirsize(char *dirpath, int mode)
 
 // Function to copy the file names in the directory to a string array
 // (excluding hidden files)
-void	copy_file_names(char **file_array, DIR *dir, size_t len)
+static void	copy_file_names(char **file_array, DIR *dir, size_t len)
 {
 	struct dirent	*entry;
 	size_t			i;

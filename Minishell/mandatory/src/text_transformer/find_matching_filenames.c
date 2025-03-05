@@ -1,28 +1,52 @@
 #include "../../include/minishell.h"
 
+// Function to find a subpattern in a string
+// Returns a pointer to the first occurence of the subpattern in the string
+// or NULL if not found
+static char	*find_subpattern(const char *big, const char *little, size_t little_len)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	if (little[0] == '\0')
+		return ((char *) big);
+	while (big[i])
+	{
+		j = 0;
+		while (big[j + i] == little[j] && big[j + i])
+		{
+			j++;
+			if (j == little_len)
+				return ((char *) big + i);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 // Function to check if a filename matches a pattern
 // Returns 1 if the filename matches the pattern, 0 if not
-int	is_matching_filename(char *pattern, char *filename)
+static int	is_matching_filename(char *pattern, char *filename)
 {
+	char	*next_wildcard;
 	char	*pat_ptr;
 	char	*file_ptr;
-	char	*next_wildcard;
-	
+
 	pat_ptr = pattern;
 	file_ptr = filename;
-
 	while (*pat_ptr)
 	{
 		if (*pat_ptr == '*')
 		{
 			while (*pat_ptr == '*')
 				pat_ptr++;
-			if (!*pat_ptr)
+			if (*pat_ptr == '\0')
 				return (1);
 			next_wildcard = ft_strchr(pat_ptr, '*');
 			if (!next_wildcard)
 				next_wildcard = pat_ptr + ft_strlen(pat_ptr);
-			file_ptr = ft_strnstr(file_ptr, pat_ptr, ft_strlen(file_ptr));
+			file_ptr = find_subpattern(file_ptr, pat_ptr, (next_wildcard - pat_ptr));
 			if (!file_ptr)
 				return (0);
 			file_ptr += (next_wildcard - pat_ptr);

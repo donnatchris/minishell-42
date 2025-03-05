@@ -47,7 +47,7 @@ SRC = \
 	$(SRC_DIR)/executor/exec_cmd.c \
 	$(SRC_DIR)/executor/exec_leaf.c \
 	$(SRC_DIR)/executor/exec_tree.c \
-	$(SRC_DIR)/executor/extract_arguments.c \
+	$(SRC_DIR)/executor/extract_args.c \
 	$(SRC_DIR)/operators/parenthesis.c \
 	$(SRC_DIR)/operators/pipe.c \
 	$(SRC_DIR)/operators/redirection_in.c \
@@ -59,11 +59,11 @@ SRC = \
 	$(SRC_DIR)/parser/lexer.c \
 	$(SRC_DIR)/parser/tests_to_remove.c \
 	$(SRC_DIR)/signals/signal_handler.c \
-	$(SRC_DIR)/wildcard_manager/find_matching_filenames.c \
-	$(SRC_DIR)/wildcard_manager/get_files_in_dir.c \
-	$(SRC_DIR)/wildcard_manager/wildcard_manager.c \
+	$(SRC_DIR)/text_transformer/dollar_manager.c \
+	$(SRC_DIR)/text_transformer/find_matching_filenames.c \
+	$(SRC_DIR)/text_transformer/get_files_in_dir.c \
+	$(SRC_DIR)/text_transformer/wildcard_manager.c \
 	$(UTILS_DIR)/delete_functions.c \
-	$(UTILS_DIR)/dollar_manager.c \
 	$(UTILS_DIR)/error_messages.c \
 	$(UTILS_DIR)/initialize_minishell.c \
 	$(UTILS_DIR)/node_token_info.c \

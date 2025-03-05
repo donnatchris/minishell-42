@@ -2,9 +2,9 @@
 
 // Function to get the next heredoc node
 // Returns the next heredoc node, NULL if there is no more heredoc
-t_dclst	*get_next_heredoc(t_dclst *node)
+static t_dclst	*get_next_heredoc(t_dclst *node)
 {
-	t_dclst *current;
+	t_dclst	*current;
 
 	current = node;
 	while (!is_tree_branch(current) && !is_eof(current))
@@ -19,9 +19,9 @@ t_dclst	*get_next_heredoc(t_dclst *node)
 // Function to get the next redirection input node
 // Returns the next redirection input node
 // or NULL if there is no more redirection input
-t_dclst	*get_next_redir_in(t_dclst *node)
+static t_dclst	*get_next_redir_in(t_dclst *node)
 {
-	t_dclst *current;
+	t_dclst	*current;
 
 	current = node;
 	while (!is_tree_branch(current) && !is_eof(current))
@@ -36,9 +36,9 @@ t_dclst	*get_next_redir_in(t_dclst *node)
 // Function to get the next redirection output node
 // Returns the next redirection output node
 // orNULL if there is no more redirection output
-t_dclst	*get_next_redir_out(t_dclst *node)
+static t_dclst	*get_next_redir_out(t_dclst *node)
 {
-	t_dclst *current;
+	t_dclst	*current;
 
 	current = node;
 	while (!is_tree_branch(current) && !is_eof(current))
@@ -52,9 +52,9 @@ t_dclst	*get_next_redir_out(t_dclst *node)
 
 // Function to get the next command node
 // Returns the next command node, NULL if there is no more command
-t_dclst	*get_next_cmd(t_dclst *node)
+static t_dclst	*get_next_cmd(t_dclst *node)
 {
-	t_dclst *current;
+	t_dclst	*current;
 
 	current = node;
 	while (!is_tree_branch(current) && !is_eof(current))
@@ -71,7 +71,7 @@ t_dclst	*get_next_cmd(t_dclst *node)
 // Function to execute a leaf node
 // (a leaf node is a node that contains a command)
 // Returns the status of the command
-int	exec_leaf(t_dclst *node, char*** envp, t_general *gen)
+int	exec_leaf(t_dclst *node, char ***envp, t_general *gen)
 {
 	t_dclst	*current;
 	int		stdin_backup;
@@ -79,7 +79,7 @@ int	exec_leaf(t_dclst *node, char*** envp, t_general *gen)
 	int		status;
 
 	stdin_backup = dup(STDIN_FILENO);
-    if (stdin_backup == -1)
+	if (stdin_backup == -1)
 		return (ft_perror("exec_leaf", "dup failed"));
 	stdout_backup = dup(STDOUT_FILENO);
 	if (stdout_backup == -1)

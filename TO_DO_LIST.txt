@@ -1,14 +1,17 @@
 TO DO LIST:
 
-- nettoyage de certaines fonctions qui peuvent être simplifiées en utilisant les fonctions du fichier
-	/utils/node_token_info.c (comme extract_args par exemple)
-
 - remplacer strcmp par un ft_strncmp dans heredoc et redir_in
 
 - ft_exit: récupère la valeur de retour de la dernière commande?
 
 - implémenter les multiples redir_in (déjà fait pour redir_out et append)
 
-- *: implémenter la gestion du * (dans manage_asterisk)
+- *: les fonctions qui cherchent et crééent un tableau de char avec les noms de fichiers
+	à insérer dans les arguments sont ok, mais il faut désormais que le remplacement intervienne
+	au niveau des tokens (pour prendre en compte 'string litteral')
 
 - gérer les signaux dans append_input comme pour heredoc?
+
+- norminette
+
+- tests multiples

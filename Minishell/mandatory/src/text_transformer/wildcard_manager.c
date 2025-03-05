@@ -1,14 +1,14 @@
 #include "../../include/minishell.h"
 
 // Function to increment 2 size_t variables
-void	increment_2_sizet(size_t *i, size_t *j)
+static void	increment_2_sizet(size_t *i, size_t *j)
 {
 	(*i)++;
 	(*j)++;
 }
 
 // Function to copy the file names in the string array
-void	concatenate_arrays(char **arg_array, size_t arg_index, char **matching_array, char **new_array)
+static void	concatenate_arrays(char **arg_array, size_t arg_index, char **matching_array, char **new_array)
 {
 	size_t	i;
 	size_t	j;
@@ -41,7 +41,7 @@ void	concatenate_arrays(char **arg_array, size_t arg_index, char **matching_arra
 // with the strings of the matching_array
 // Returns the new string array or NULL on failure
 // RETURN MUST BE FREED AFTER USE
-char	**replace_args(char **arg_array, size_t arg_index, char **matching_array)
+static char	**replace_args(char **arg_array, size_t arg_index, char **matching_array)
 {
 	char	**new_array;
 	size_t	new_size;
@@ -57,7 +57,7 @@ char	**replace_args(char **arg_array, size_t arg_index, char **matching_array)
 
 // Function to find the mode for the extract_matching_filenames() function
 // Returns W_HIDDEN if the argument starts with a '.', NO_HIDDEN otherwise
-int	find_mode(char *arg)
+static int	find_mode(char *arg)
 {
 	if (arg[0] == '.')
 		return (W_HIDDEN);
@@ -111,9 +111,3 @@ char	**manage_wildcards(char **arg_array)
 	}
 	return (arg_array);
 }
-
-// *			Remplace 0 ou plusieurs caractères
-// *.txt		Tous les fichiers se terminant par .txt
-// file*		Tous les fichiers commençant par file
-// *file*		Tous les fichiers contenant file
-// *.*			Tous les fichiers ayant une extension

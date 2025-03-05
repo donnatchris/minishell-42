@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 // Function to find the end of a variable name
 // Returns a pointer to the end of the variable name or NULL if there is no name
