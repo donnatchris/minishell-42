@@ -56,3 +56,19 @@ char	*ft_getenv(const char *var, char **envp)
 	}
 	return (NULL);
 }
+
+// Function to compare environment variables
+// Returns 0 if the variables are equal
+// Returns a positive number if s1 is greater than s2
+// Returns a negative number if s1 is less than s2
+int compare_env_vars(const char *s1, const char *s2)
+{
+    while (*s1 && *s2 && *s1 != '=' && *s2 != '=' && *s1 == *s2)
+    {
+        s1++;
+        s2++;
+    }
+    if (*s1 == '=' || *s2 == '=')
+        return (*s1 - *s2);
+    return (*s1 - *s2);
+}

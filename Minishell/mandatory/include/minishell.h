@@ -60,6 +60,7 @@ void		exit_cmd(char **args, char **envp, t_general *gen);
 size_t		count_env_size(char **envp);
 char		**find_env_var(const char *var, char **envp);
 char		*ft_getenv(const char *var, char **envp);
+int 		compare_env_vars(const char *s1, const char *s2);
 // write_env.c
 char		**ft_realloc_env(char ***envp, char *new_entry);
 int			create_env_var_void(const char *key, char sep, char ***envp);

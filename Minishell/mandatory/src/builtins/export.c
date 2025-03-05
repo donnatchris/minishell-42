@@ -3,24 +3,24 @@
 // Function to find the lowest variable in the environment (alphabetically)
 // above the variable passed as an argument
 // Returns the address of the variable in the environment or NULL if not found
-char	*find_next_lowest_var(char *var, char **envp)
+char *find_next_lowest_var(char *var, char **envp)
 {
-	int		i;
-	char	*temp;
+    int i;
+    char *temp;
 
-	if (!envp)
-		return (NULL);
-	i = 0;
-	if (!var)
-		var = "";
-	temp = NULL;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], var, ft_strlen(envp[i])) > 0 && (!temp || ft_strncmp(envp[i], temp, ft_strlen(envp[i])) < 0))
-			temp = envp[i];
-		i++;
-	}
-	return (temp);
+    if (!envp)
+        return (NULL);
+
+    temp = NULL;
+    for (i = 0; envp[i]; i++)
+    {
+        if ((!var || compare_env_vars(envp[i], var) > 0) &&
+            (!temp || compare_env_vars(envp[i], temp) < 0))
+        {
+            temp = envp[i];
+        }
+    }
+    return (temp);
 }
 
 // Function to print characters of a string from pointer start to pointer end
