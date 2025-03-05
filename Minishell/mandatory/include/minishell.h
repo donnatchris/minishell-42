@@ -140,7 +140,7 @@ void	    signal_handler(int signum);
 /* ************************************************************************** */
 char		**extract_matching_filenames(char *arg, char **file_array);
 char		**get_files_in_dir(char *path, int mode);
-char		**manage_wildcards(char **arg_array);
+char		*manage_wildcards(char *arg, t_dclst *node, t_general *gen);
 /* ************************************************************************** */
 /*										utils								  */
 /* ************************************************************************** */

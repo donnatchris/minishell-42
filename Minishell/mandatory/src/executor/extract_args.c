@@ -60,6 +60,7 @@ char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 	while (is_text(node))
 	{
 		arg = manage_dollar((t_token *) node->data, envp, gen->exit_status);
+		arg = manage_wildcards(arg, node, gen); // line to remove if not using wildcards
 		while (!has_space(node) && is_text(node->next))
 		{
 			arg = concat_arg(arg, node->next, envp, gen);

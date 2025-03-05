@@ -30,7 +30,7 @@ static size_t	dirsize(char *dirpath, int mode)
 
 // Function to copy the file names in the directory to a string array
 // (excluding hidden files)
-static void	copy_file_names(char **file_array, DIR *dir, size_t len)
+static void	copy_file_names(char **file_array, DIR *dir, size_t len, int mode)
 {
 	struct dirent	*entry;
 	size_t			i;
@@ -43,7 +43,7 @@ static void	copy_file_names(char **file_array, DIR *dir, size_t len)
 			break ;
 		else
 		{
-			if (entry->d_name[0] == '.')
+			if (entry->d_name[0] == '.' && mode == NO_HIDDEN)
 				continue ;
 			file_array[i] = ft_strdup(entry->d_name);
 			if (!file_array[i])
@@ -75,7 +75,7 @@ char	**get_files_in_dir(char *path, int mode)
 	dir = opendir(path);
 	if (!dir)
 		return (ft_perror("get_files_in_dir", "opendir failed"), NULL);
-	copy_file_names(file_array, dir, len);
+	copy_file_names(file_array, dir, len, mode);
 	if (closedir(dir) == -1)
 		ft_perror("get_files_in_dir", "closedir failed");
 	return (file_array);

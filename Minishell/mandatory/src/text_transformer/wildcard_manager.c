@@ -1,65 +1,68 @@
 #include "../../include/minishell.h"
 
-// Function to increment 2 size_t variables
-static void	increment_2_sizet(size_t *i, size_t *j)
+static void	insert_new_node(t_dclst *new_node, t_dclst *anchor)
 {
-	(*i)++;
-	(*j)++;
+	new_node->next = anchor->next;
+	new_node->prev = anchor;
+	anchor->next->prev = new_node;
+	anchor->next = new_node;
 }
 
-// Function to copy the file names in the string array
-static void	concatenate_arrays(char **arg_array, size_t arg_index, char **matching_array, char **new_array)
+static void	insert_additional_nodes(t_dclst *node, char **matching_array)
 {
+	t_dclst	*current;
+	t_dclst	*new_node;
+	t_token	*token;
 	size_t	i;
-	size_t	j;
-	size_t	k;
 
-	i = 0;
-	while (i < arg_index)
+	current = node;
+	i = 1;
+	while (matching_array[i])
 	{
-		new_array[i] = ft_strdup(arg_array[i]);
+		token = (t_token *) malloc(sizeof(t_token) + 1);
+		if (!token)
+		{
+			shell_error_msg("insert_additionnal_nodes", "malloc failed");
+			return ;
+		}
+		token->type = TOKEN_LITTERAL;
+		token->start = ft_strdup(matching_array[i]);
+		token->end = NULL;
+		token->space = 1;
+		token->priority = 6;
+		new_node = dclst_create_node(token);
+		if (!new_node)
+		{
+			free(token->start);
+			free(token);
+			shell_error_msg("insert_additionnal_nodes", "dclst_create_node failed");
+			return ;
+		}
+		insert_new_node(new_node, current);
+		current = current->next;
 		i++;
 	}
-	j = 0;
-	k = i;
-	while (matching_array[j])
-	{
-		new_array[k] = ft_strdup(matching_array[j]);
-		increment_2_sizet(&j, &k);
-	}
-	i++;
-	while (arg_array[i])
-	{
-		new_array[k] = ft_strdup(arg_array[i]);
-		increment_2_sizet(&i, &k);
-	}
-	new_array[k] = NULL;
 }
 
-// Function to create a new string_array
-// It takes the arg array and replace the arg_index element
-// with the strings of the matching_array
-// Returns the new string array or NULL on failure
-// RETURN MUST BE FREED AFTER USE
-static char	**replace_args(char **arg_array, size_t arg_index, char **matching_array)
+t_dclst	*find_cmd(t_dclst *node)
 {
-	char	**new_array;
-	size_t	new_size;
+	t_dclst	*current;
+	t_dclst *cmd;
 
-	new_size = count_env_size(arg_array) + count_env_size(matching_array) - 1;
-	new_array = (char **) malloc(sizeof(char * ) * (new_size + 1));
-	if (!new_array)
-		return (shell_error_msg("replace_args", "malloc failed"), NULL);
-	ft_memset(new_array, 0, sizeof(char *) * (new_size + 1));
-	concatenate_arrays(arg_array, arg_index, matching_array, new_array);
-	return (new_array);
+	current = node;
+	cmd = node;
+	while (!is_tree_branch(current) && !is_eof(current))
+	{
+		if (is_text(current) && !is_redir(current->prev))
+			cmd = current;
+		current = current->prev;
+	}
+	return (cmd);
 }
 
-// Function to find the mode for the extract_matching_filenames() function
-// Returns W_HIDDEN if the argument starts with a '.', NO_HIDDEN otherwise
-static int	find_mode(char *arg)
+int	choose_mode(char *arg)
 {
-	if (arg[0] == '.')
+	if (arg && arg[0] == '.')
 		return (W_HIDDEN);
 	return (NO_HIDDEN);
 }
@@ -69,45 +72,26 @@ static int	find_mode(char *arg)
 // with the matching filenames
 // Returns the new array of strings or NULL on failure
 // RETURN MUST BE FREED AFTER USE
-char	**manage_wildcards(char **arg_array)
+char	*manage_wildcards(char *arg, t_dclst *node, t_general *gen)
 {
-	size_t	i;
+	// char	*cmd;
 	char	**file_array;
 	char	**matching_array;
-	char	**new_array;
 	char	pwd[PATH_MAX];
 
-	i = 0;
-	while (arg_array[i])
-	{
-		if (ft_strchr(arg_array[i], '*'))
-		{
-			if ((!ft_strncmp(arg_array[0], "export", 6) && ft_strlen(arg_array[0]) == 6) && ft_strchr(arg_array[i], '='))
-			{
-				i++;
-				continue ;
-			}
-			file_array = get_files_in_dir(getcwd(pwd, sizeof(pwd)), find_mode(arg_array[i]));
-			if (!file_array)
-			{
-				i++;
-				continue ;
-			}
-			matching_array = extract_matching_filenames(arg_array[i], file_array);
-			if (matching_array)
-			{
-				new_array = NULL;
-				new_array = replace_args(arg_array, i, matching_array);
-				delete_str_tab(matching_array);
-			}
-			delete_str_tab(file_array);
-			if (new_array)
-			{
-				delete_str_tab(arg_array);
-				arg_array = new_array;
-			}
-		}
-		i++;
-	}
-	return (arg_array);
+	(void) gen;
+	if (((t_token *) node->data)->type != TOKEN_WORD || !ft_strchr(arg, '*'))
+		return (arg);
+	// cmd = ((t_token *) find_cmd(node)->data)->start;
+	// if (!ft_strncmp(cmd, "export", 6) && ft_strlen(cmd) == 6)
+	// 	return (arg);
+	file_array = get_files_in_dir(getcwd(pwd, sizeof(pwd)), choose_mode(arg));
+	if (!file_array)
+		return (arg);
+	matching_array = extract_matching_filenames(arg, file_array);
+	if (!matching_array)
+		return (delete_str_tab(file_array), arg);
+	delete_str_tab(file_array);
+	insert_additional_nodes(node, matching_array);
+	return (free(arg), matching_array[0]);
 }
