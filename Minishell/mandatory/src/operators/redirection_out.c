@@ -40,7 +40,7 @@ t_dclst	*next_redir_out(t_dclst *node)
 
 // Function to handle one redirection '>' or '>>'
 // Returns 0 on success, -1 on error
-int	redir_from_node(t_dclst *node, char ***envp, t_general *gen, int flag)
+int	redir_out_from_node(t_dclst *node, char ***envp, t_general *gen, int flag)
 {
 	t_token	*token;
 	char	*filename;
@@ -71,7 +71,7 @@ int	redir_out(t_dclst *node, char ***envp, t_general *gen)
 	if (!node || !envp || !gen)
 		return (shell_error_msg("redir_out", "invalid arguments"));
 	flag = redir_flag(node);
-	if (redir_from_node(node, envp, gen, flag) == -1)
+	if (redir_out_from_node(node, envp, gen, flag) == -1)
 		return (-1);
 	while (1)
 	{
@@ -79,9 +79,8 @@ int	redir_out(t_dclst *node, char ***envp, t_general *gen)
 		if (!node)
 			break ;
 		flag = redir_flag(node);
-		if (redir_from_node(node, envp, gen, flag) == -1)
+		if (redir_out_from_node(node, envp, gen, flag) == -1)
 			return (-1);
 	}
 	return (0);
 }
-
