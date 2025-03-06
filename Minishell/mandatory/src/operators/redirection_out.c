@@ -38,8 +38,8 @@ t_dclst	*next_redir_out(t_dclst *node)
 	return (NULL);
 }
 
-// Function to close redir_out
-// Returns exec_tree on success, -1 on error
+// Function to handle one redirection '>' or '>>'
+// Returns 0 on success, -1 on error
 int	redir_from_node(t_dclst *node, char ***envp, t_general *gen, int flag)
 {
 	t_token	*token;
@@ -62,8 +62,8 @@ int	redir_from_node(t_dclst *node, char ***envp, t_general *gen, int flag)
 	return (0);
 }
 
-// Function to handle the redirection '>'
-// Returns exec_tree on success, -1 on error
+// Function to handle multiple redirections '>' or '>>'
+// Returns 0 on success, -1 on error
 int	redir_out(t_dclst *node, char ***envp, t_general *gen)
 {
 	int		flag;

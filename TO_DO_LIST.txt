@@ -4,13 +4,15 @@ TO DO LIST:
 
 - ft_exit: récupère la valeur de retour de la dernière commande?
 
-- implémenter les multiples redir_in (déjà fait pour redir_out et append)
+- implémenter les multiples redir_in (ok pour redir_out et append et heredoc)
+    ->il manque seulement redir_in (ne prend en compte que la derniere)
 
 - dans unset : utiliser realloc
 
 - wildcards ok mais allocation de la mémoire du nouveau token->start pas free
 
 - gérer les signaux dans append_input comme pour heredoc?
+    -> generaliser la gestion de signaux a l execution de l arbre binaire
 
 - norminette
 

@@ -89,7 +89,7 @@ int         redir_in(t_dclst *node, char ***envp, t_general *gen);
 void		end_redir_out(int stdout_backup);
 int			redir_out(t_dclst *node, char ***envp, t_general *gen);
 // heredoc.c
-void		redir_heredoc_read(int pipefd[2], char *delimiter, char **envp, int exit_status);
+void		redir_heredoc_read(int pipefd[2], char **delimiters, char **envp, int exit_status);
 int         redir_heredoc(t_dclst *node, char ***envp, t_general *gen);
 /* ************************************************************************** */
 /*										parser								  */
@@ -129,8 +129,10 @@ void		print_dclst_tokens(t_dclst **head); // A retirer avant de rendre
 void		init_signals(void);
 void	    signal_handler(int signum);
 /* ************************************************************************** */
-/*									wildcard_manager						  */
+/*									text_transformer						  */
 /* ************************************************************************** */
+char		*replace_each_dollar(char *str, char **envp, int exit_status);
+char		*manage_dollar(t_token *token, char **envp, int exit_status);
 char		**extract_matching_filenames(char *arg, char **file_array);
 char		**get_files_in_dir(char *path, int mode);
 char		*manage_wildcards(char *arg, t_dclst *node, t_general *gen);
@@ -142,12 +144,6 @@ void		delete_str_tab(char **tab);
 void		delete_tree(t_tree *root);
 void		delete_cmd_line(t_general *gen);
 void		delete_general(t_general *gen);
-// dollar_manager.c
-char		*find_var_name_end(char *ptr);
-char		*replace_a_dollar(char *str, char *doll_pos, char **envp);
-char		*replace_with_exit_status(char *str, char *doll_pos, char **envp, int exit_status);
-char		*replace_each_dollar(char *str, char **envp, int exit_status);
-char		*manage_dollar(t_token *token, char **envp, int exit_status);
 // error_msg.c
 int			print_token_error(t_token *token);
 void		print_token(t_token *token);
