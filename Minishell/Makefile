@@ -48,6 +48,7 @@ SRC = \
 	$(SRC_DIR)/executor/exec_leaf.c \
 	$(SRC_DIR)/executor/exec_tree.c \
 	$(SRC_DIR)/executor/extract_args.c \
+	$(SRC_DIR)/executor/extract_filename.c \
 	$(SRC_DIR)/operators/parenthesis.c \
 	$(SRC_DIR)/operators/pipe.c \
 	$(SRC_DIR)/operators/redirection_in.c \

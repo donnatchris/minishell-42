@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:32:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 10:08:52 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:46:54 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,11 @@ int	pipe_operator(t_tree *tree, char ***envp, t_general *gen)
 			ft_perror("handle_pipe", "fork failed"));
 	if (pid == 0)
 		writing_proc(fd, tree, envp, gen);
-	ignore_signals();
+	// ignore_signals();
 	status = reading_proc(fd, tree, envp, gen);
 	if (waitpid(pid, &child_status, 0) == -1)
 		return (ft_perror("handle_pipe", "waitpid failed"));
-	init_signals();
+	// init_signals();
 	if (WIFSIGNALED(child_status))
 		return (128 + WTERMSIG(child_status));
 	return (status);

@@ -1,11 +1,6 @@
 TO DO LIST:
 
-- remplacer strcmp par un ft_strncmp dans heredoc et redir_in
-
 - ft_exit: récupère la valeur de retour de la dernière commande?
-
-- implémenter les multiples redir_in (ok pour redir_out et append et heredoc)
-    ->il manque seulement redir_in (ne prend en compte que la derniere)
 
 - dans unset : utiliser realloc
 
@@ -13,5 +8,9 @@ TO DO LIST:
 
 - gérer les signaux dans append_input comme pour heredoc?
     -> generaliser la gestion de signaux a l execution de l arbre binaire
+
+- cat <<eof | grep truc
+
+- wildcards dans les noms de fichier: erreur si plusieurs fichiers possibles
 
 - tests multiples

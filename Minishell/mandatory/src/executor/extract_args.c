@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:31:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 10:53:40 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/07 13:17:00 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,12 @@ static char	**expand_array(char **args, char *arg, int *i)
 static t_dclst	*find_next_node(t_dclst *node)
 {
 	node = node->next;
-	while (is_redir(node))
-		node = node->next->next;
+	if (is_redir(node))
+	{
+		node = node->next;
+		while (is_filename(node))
+			node = node->next;
+	}
 	return (node);
 }
 
@@ -72,14 +76,14 @@ char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 	while (is_text(node))
 	{
 		arg = manage_dollar((t_token *) node->data, envp, gen->exit_status);
-		arg = manage_wildcards(arg, node, gen);
-		while (!has_space(node) && is_text(node->next))
+		while (!has_space(node) && is_text(node->next) && !is_filename(node))
 		{
 			arg = concat_arg(arg, node->next, envp, gen);
 			if (!arg)
 				return (NULL);
 			node = node->next;
 		}
+		arg = manage_wildcards(arg, node, gen);// probleme en vue?
 		args = expand_array(args, arg, &i);
 		node = find_next_node(node);
 		if (!is_text(node) || !args)
@@ -88,6 +92,12 @@ char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 	return (args);
 }
 
+
+
+
+
+			// if (is_filename(node))
+			// 	break ;
 
 
 // PREVIOUS VERSION

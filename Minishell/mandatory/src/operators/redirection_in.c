@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_in.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:36:16 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/07 11:30:29 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	redir_in_from_node(t_dclst *node, char ***envp, t_general *gen)
 	token = (t_token *) node->next->data;
 	if (!token || token->priority != 6 || !token->start)
 		return (shell_err_msg("redir_in", "invalid arguments 2"));
-	filename = manage_dollar(token, *envp, gen->exit_status);
+	filename = extract_filename(node->next, *envp, gen);
 	if (!filename)
 		return (shell_err_msg("redir_in", "filename is NULL"));
 	fd = open(filename, O_RDONLY);

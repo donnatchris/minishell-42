@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 10:39:13 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/07 11:59:54 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,9 @@ int			exec_leaf(t_dclst *node, char ***envp, t_general *gen);
 int			exec_tree(t_tree *tree, char ***envp, t_general *gen);
 // extract_arguments.c
 char		**extract_args(t_dclst *node, char **envp, t_general *gen);
+// extract_filename.c
+char		*extract_filename(t_dclst *node, char **envp, t_general *gen);
+
 /* ************************************************************************** */
 /*										operators							  */
 /* ************************************************************************** */
@@ -171,6 +174,7 @@ int			is_redir_in(t_dclst *node);
 int			is_redir_out(t_dclst *node);
 // node_token_info3.c
 int			has_space(t_dclst *node);
+int			is_filename(t_dclst *node);
 // token_error_message.c
 int			print_token_error(t_token *token);
 // utils_functions.c

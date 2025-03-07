@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 10:46:58 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:46:43 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,15 @@ int	redir_heredoc(t_dclst *node, char ***envp, t_general *gen)
 	delimiters = find_delimiters(node);
 	if (pid == 0)
 	{
-		heredoc_signals();
+		// heredoc_signals();
 		if (!delimiters)
 			exit(-1);
 		redir_heredoc_read(pipefd, delimiters, *envp, gen);
 	}
-	ignore_signals();
+	// ignore_signals();
 	delete_str_tab(delimiters);
 	waitpid(pid, NULL, 0);
-	init_signals();
+	// init_signals();
 	close(pipefd[1]);
 	if (dup2(pipefd[0], STDIN_FILENO) == -1)
 		return (close(pipefd[0]), ft_perror("redir_heredoc", "dup2 failed"));
