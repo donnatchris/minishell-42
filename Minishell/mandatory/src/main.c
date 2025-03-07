@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 06:21:47 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 06:21:49 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 // Global variable for handling signals
@@ -32,12 +44,3 @@ int	main(int ac, char **av, char **envp)
 	delete_general(gen);
 	return (0);
 }
-
-// to see the created tokens:
-// ft_printf("\nPrinting tokens:\n");
-// print_dclst_tokens(gen->head);
-
-// to see the created tree:
-// ft_printf("\nPrinting tree:\n");
-// print_tree(gen->tree);
-// ft_printf("\n");

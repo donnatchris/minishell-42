@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 04:29:39 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 // Function to check if the command is a soft builtin
@@ -65,9 +77,8 @@ int	exec_cmd(t_dclst *node, char ***envp, t_general *gen)
 		return (0);
 	status = 0;
 	args = extract_args(node, *envp, gen);
-	// args = manage_wildcards(args);
 	if (!args)
-		return (shell_error_msg("exec_node", "extract_args failed"), -1);
+		return (shell_err_msg("exec_node", "extract_args failed"), -1);
 	if (!ft_strncmp(args[0], "exit", 4) && ft_strlen(args[0]) == 4)
 		exit_cmd(args, *envp, gen);
 	else if (!ft_strncmp(args[0], "cd", 2) && ft_strlen(args[0]) == 2)

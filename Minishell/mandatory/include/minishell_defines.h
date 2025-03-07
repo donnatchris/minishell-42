@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell_defines.h                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 07:03:04 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 07:03:06 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_DEFINES_H
 # define MINISHELL_DEFINES_H
 
@@ -30,21 +42,21 @@ typedef struct s_token
 
 typedef enum e_token_type
 {
-	NOTHING,			// Rien (pour ne pas utiliser la valeur zéro)
-	TOKEN_PARENTHESIS,	// (...) / Prio1
-	TOKEN_PIPE,			// | / Prio2
-	TOKEN_AND,			// && / Prio3
-	TOKEN_OR,			// || / Prio3
-	TOKEN_REDIR_OUT,	// > / Prio4
-	TOKEN_APPEND,		// >> / Prio4
-	TOKEN_REDIR_IN,		// < / Prio4
-	TOKEN_HEREDOC,		// << / Prio4
-	TOKEN_SEMICOLON,	// ;  / Prio5
-	TOKEN_STRING,		// "texte" (variable autorisée) / Prio6
-	TOKEN_WORD,			// Un mot (variable autorisée) / Prio6
-	TOKEN_LITTERAL,		// 'texte' (pas de variable) / Prio6
-	TOKEN_EOF,			// Fin d'entrée
-	TOKEN_ERROR			// Erreur
+	NOTHING,
+	TOKEN_PARENTHESIS,
+	TOKEN_PIPE,
+	TOKEN_AND,
+	TOKEN_OR,
+	TOKEN_REDIR_OUT,
+	TOKEN_APPEND,
+	TOKEN_REDIR_IN,
+	TOKEN_HEREDOC,
+	TOKEN_SEMICOLON,
+	TOKEN_STRING,
+	TOKEN_WORD,
+	TOKEN_LITTERAL,
+	TOKEN_EOF,
+	TOKEN_ERROR
 }	t_token_type;
 
 typedef struct s_tree
@@ -57,14 +69,14 @@ typedef struct s_tree
 
 typedef enum e_tree_type
 {
-	TREE_NOTHING,		// Rien (pour ne pas utiliser la valeur zéro)
-	TREE_PARENTHESIS,	// Parenthèses
-	TREE_PIPE,			// Pipe
-	TREE_AND,			// Et
-	TREE_OR,			// Ou
-	TREE_SEMICOLON,		// Séparateur
-	TREE_COMMAND,		// Commande simple
-	TREE_ERROR			// Erreur
+	TREE_NOTHING,
+	TREE_PARENTHESIS,
+	TREE_PIPE,
+	TREE_AND,
+	TREE_OR,
+	TREE_SEMICOLON,
+	TREE_COMMAND,
+	TREE_ERROR
 }	t_tree_type;
 
 typedef struct s_general

@@ -14,6 +14,4 @@ TO DO LIST:
 - gérer les signaux dans append_input comme pour heredoc?
     -> generaliser la gestion de signaux a l execution de l arbre binaire
 
-- norminette
-
 - tests multiples

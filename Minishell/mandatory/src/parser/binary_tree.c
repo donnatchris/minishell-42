@@ -1,21 +1,20 @@
-#include "../../include/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   binary_tree.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 04:00:25 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// Function to print the tree
-void	print_tree(t_tree *root)
-{
-	// Function to remove before submitting
-	if (!root)
-		return ;
-	if (root->left)
-		print_tree(root->left);
-	if (root->right)
-		print_tree(root->right);
-	print_a_token((t_token *) root->list_node->data);
-}
+#include "../../include/minishell.h"
 
 // Function to find the type of the tree node
 // Returns the type of the tree node
-int	find_tree_node_type(t_token *token)
+static int	find_tree_node_type(t_token *token)
 {
 	if (token->type == TOKEN_PIPE)
 		return (TREE_PIPE);
@@ -33,13 +32,13 @@ int	find_tree_node_type(t_token *token)
 
 // Function to create a new node in the binary tree
 // Returns the new node or NULL if an error occurs
-t_tree	*create_tree_node(t_dclst *list_node)
+static t_tree	*create_tree_node(t_dclst *list_node)
 {
 	t_tree	*tree_node;
 
 	tree_node = (t_tree *) malloc(sizeof(t_tree));
 	if (!tree_node)
-		return (shell_error_msg("create_tree_node", "malloc failed"), NULL);
+		return (shell_err_msg("create_tree_node", "malloc failed"), NULL);
 	ft_memset(tree_node, 0, sizeof(t_tree));
 	tree_node->list_node = list_node;
 	tree_node->type = find_tree_node_type((t_token *) list_node->data);
@@ -49,15 +48,16 @@ t_tree	*create_tree_node(t_dclst *list_node)
 // Function to find the priority token in the doubly circular linked list
 // Returns the node with the lowest priority or NULL if an error occurs
 // THE RETURNED NODE MUST BE FREED AFTER USE
-t_dclst	*find_lowest_priority(t_dclst *left, t_dclst *right)
+static t_dclst	*find_lowest_priority(t_dclst *left, t_dclst *right)
 {
 	t_dclst	*current;
 	t_dclst	*lowest;
 	t_token	*token;
 	t_token	*lowest_token;
-	
+
 	if (!left || !right)
-		return (shell_error_msg("find_lowest_priority", "invalid arguments"), NULL);
+		return (shell_err_msg("find_lowest_priority",
+				"invalid arguments"), NULL);
 	current = right;
 	lowest = left;
 	while (1)
@@ -81,7 +81,7 @@ t_tree	*create_tree(t_dclst *left, t_dclst *right)
 	t_dclst	*lowest;
 
 	if (!left || !right)
-		return (shell_error_msg("create tree", "invalid arguments"), NULL);
+		return (shell_err_msg("create tree", "invalid arguments"), NULL);
 	lowest = find_lowest_priority(left, right);
 	tree_node = create_tree_node(lowest);
 	if (!tree_node)

@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 // Function to find the next heredoc
 // Returns the node found or NULL if nothing is found
-static t_dclst *next_heredoc(t_dclst *node)
+static t_dclst	*next_heredoc(t_dclst *node)
 {
 	t_token	*token;
 
@@ -14,7 +26,7 @@ static t_dclst *next_heredoc(t_dclst *node)
 		if (token->type == TOKEN_HEREDOC)
 			return (node);
 		if (!is_text(node))
-			break;
+			break ;
 	}
 	return (NULL);
 }
@@ -40,8 +52,8 @@ static size_t	count_delimiters(t_dclst *node)
 // Returns the next heredoc node, NULL if there is no more heredoc
 static char	**find_delimiters(t_dclst *node)
 {
-	char    **delimiters;
-	size_t    size;
+	char	**delimiters;
+	size_t	size;
 	size_t	i;
 
 	size = count_delimiters(node);
@@ -64,14 +76,14 @@ static char	**find_delimiters(t_dclst *node)
 
 // Function to handle multiple heredoc redirections '<<'
 // return 0 on success, return -1 on failure
-int redir_heredoc(t_dclst *node, char ***envp, t_general *gen)
+int	redir_heredoc(t_dclst *node, char ***envp, t_general *gen)
 {
-	pid_t   pid;
-	int     pipefd[2];
-	char    **delimiters;
+	pid_t	pid;
+	int		pipefd[2];
+	char	**delimiters;
 
 	if (!node || !envp || !gen)
-		return (shell_error_msg("redir_heredoc", "invalid arguments"));
+		return (shell_err_msg("redir_heredoc", "invalid arguments"));
 	if (pipe(pipefd) == -1)
 		return (ft_perror("redir_heredoc", "pipe failed"));
 	pid = fork();
@@ -91,74 +103,3 @@ int redir_heredoc(t_dclst *node, char ***envp, t_general *gen)
 		return (close(pipefd[0]), ft_perror("redir_heredoc", "dup2 failed"));
 	return (close(pipefd[0]), 0);
 }
-
-
-// PREVIOUS VERSION
-// //test
-// // Function to read lines on the child process until delimiter is found
-// // return nothing
-// void    redir_heredoc_read(int pipefd[2], char *delimiter, char **envp, int exit_status)
-// {
-//     int     i;
-//     char    *line;
-// 	char	*temp; // to test
-
-//     line = NULL;
-//     i = 0;
-//     close(pipefd[0]); // Ferme la lecture
-//     while (1)
-//     {
-//         i++;
-//         line = readline(CYAN "> " RESET);
-//         if (!line)
-//         {
-//             ft_putstr_fd("minishell: warning: here-document at line ", 1);
-//             ft_putchar_fd((char)(i + 48), 1);
-//             ft_putstr_fd(" delimited by end-of-file (wanted `", 1);
-//             ft_putstr_fd(delimiter, 1);
-//             ft_putstr_fd("')\n", 1);
-//         }
-//         if (strcmp(line, delimiter) == 0)	// à remplacer par ft_strncmp
-//             break;
-
-// 		temp = replace_each_dollar(line, envp, exit_status);
-//         ft_putstr_fd(temp, pipefd[1]);
-// 		free(temp);
-
-
-//         // ft_putstr_fd(line, pipefd[1]);
-//         ft_putstr_fd("\n", pipefd[1]);
-//         free(line);
-//     }
-//     free(line);
-//     close(pipefd[1]); // ferme l'ecriture
-//     exit(0);
-// }
-
-// // Function to handle the redirection '<<'
-// // return exec_tree on success, return -1 on failure
-// int redir_heredoc(t_dclst *node, char ***envp, t_general *gen)
-// {
-//     t_token *token;
-//     pid_t   pid;
-//     int     pipefd[2];
-
-//     if (!node || !envp || !gen)
-//         return (shell_error_msg("redir_heredoc", "invalid arguments"));
-//     token = (t_token *) node->next->data;
-//     if (!token || token->priority != 6 || !token->start)
-//         return (shell_error_msg("redir_heredoc", "invalid arguments"));
-//     if (pipe(pipefd) == -1)
-//         return (ft_perror("redir_heredoc", "pipe failed"));
-//     pid = fork();
-//     if (pid == -1)
-//         return (ft_perror("redir_heredoc", "fork failed"));
-//     if (pid == 0)
-//         redir_heredoc_read(pipefd, token->start, *envp, gen->exit_status);
-//     waitpid(pid, NULL, 0);
-//     close(pipefd[1]); // ferme l'ecriture
-//     if (dup2(pipefd[0], STDIN_FILENO) == -1)
-//         return (close(pipefd[0]), ft_perror("redir_heredoc", "dup2 failed"));
-//     close(pipefd[0]); // ferme la lecture
-//     return (0);
-// }

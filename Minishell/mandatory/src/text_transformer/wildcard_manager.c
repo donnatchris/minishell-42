@@ -1,13 +1,49 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wildcard_manager.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 06:21:05 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 06:21:07 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
-static void	insert_new_node(t_dclst *new_node, t_dclst *anchor)
+// Function to insert a new node in the doubly circular linked list
+// Returns the new node or NULL if an error occurs
+static t_dclst	*insert_new_node(t_token *token, t_dclst *anchor)
 {
+	t_dclst	*new_node;
+
+	new_node = dclst_create_node(token);
+	if (!new_node)
+	{
+		free(token->start);
+		free(token);
+		shell_err_msg("insert_additionnal_nodes", "dclst_create_node failed");
+		return (NULL);
+	}
 	new_node->next = anchor->next;
 	new_node->prev = anchor;
 	anchor->next->prev = new_node;
 	anchor->next = new_node;
+	return (new_node);
 }
 
+// function to affect the values of the token
+static void	affect_token_values(t_token *token, char *matching_str)
+{
+	token->type = TOKEN_LITTERAL;
+	token->start = ft_strdup(matching_str);
+	token->end = NULL;
+	token->space = 1;
+	token->priority = 6;
+}
+
+// Function to insert additional nodes in the doubly circular linked list
 static void	insert_additional_nodes(t_dclst *node, char **matching_array)
 {
 	t_dclst	*current;
@@ -22,49 +58,17 @@ static void	insert_additional_nodes(t_dclst *node, char **matching_array)
 		token = (t_token *) malloc(sizeof(t_token) + 1);
 		if (!token)
 		{
-			shell_error_msg("insert_additionnal_nodes", "malloc failed");
+			shell_err_msg("insert_additionnal_nodes", "malloc failed");
 			return ;
 		}
-		token->type = TOKEN_LITTERAL;
-		token->start = ft_strdup(matching_array[i]);
-		token->end = NULL;
-		token->space = 1;
-		token->priority = 6;
+		affect_token_values(token, matching_array[i]);
+		insert_new_node(token, current);
 		new_node = dclst_create_node(token);
 		if (!new_node)
-		{
-			free(token->start);
-			free(token);
-			shell_error_msg("insert_additionnal_nodes", "dclst_create_node failed");
 			return ;
-		}
-		insert_new_node(new_node, current);
 		current = current->next;
 		i++;
 	}
-}
-
-t_dclst	*find_cmd(t_dclst *node)
-{
-	t_dclst	*current;
-	t_dclst *cmd;
-
-	current = node;
-	cmd = node;
-	while (!is_tree_branch(current) && !is_eof(current))
-	{
-		if (is_text(current) && !is_redir(current->prev))
-			cmd = current;
-		current = current->prev;
-	}
-	return (cmd);
-}
-
-int	choose_mode(char *arg)
-{
-	if (arg && arg[0] == '.')
-		return (W_HIDDEN);
-	return (NO_HIDDEN);
 }
 
 // Function to manage the wildcards in a dynamicallly allocated array of strings
@@ -74,18 +78,19 @@ int	choose_mode(char *arg)
 // RETURN MUST BE FREED AFTER USE
 char	*manage_wildcards(char *arg, t_dclst *node, t_general *gen)
 {
-	// char	*cmd;
 	char	**file_array;
 	char	**matching_array;
 	char	pwd[PATH_MAX];
+	int		mode;
 
 	(void) gen;
+	if (arg && arg[0] == '.')
+		mode = W_HIDDEN;
+	else
+		mode = NO_HIDDEN;
 	if (((t_token *) node->data)->type != TOKEN_WORD || !ft_strchr(arg, '*'))
 		return (arg);
-	// cmd = ((t_token *) find_cmd(node)->data)->start;
-	// if (!ft_strncmp(cmd, "export", 6) && ft_strlen(cmd) == 6)
-	// 	return (arg);
-	file_array = get_files_in_dir(getcwd(pwd, sizeof(pwd)), choose_mode(arg));
+	file_array = get_files_in_dir(getcwd(pwd, sizeof(pwd)), mode);
 	if (!file_array)
 		return (arg);
 	matching_array = extract_matching_filenames(arg, file_array);

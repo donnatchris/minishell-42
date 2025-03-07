@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc_read.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 04:37:36 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 04:46:42 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 // Function to print error message in heredoc
-static void heredoc_err(int n_line, char *delimiter)
+static void	heredoc_err(int n_line, char *delimiter)
 {
 	ft_putstr_fd("minishell: warning: here-document at line ", 1);
 	ft_putchar_fd((char)(n_line + 48), 1);
@@ -11,51 +23,58 @@ static void heredoc_err(int n_line, char *delimiter)
 }
 
 // Function to end redir_heredoc_read
-static void	end_redir_heredoc_read(char *line, int pipefd[])
+static void	end_redir_heredoc_read(char *line, int fd[])
 {
 	if (line)
 		free(line);
-	close(pipefd[1]);
+	close(fd[1]);
 	exit(0);
 }
 
 // Function to print the line to the fd
-static void	print_heredoc_line(char *line, int fd, char **envp, int exit_status)
+static void	print_heredoc_line(char *line, int fd, char **envp, int ex_stat)
 {
 	char	*temp;
 
-	temp = replace_each_dollar(line, envp, exit_status);
+	temp = replace_each_dollar(line, envp, ex_stat);
 	ft_putstr_fd(temp, fd);
 	free(temp);
 	ft_putstr_fd("\n", fd);
 }
 
-// Function to read lines on the child process until delimiter is found
-void    redir_heredoc_read(int pipefd[2], char **delimiters, char **envp, int exit_status)
+// Function to initialize heredoc read values
+static void	init_heredoc_read_values(char **line, int *n_line, size_t *j)
 {
-	int     n_line;
-	size_t	j;
-	size_t	delimiter_size;
-	char    *line;
+	*line = NULL;
+	*n_line = 0;
+	*j = 0;
+}
 
-	line = NULL;
-	n_line = 0;
-	j = 0;
-	delimiter_size = count_env_size(delimiters);
-	close(pipefd[0]);
+// Function to read lines on the child process until delimiter is found
+void	redir_heredoc_read(int fd[2], char **limiters, char **envp, int ex_stat)
+{
+	int		n_line;
+	size_t	j;
+	size_t	limiter_size;
+	char	*line;
+
+	init_heredoc_read_values(&line, &n_line, &j);
+	limiter_size = count_env_size(limiters);
+	close(fd[0]);
 	while (++n_line)
 	{
 		line = readline(CYAN "> " RESET);
 		if (!line)
-			heredoc_err(n_line, delimiters[j]);
-		if (!ft_strncmp(line, delimiters[j], ft_strlen(delimiters[j])) && ft_strlen(line) == ft_strlen(delimiters[j]))
+			heredoc_err(n_line, limiters[j]);
+		if (!ft_strncmp(line, limiters[j], ft_strlen(limiters[j]))
+			&& ft_strlen(line) == ft_strlen(limiters[j]))
 		{
-			if (++j == delimiter_size)
+			if (++j == limiter_size)
 				break ;
 		}
-		else if (j == delimiter_size - 1)//test
-			print_heredoc_line(line, pipefd[1], envp, exit_status);
+		else if (j == limiter_size - 1)
+			print_heredoc_line(line, fd[1], envp, ex_stat);
 		free(line);
 	}
-	end_redir_heredoc_read(line, pipefd);
+	end_redir_heredoc_read(line, fd);
 }

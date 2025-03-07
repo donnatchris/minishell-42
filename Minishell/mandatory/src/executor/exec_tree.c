@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_tree.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 04:29:56 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 // Function to execute a logical operator
@@ -24,7 +36,7 @@ static int	exec_logical_operator(t_tree *tree, char ***envp, t_general *gen)
 			gen->exit_status = exec_tree(tree->right, envp, gen);
 	}
 	else
-		gen->exit_status = shell_error_msg("exec_tree",
+		gen->exit_status = shell_err_msg("exec_tree",
 				"invalid tree node type");
 	return (gen->exit_status);
 }

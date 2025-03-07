@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   node_token_info3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 04:57:28 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*   Created: 2025/03/07 06:33:19 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 06:33:23 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../include/minishell.h"
 
-// Function to print the actual working directory
-// like the pwd comand in bash
-// Returns 0 on success, -1 on failure
-int	pwd_cmd(char **args, char **envp)
+// Function to check if the token of the node has a space
+// Returns 1 if the token has a space, 0 otherwise
+int	has_space(t_dclst *node)
 {
-	char	current_dir[PATH_MAX];
+	t_token	*tok;
 
-	(void)args;
-	(void)envp;
-	if (!getcwd(current_dir, sizeof(current_dir)))
-		return (shell_err_msg("pwd", "getcwd failed"));
-	else
-		ft_printf("%s\n", current_dir);
+	tok = (t_token *) node->data;
+	if (tok->space)
+		return (1);
 	return (0);
 }

@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parenthesis.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 04:48:16 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 // Function to run a minishell inside the minishell
 // Returns the status of the last command or -1 on error
-int	mini_minishell(t_dclst **head, char **envp, t_general *gen)
+static int	mini_minishell(t_dclst **head, char **envp, t_general *gen)
 {
 	t_tree	*tree;
 	int		status;
@@ -21,9 +33,8 @@ int	run_parenthesis(t_tree *tree, char ***envp, t_general *gen)
 	pid_t	pid;
 	t_dclst	**head;
 
-
 	if (!tree || !envp || !gen)
-		return (shell_error_msg("run_parenthesis", "invalid arguments"), -1);
+		return (shell_err_msg("run_parenthesis", "invalid arguments"), -1);
 	pid = fork();
 	if (pid == -1)
 		return (ft_perror("run_parenthesis", "fork failed"), -1);

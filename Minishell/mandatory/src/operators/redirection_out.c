@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection_out.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 04:50:32 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 // Function to restore the standard output
@@ -10,7 +22,8 @@ void	end_redir_out(int stdout_backup)
 }
 
 // Function to find the redirection flag
-// Returns O_TRUNC if the redirection is '>', O_APPEND if the redirection is '>>'
+// Returns O_TRUNC if the redirection is '>',
+// O_APPEND if the redirection is '>>'
 int	redir_flag(t_dclst *node)
 {
 	if (((t_token *) node->data)->type == TOKEN_REDIR_OUT)
@@ -33,7 +46,7 @@ t_dclst	*next_redir_out(t_dclst *node)
 		if (token->type == TOKEN_REDIR_OUT || token->type == TOKEN_APPEND)
 			return (node);
 		if (!is_text(node))
-			break;
+			break ;
 	}
 	return (NULL);
 }
@@ -48,10 +61,10 @@ int	redir_out_from_node(t_dclst *node, char ***envp, t_general *gen, int flag)
 
 	token = (t_token *) node->next->data;
 	if (!token || token->priority != 6 || !token->start)
-		return (shell_error_msg("redir_from_node", "invalid arguments"));
+		return (shell_err_msg("redir_from_node", "invalid arguments"));
 	filename = manage_dollar(token, *envp, gen->exit_status);
 	if (!filename)
-		return (shell_error_msg("redir_out", "filename is NULL"));
+		return (shell_err_msg("redir_out", "filename is NULL"));
 	fd = open(filename, O_CREAT | O_WRONLY | flag, 0644);
 	if (fd == -1)
 		return (open_error(filename));
@@ -69,7 +82,7 @@ int	redir_out(t_dclst *node, char ***envp, t_general *gen)
 	int		flag;
 
 	if (!node || !envp || !gen)
-		return (shell_error_msg("redir_out", "invalid arguments"));
+		return (shell_err_msg("redir_out", "invalid arguments"));
 	flag = redir_flag(node);
 	if (redir_out_from_node(node, envp, gen, flag) == -1)
 		return (-1);

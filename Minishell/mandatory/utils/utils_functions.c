@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_functions.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 06:27:52 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 06:27:54 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 // Function to reallocate a string array
@@ -42,7 +54,7 @@ char	*cut_name(char *str)
 		i++;
 	name = ft_substr(str, 0, i);
 	if (!name)
-		return (shell_error_msg("cut_name", "ft_sustr failed"), NULL);
+		return (shell_err_msg("cut_name", "ft_sustr failed"), NULL);
 	return (name);
 }
 

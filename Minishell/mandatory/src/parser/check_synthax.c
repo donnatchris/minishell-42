@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_synthax.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 04:00:42 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 // Function to check recursively the syntax inside a parenthesis
@@ -15,7 +27,7 @@ int	check_parenthesis(t_dclst *node, t_general *gen)
 	if (!head)
 	{
 		free(line);
-		return (shell_error_msg("check_parenthesis", "tokenize failed"));
+		return (shell_err_msg("check_parenthesis", "tokenize failed"));
 	}
 	res = check_syntax(head, gen, IN_PARENTHESIS);
 	dclst_clear(head);
@@ -31,7 +43,7 @@ int	append_input(t_general *gen, t_dclst *node)
 	char	*join;
 
 	if (!gen || !gen->input_cpy || !node)
-		return (shell_error_msg("append_input", "invalid arguments"));
+		return (shell_err_msg("append_input", "invalid arguments"));
 	line = readline(CYAN "> " RESET);
 	if (!line || !line[0] || line[0] == '\n')
 		return (print_token_error((t_token *) node->next->data));

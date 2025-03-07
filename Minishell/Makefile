@@ -56,20 +56,25 @@ SRC = \
 	$(SRC_DIR)/operators/heredoc.c \
 	$(SRC_DIR)/parser/binary_tree.c \
 	$(SRC_DIR)/parser/check_synthax.c \
-	$(SRC_DIR)/parser/get_token.c \
+	$(SRC_DIR)/parser/get_token1.c \
+	$(SRC_DIR)/parser/get_token2.c \
 	$(SRC_DIR)/parser/lexer.c \
-	$(SRC_DIR)/parser/tests_to_remove.c \
 	$(SRC_DIR)/signals/signal_handler.c \
 	$(SRC_DIR)/text_transformer/dollar_manager.c \
-	$(SRC_DIR)/text_transformer/find_matching_filenames.c \
+	$(SRC_DIR)/text_transformer/filenames_extraction.c \
+	$(SRC_DIR)/text_transformer/filenames_searcher.c \
 	$(SRC_DIR)/text_transformer/get_files_in_dir.c \
 	$(SRC_DIR)/text_transformer/wildcard_manager.c \
 	$(UTILS_DIR)/delete_functions.c \
 	$(UTILS_DIR)/error_messages.c \
-	$(UTILS_DIR)/initialize_minishell.c \
-	$(UTILS_DIR)/node_token_info.c \
-	$(UTILS_DIR)/utils_functions.c \
 	$(UTILS_DIR)/ft_strtol.c \
+	$(UTILS_DIR)/initialize_minishell.c \
+	$(UTILS_DIR)/node_token_info1.c \
+	$(UTILS_DIR)/node_token_info2.c \
+	$(UTILS_DIR)/node_token_info3.c \
+	$(UTILS_DIR)/token_error_message.c \
+	$(UTILS_DIR)/utils_functions.c \
+	mandatory/test/tests_to_remove.c \
 	$(MAIN)
 
 # Sources files for bonus part

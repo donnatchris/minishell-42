@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_execve.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 04:30:45 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 // Function to find the path of the executable file
@@ -15,11 +27,11 @@ static char	*find_path_in_path(char *cmd, char **path_split)
 	{
 		tmp = ft_strjoin(path_split[i], "/");
 		if (!tmp)
-			return (shell_error_msg(cmd, "ft_strjoin failed"), NULL);
+			return (shell_err_msg(cmd, "ft_strjoin failed"), NULL);
 		exec_path = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!exec_path)
-			return (shell_error_msg(cmd, "ft_strjoin failed"), NULL);
+			return (shell_err_msg(cmd, "ft_strjoin failed"), NULL);
 		if (!access(exec_path, F_OK))
 			return (exec_path);
 		free(exec_path);
@@ -40,10 +52,10 @@ static char	*find_exec_path(char *cmd, char **envp)
 
 	path = ft_getenv("PATH", envp);
 	if (!path)
-		return (shell_error_msg(path, "PATH not set"), NULL);
+		return (shell_err_msg(path, "PATH not set"), NULL);
 	path_split = ft_split(path, ':');
 	if (!path_split)
-		return (shell_error_msg(path, "ft_split failed"), NULL);
+		return (shell_err_msg(path, "ft_split failed"), NULL);
 	exec_path = find_path_in_path(cmd, path_split);
 	delete_str_tab(path_split);
 	return (exec_path);
@@ -85,22 +97,22 @@ int	execve_cmd(char *cmd, char **args, char **envp)
 	int		ret;
 
 	if (!cmd || !args || !envp)
-		return (shell_error_msg("execve_cmd", "invalid arguments"));
+		return (shell_err_msg("execve_cmd", "invalid arguments"));
 	if (ft_strchr(cmd, '/'))
 	{
 		path = ft_strdup(cmd);
 		if (!path)
-			return (shell_error_msg(cmd, "ft_strdup failed"), -1);
+			return (shell_err_msg(cmd, "ft_strdup failed"), -1);
 		if (access(path, F_OK))
-			return (free(path), shell_error_msg(cmd,
-				"no such file or directory"), -1);
+			return (free(path), shell_err_msg(cmd,
+					"no such file or directory"), -1);
 	}
 	else
 		path = find_exec_path(cmd, envp);
 	if (!path)
-		return (shell_error_msg(cmd, "command not found"), -1);
+		return (shell_err_msg(cmd, "command not found"), -1);
 	if (access(path, X_OK))
-		return (free(path), shell_error_msg(cmd, "permission denied"), -1);
+		return (free(path), shell_err_msg(cmd, "permission denied"), -1);
 	ret = execute_execve_cmd(path, args, envp);
 	free(path);
 	return (ret);

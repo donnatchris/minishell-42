@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_files_in_dir.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 05:26:31 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 05:26:33 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 // Function to get the size of a directory
@@ -66,7 +78,7 @@ char	**get_files_in_dir(char *path, int mode)
 	char			**file_array;
 	DIR				*dir;
 	size_t			len;
-	
+
 	len = dirsize(path, mode);
 	file_array = (char **) malloc(sizeof(char *) * (len + 1));
 	if (!file_array)

@@ -1,7 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 04:03:51 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 04:10:44 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
-// Function to affect the priority to each token in the doubly circular linked list
-void	affect_tokens_priority(t_dclst **head)
+// Function to affect the priority to each token
+// in the doubly circular linked list
+static void	affect_tokens_priority(t_dclst **head)
 {
 	t_dclst	*current;
 	t_token	*tok;
@@ -16,16 +29,11 @@ void	affect_tokens_priority(t_dclst **head)
 			tok->priority = 6;
 		else if (tok->type == TOKEN_PIPE)
 			tok->priority = 1;
-		else if (tok->type == TOKEN_AND || tok->type == TOKEN_OR || tok->type == TOKEN_SEMICOLON)
+		else if (tok->type == TOKEN_AND || tok->type == TOKEN_OR
+			||tok->type == TOKEN_SEMICOLON)
 			tok->priority = 0;
 		else if (tok->type == TOKEN_PARENTHESIS)
 			tok->priority = 2;
-		else if (tok->type == TOKEN_HEREDOC)
-			tok->priority = 4;
-		else if (tok->type == TOKEN_REDIR_IN)
-			tok->priority = 4;
-		else if (tok->type == TOKEN_REDIR_OUT || tok->type == TOKEN_APPEND)
-			tok->priority = 4;
 		else
 			tok->priority = 10;
 		current = current->next;
@@ -37,7 +45,7 @@ void	affect_tokens_priority(t_dclst **head)
 // Function to fill the data string in the doubly circular linked list
 // with the corresponding token type
 // Returns the type of the token
-void	null_terminate_token(t_dclst **head)
+static void	null_terminate_token(t_dclst **head)
 {
 	t_dclst	*current;
 	t_token	*token;
@@ -48,7 +56,8 @@ void	null_terminate_token(t_dclst **head)
 	while (1)
 	{
 		token = (t_token *) current->data;
-		if (token->type == TOKEN_PARENTHESIS || token->type == TOKEN_STRING || token->type == TOKEN_LITTERAL)
+		if (token->type == TOKEN_PARENTHESIS || token->type == TOKEN_STRING
+			|| token->type == TOKEN_LITTERAL)
 		{
 			token->start++;
 			token->end--;
@@ -56,8 +65,6 @@ void	null_terminate_token(t_dclst **head)
 		}
 		else if (token->type == TOKEN_WORD)
 			*token->end = '\0';
-		// else
-		// 	token->start = NULL; // was "" before last modification
 		token->end = NULL;
 		current = current->next;
 		if (current == *head)
@@ -65,9 +72,10 @@ void	null_terminate_token(t_dclst **head)
 	}
 }
 
-// Function to split the input into tokens and store them in the doubly circular linked list
+// Function to split the input into tokens
+// and store them in the doubly circular linked list
 // Returns 0 if the function succeeds or -1 if an error occurs
-int	tokenize_to_dclst(char *input, t_dclst **head)
+static int	tokenize_to_dclst(char *input, t_dclst **head)
 {
 	t_token	*token;
 	char	*string;
@@ -97,7 +105,8 @@ int	tokenize_to_dclst(char *input, t_dclst **head)
 }
 
 // Function to create a doubly circular linked list of tokens from the input
-// Returns the head of the doubly circular linked list or NULL if an error occurs
+// Returns the head of the doubly circular linked list
+// or NULL if an error occurs
 t_dclst	**tokenize(char *input)
 {
 	t_dclst	**head;

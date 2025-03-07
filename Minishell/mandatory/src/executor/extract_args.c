@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   extract_args.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/07 04:31:29 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 // Function to add an argument to the current argument
@@ -9,11 +21,11 @@ static char	*concat_arg(char *arg, t_dclst *node, char **envp, t_general *gen)
 
 	next_arg = manage_dollar((t_token *) node->data, envp, gen->exit_status);
 	if (!next_arg)
-		return (shell_error_msg("add_arg", "malloc failed"), NULL);
+		return (shell_err_msg("add_arg", "malloc failed"), NULL);
 	temp = arg;
 	arg = ft_strjoin(arg, next_arg);
 	if (!arg)
-		shell_error_msg("add_arg", "malloc failed");
+		shell_err_msg("add_arg", "malloc failed");
 	free(temp);
 	free(next_arg);
 	return (arg);
@@ -28,7 +40,7 @@ static char	**expand_array(char **args, char *arg, int *i)
 	args[*i] = arg;
 	(*i)++;
 	if (!args)
-		shell_error_msg("expand_array", "malloc failed");
+		shell_err_msg("expand_array", "malloc failed");
 	else
 		args[*i] = NULL;
 	return (args);
@@ -55,12 +67,12 @@ char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 
 	args = ft_realloc_str_array(NULL, 1);
 	if (!args)
-		return (shell_error_msg("extract args", "malloc failed"), NULL);
+		return (shell_err_msg("extract args", "malloc failed"), NULL);
 	i = 0;
 	while (is_text(node))
 	{
 		arg = manage_dollar((t_token *) node->data, envp, gen->exit_status);
-		arg = manage_wildcards(arg, node, gen); // line to remove if not using wildcards
+		arg = manage_wildcards(arg, node, gen);
 		while (!has_space(node) && is_text(node->next))
 		{
 			arg = concat_arg(arg, node->next, envp, gen);
@@ -91,7 +103,7 @@ char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 
 // 	args = ft_realloc_str_array(NULL, 1);
 // 	if (!args)
-// 		return (shell_error_msg("extract args", "malloc failed"), NULL);
+// 		return (shell_err_msg("extract args", "malloc failed"), NULL);
 // 	current_node = node;
 // 	next_node = current_node->next;
 // 	args[0] = NULL;
