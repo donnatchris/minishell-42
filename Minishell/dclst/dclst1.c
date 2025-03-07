@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 08:58:54 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/03 15:03:15 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/07 08:16:18 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,10 +125,12 @@ void	dclst_remove_node(t_dclst **head, t_dclst *node)
 // Function to clear the entire doubly circular linked list
 void	dclst_clear(t_dclst **head)
 {
+	t_dclst	*current;
+	t_dclst	*next;
+
 	if (!head || !*head)
 		return ;
-	t_dclst *current = *head;
-	t_dclst *next;
+	current = *head;
 	while (current)
 	{
 		next = current->next;

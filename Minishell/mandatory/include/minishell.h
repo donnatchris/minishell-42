@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 06:49:00 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/07 10:39:13 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void		end_redir_out(int stdout_backup);
 int			redir_out(t_dclst *node, char ***envp, t_general *gen);
 // heredoc.c
 void		redir_heredoc_read(int pipefd[2],
-				char **delimiters, char **envp, int exit_status);
+				char **delimiters, char **envp, t_general *gen);
 int			redir_heredoc(t_dclst *node, char ***envp, t_general *gen);
 /* ************************************************************************** */
 /*										parser								  */
@@ -122,6 +122,9 @@ t_dclst		**tokenize(char *input);
 // signal_handler.c
 void		init_signals(void);
 void		signal_handler(int signum);
+void		ignore_signals(void);
+void		heredoc_signals(void);
+void		heredoc_signal_handler(int signum);
 /* ************************************************************************** */
 /*									text_transformer						  */
 /* ************************************************************************** */

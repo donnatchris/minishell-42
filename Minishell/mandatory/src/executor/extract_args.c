@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extract_args.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:31:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/07 10:53:40 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 	}
 	return (args);
 }
+
+
 
 // PREVIOUS VERSION
 // char	**extract_args(t_dclst *node, char **envp, t_general *gen)

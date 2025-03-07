@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:21:47 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 06:21:49 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/07 10:11:35 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ int	main(int ac, char **av, char **envp)
 {
 	t_general	*gen;
 
-	init_signals();
 	gen = NULL;
 	gen = init_gen(gen, envp, av, ac);
 	while (g_signals != EOF)
 	{
+		init_signals();
 		g_signals = 0;
 		delete_cmd_line(gen);
 		gen->input = readline(CYAN "MINISHELL > " RESET);

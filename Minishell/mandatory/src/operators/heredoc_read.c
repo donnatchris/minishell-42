@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_read.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:37:36 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 04:46:42 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/07 10:38:16 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	init_heredoc_read_values(char **line, int *n_line, size_t *j)
 }
 
 // Function to read lines on the child process until delimiter is found
-void	redir_heredoc_read(int fd[2], char **limiters, char **envp, int ex_stat)
+void	redir_heredoc_read(int fd[2], char **limiters, char **envp, t_general *gen)
 {
 	int		n_line;
 	size_t	j;
@@ -73,7 +73,7 @@ void	redir_heredoc_read(int fd[2], char **limiters, char **envp, int ex_stat)
 				break ;
 		}
 		else if (j == limiter_size - 1)
-			print_heredoc_line(line, fd[1], envp, ex_stat);
+			print_heredoc_line(line, fd[1], envp, gen->exit_status);
 		free(line);
 	}
 	end_redir_heredoc_read(line, fd);
