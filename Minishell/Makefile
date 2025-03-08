@@ -103,7 +103,7 @@ else
 endif
 
 # Compiler
-CC = gcc
+CC = cc
 
 # Rule to compile the mandatory part
 all: $(NAME)

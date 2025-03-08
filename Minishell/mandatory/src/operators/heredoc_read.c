@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:37:36 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/08 18:09:19 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/08 18:21:12 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,7 @@ void	redir_heredoc_read(int fd[2], char **limiters, char **envp, t_general *gen)
 	{
 		line = readline(CYAN "> " RESET);
 		if (!line)
-		{
-			heredoc_err(n_line, limiters[j]);
-			j++;
-		}
+			heredoc_err(n_line, limiters[j++]);
 		else if (line && limiters[j] && ft_strlen(line) == ft_strlen(limiters[j]) && !ft_strncmp(line, limiters[j], ft_strlen(limiters[j])))
 			j++;
 		else if (j == limiter_size - 1)
