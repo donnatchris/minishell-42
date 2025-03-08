@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handler.c                                   :+:      :+:    :+:   */
+/*   main_signal_handler.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 05:18:15 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 10:50:04 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/08 15:07:25 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,4 @@ void	signal_handler(int signum)
 		rl_redisplay();
 	}
 	return ;
-}
-
-// Function to ignore all the signals
-void	ignore_signals(void)
-{
-	signal(SIGINT, SIG_IGN);
-	signal(EOF, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	heredoc_signals(void)
-{
-	signal(SIGINT, heredoc_signal_handler);
-	signal(EOF, heredoc_signal_handler);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	heredoc_signal_handler(int signum)
-{
-	(void) signum;
 }

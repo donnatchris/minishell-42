@@ -60,7 +60,8 @@ SRC = \
 	$(SRC_DIR)/parser/get_token1.c \
 	$(SRC_DIR)/parser/get_token2.c \
 	$(SRC_DIR)/parser/lexer.c \
-	$(SRC_DIR)/signals/signal_handler.c \
+	$(SRC_DIR)/signals/heredoc_signal_handler.c \
+	$(SRC_DIR)/signals/main_signal_handler.c \
 	$(SRC_DIR)/text_transformer/dollar_manager.c \
 	$(SRC_DIR)/text_transformer/filenames_extraction.c \
 	$(SRC_DIR)/text_transformer/filenames_searcher.c \
@@ -89,7 +90,8 @@ OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 BONUS_OBJ = $(BONUS_SRC:$(BONUS_SRC_DIR)/%.c=$(BONUS_OBJ_DIR)/%.o)
 
 # Compilation options (for Linux and MacOS)
-# oprtions de compilation pour tester la mémoire -fsanitize=undefined -fsanitize=address -fsanitize=thread -g
+# options de compilation mac pour tester la mémoire: -fsanitize=undefined -fsanitize=address -g
+# ou -fsanitize=thread -g pour tester les threads
 ifeq ($(UNAME), Linux)
 	CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR)/headers
 	LDFLAGS = -lreadline -L$(LIBFT_DIR) -lft_inc
