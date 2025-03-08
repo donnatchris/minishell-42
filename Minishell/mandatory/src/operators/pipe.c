@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:32:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/08 08:46:46 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/08 20:08:02 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	writing_proc(int fd[], t_tree *tree, char ***envp, t_general *gen)
 {
 	int	status;
 
+	child_signals();
 	close(fd[0]);
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 	{
@@ -70,11 +71,11 @@ int	pipe_operator(t_tree *tree, char ***envp, t_general *gen)
 			ft_perror("handle_pipe", "fork failed"));
 	if (pid == 0)
 		writing_proc(fd, tree, envp, gen);
-	// ignore_signals();
+	ignore_signals();
 	status = reading_proc(fd, tree, envp, gen);
 	if (waitpid(pid, &child_status, 0) == -1)
 		return (ft_perror("handle_pipe", "waitpid failed"));
-	// init_signals();
+	init_signals();
 	if (WIFSIGNALED(child_status))
 		return (128 + WTERMSIG(child_status));
 	return (status);

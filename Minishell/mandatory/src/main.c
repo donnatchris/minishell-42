@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:21:47 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 10:11:35 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/09 00:42:17 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ int	main(int ac, char **av, char **envp)
 	gen = init_gen(gen, envp, av, ac);
 	while (g_signals != EOF)
 	{
-		init_signals();
 		g_signals = 0;
+		init_signals();
 		delete_cmd_line(gen);
 		gen->input = readline(CYAN "MINISHELL > " RESET);
 		if (!gen->input)
 			break ;
-		if (gen->input)
+		if (gen->input && gen->input[0] != '\n' && gen->input[0] != '\0')
 			add_history(gen->input);
 		if (!gen->input[0] || gen->input[0] == '\n')
 			continue ;
@@ -41,6 +41,7 @@ int	main(int ac, char **av, char **envp)
 		gen->tree = create_tree(*gen->head, (*gen->head)->prev->prev);
 		exec_tree(gen->tree, &gen->envp, gen);
 	}
+	ft_printf("exit\n");
 	delete_general(gen);
 	return (0);
 }

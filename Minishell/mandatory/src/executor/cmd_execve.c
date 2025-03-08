@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:30:45 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/08 08:44:29 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/08 20:02:30 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ static int	execute_execve_cmd(char *path, char **args, char **envp)
 		return (ft_perror(path, "fork failed"), -1);
 	if (pid == 0)
 	{
+		child_signals();
 		if (execve(path, args, envp) == -1)
 		{
 			ft_perror(path, "exec_ve failed");
@@ -107,7 +108,7 @@ int	execve_cmd(char *cmd, char **args, char **envp)
 	{
 		path = ft_strdup(cmd);
 		if (!path)
-			return (shell_err_msg(cmd, "ft_strdup failed"), -1);
+			return (shell_err_msg(cmd, "ft_strdup failed"));
 		if (access(path, F_OK))
 			return (free(path), shell_err_msg(cmd,
 					"no such file or directory"), -1);
@@ -115,9 +116,9 @@ int	execve_cmd(char *cmd, char **args, char **envp)
 	else
 		path = find_exec_path(cmd, envp);
 	if (!path)
-		return (shell_err_msg(cmd, "command not found"), -1);
+		return (shell_err_msg(cmd, "command not found"), 127);
 	if (access(path, X_OK))
-		return (free(path), shell_err_msg(cmd, "permission denied"), -1);
+		return (free(path), shell_err_msg(cmd, "permission denied"), 127);
 	ret = execute_execve_cmd(path, args, envp);
 	free(path);
 	return (ret);
