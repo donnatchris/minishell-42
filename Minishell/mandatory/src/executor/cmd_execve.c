@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_execve.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:30:45 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 10:07:26 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/08 08:44:29 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ static int	execute_execve_cmd(char *path, char **args, char **envp)
 	if (pid == 0)
 	{
 		if (execve(path, args, envp) == -1)
-			return (ft_perror(path, "exec_ve failed"), status);
+		{
+			ft_perror(path, "exec_ve failed");
+			exit (status);
+		}
 	}
 	else
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:32:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 12:46:54 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/08 08:46:46 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 // Returns 0 on success, -1 on error
 int	writing_proc(int fd[], t_tree *tree, char ***envp, t_general *gen)
 {
+	int	status;
+
 	close(fd[0]);
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 	{
@@ -23,7 +25,8 @@ int	writing_proc(int fd[], t_tree *tree, char ***envp, t_general *gen)
 		exit(ft_perror("handle_pipe", "dup2 failed"));
 	}
 	close(fd[1]);
-	exit(exec_tree(tree->left, envp, gen));
+	status = exec_tree(tree->left, envp, gen);
+	exit(status);
 }
 
 // Function to handle the parent process (the reading process)

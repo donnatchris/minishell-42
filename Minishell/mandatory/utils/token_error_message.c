@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:27:25 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 06:27:28 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/08 09:09:03 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	print_token(t_token *token)
 {
 	if (token->type == TOKEN_PARENTHESIS)
-		ft_putstr_fd("`()'", 2);
+		ft_putstr_fd("`)'", 2);
 	else if (token->type == TOKEN_PIPE)
 		ft_putstr_fd("`|'", 2);
 	else if (token->type == TOKEN_AND)

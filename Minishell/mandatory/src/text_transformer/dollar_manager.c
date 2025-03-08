@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 05:19:05 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 05:24:54 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/08 12:21:46 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,25 +90,32 @@ char	*replace_each_dollar(char *str, char **envp, int ex_stat)
 {
 	char	*ptr;
 	char	*res;
+	int		i;
 
 	if (!str || !envp)
 		return (shell_err_msg("replace_each_doll", "invalid arg"), NULL);
-	ptr = ft_strchr(str, '$');
 	res = ft_strdup(str);
 	if (!res)
 		return (shell_err_msg("replace_each_doll", "ft_strdup failed"), NULL);
-	while (ptr)
+	i = 0;
+	while (1)
 	{
-		ptr = ft_strchr(res, '$');
+		ptr = ft_strchr(res + i, '$');
+		if (!ptr)
+			break ;
+		if (*(ptr + 1) == '.')
+		{
+			i++;
+			continue ;
+		}
 		str = res;
-		if (*(ptr + 1) == '?' && *(ptr + 2) == '\0')
+		if (*(ptr + 1) == '?')
 			res = replace_w_ex_stat(str, ptr, envp, ex_stat);
 		else
 			res = replace_a_dollar(str, ptr, envp);
 		free(str);
 		if (!res)
 			return (NULL);
-		ptr = ft_strchr(res, '$');
 	}
 	return (res);
 }

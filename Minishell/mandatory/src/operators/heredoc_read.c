@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_read.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:37:36 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 10:38:16 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/08 14:51:42 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ void	redir_heredoc_read(int fd[2], char **limiters, char **envp, t_general *gen)
 		line = readline(CYAN "> " RESET);
 		if (!line)
 			heredoc_err(n_line, limiters[j]);
-		if (!ft_strncmp(line, limiters[j], ft_strlen(limiters[j]))
-			&& ft_strlen(line) == ft_strlen(limiters[j]))
+		if (line && limiters[j] && ft_strlen(line) == ft_strlen(limiters[j]) && !ft_strncmp(line, limiters[j], ft_strlen(limiters[j])))
 		{
 			if (++j == limiter_size)
 				break ;

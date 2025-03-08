@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:00:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/08 09:07:30 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ int	check_parenthesis(t_dclst *node, t_general *gen)
 	{
 		free(line);
 		return (shell_err_msg("check_parenthesis", "tokenize failed"));
+	}
+	if (is_eof(*head))
+	{
+		dclst_clear(head);
+		free(line);
+		return (print_token_error((t_token *) node->data));
 	}
 	res = check_syntax(head, gen, IN_PARENTHESIS);
 	dclst_clear(head);

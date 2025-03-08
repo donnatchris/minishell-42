@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 12:46:43 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/08 14:49:12 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,18 @@ static char	**find_delimiters(t_dclst *node)
 	size_t	i;
 
 	size = count_delimiters(node);
-	delimiters = (char **) malloc(sizeof(char *) * size + 1);
+	delimiters = (char **) malloc(sizeof(char *) * (size + 1));
 	if (!delimiters)
 		return (ft_perror("find_delimiters", "malloc failed"), NULL);
 	delimiters[0] = ft_strdup(((t_token *) node->next->data)->start);
 	i = 1;
-	while (1)
+	while (i < size)
 	{
-		delimiters[i] = NULL;
 		node = next_heredoc(node);
-		if (!node)
-			break ;
 		delimiters[i] = ft_strdup(((t_token *) node->next->data)->start);
 		i++;
 	}
+	delimiters[i] = NULL;
 	return (delimiters);
 }
 
@@ -92,15 +90,15 @@ int	redir_heredoc(t_dclst *node, char ***envp, t_general *gen)
 	delimiters = find_delimiters(node);
 	if (pid == 0)
 	{
-		// heredoc_signals();
+		heredoc_signals();
 		if (!delimiters)
 			exit(-1);
 		redir_heredoc_read(pipefd, delimiters, *envp, gen);
 	}
-	// ignore_signals();
+	ignore_signals();
 	delete_str_tab(delimiters);
 	waitpid(pid, NULL, 0);
-	// init_signals();
+	init_signals();
 	close(pipefd[1]);
 	if (dup2(pipefd[0], STDIN_FILENO) == -1)
 		return (close(pipefd[0]), ft_perror("redir_heredoc", "dup2 failed"));

@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:27:52 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 06:27:54 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/07 20:56:24 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,24 @@
 // Function to reallocate a string array
 // Returns the new string array
 // RETURN MUST BE FREED AFTER USE
-char	**ft_realloc_str_array(char **tab, size_t new_size)
+char **ft_realloc_str_array(char **tab, size_t new_size)
 {
-	char	**new_tab;
-	size_t	i;
+	char **new_tab;
+	size_t i;
 
-	if (!tab)
-		return ((char **) malloc(sizeof(char *) * new_size));
+	if (new_size == 0)
+		return (delete_str_tab(tab), NULL);
 	new_tab = (char **) malloc(sizeof(char *) * new_size);
 	if (!new_tab)
 		return (NULL);
 	i = 0;
-	while (tab[i] && i < new_size - 1)
+	if (tab)
 	{
-		new_tab[i] = tab[i];
-		i++;
+		while (tab[i] && i < new_size)
+		{
+			new_tab[i] = tab[i];
+			i++;
+		}
 	}
 	while (i < new_size)
 	{
@@ -37,7 +40,7 @@ char	**ft_realloc_str_array(char **tab, size_t new_size)
 		i++;
 	}
 	free(tab);
-	return (new_tab);
+	return new_tab;
 }
 
 // Function to cut the variable name from the string
