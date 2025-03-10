@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_defines.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 07:03:04 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 07:03:06 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/10 13:39:29 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ typedef struct s_general
 	t_dclst	**head;
 	t_tree	*tree;
 	int		exit_status;
+	int		stdin_backup;
+	int		stdout_backup;
 }			t_general;
 
 # define NO_HIDDEN 0

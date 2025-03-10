@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 05:01:44 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 05:01:46 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/10 13:34:30 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

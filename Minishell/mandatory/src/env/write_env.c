@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   write_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:27:53 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/10 14:22:42 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	**ft_realloc_env(char ***envp, char *new_entry)
 // from a key but without a value
 // Returns 0 on success, -1 on failure
 int	create_env_var_void(const char *key, char sep, char ***envp)
-{
+{//test
 	char	*new_entry;
 
 	if (!envp || !key)

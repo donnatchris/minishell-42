@@ -29,6 +29,9 @@ MAIN = $(SRC_DIR)/main.c
 # Main file for bonus part
 BONUS_MAIN = $(BONUS_SRC_DIR)/main.c
 
+# Arguments for valgrind
+VALARGS = --suppressions=./valgrind.sup --leak-check=full --track-origins=yes --show-leak-kinds=all --trace-children=yes --track-fds=yes
+
 # Sources files for mandatory part	$(SRC_DIR)/iso.c
 SRC = \
 	$(DCLST_DIR)/dclst1.c \
@@ -151,6 +154,10 @@ fclean: clean
 
 # Rule to recompile the project
 re: fclean all
+
+# Rule to execute prgm with valgrind
+val: 
+	valgrind $(VALARGS) ./$(NAME)
 
 # Phony rule
 .PHONY: all clean fclean re bonus

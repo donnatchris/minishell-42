@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   delete_functions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 06:23:43 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/10 13:47:54 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,14 @@ void	delete_tree(t_tree *root)
 // Function to reinitialize the command line
 void	delete_cmd_line(t_general *gen)
 {
+
+	
 	if (!gen)
 		return ;
+	if (gen->stdout_backup)
+		close(gen->stdout_backup);
+	if (gen->stdin_backup)
+		close(gen->stdin_backup);
 	if (gen->input)
 		free(gen->input);
 	if (gen->input_cpy)
@@ -65,6 +71,13 @@ void	delete_cmd_line(t_general *gen)
 // Function to free the general structure
 void	delete_general(t_general *gen)
 {
+	rl_clear_history();
+	
+	if (gen->stdout_backup)
+		close(gen->stdout_backup);
+	if (gen->stdin_backup)
+		close(gen->stdin_backup);
+		
 	if (!gen)
 		return ;
 	delete_cmd_line(gen);
