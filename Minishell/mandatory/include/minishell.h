@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/08 18:40:00 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/10 16:34:57 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,7 @@ char		*ft_getenv(const char *var, char **envp);
 int			compare_env_vars(const char *s1, const char *s2);
 // write_env.c
 char		**ft_realloc_env(char ***envp, char *new_entry);
-int			create_env_var_void(const char *key, char sep, char ***envp);
-int			create_env_var(const char *key, char sep,
-				const char *value, char ***envp);
+int	create_env_var(const char *key, char sep, const char *value, char ***envp);
 int			update_env_var(const char *key,
 				char sep, const char *value, char ***envp);
 char		**copy_env(char **envp);
