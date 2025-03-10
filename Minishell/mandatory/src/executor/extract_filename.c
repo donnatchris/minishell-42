@@ -13,7 +13,7 @@ static char	*concat_filenames(char *filename, t_dclst *node, char **envp, t_gene
 	temp = filename;
 	filename = ft_strjoin(filename, next_arg);
 	if (!filename)
-		shell_err_msg("add_arg", "malloc failed");
+		shell_err_msg("add_arg", "ft_strjoin failed");
 	free(temp);
 	free(next_arg);
 	return (filename);

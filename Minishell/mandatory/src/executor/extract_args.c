@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:31:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 13:17:00 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:39:34 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,33 @@ static char	**expand_array(char **args, char *arg, int *i)
 	return (args);
 }
 
-// Function to find the next node that is not a redirection
-// Returns the next node that is not a redirection
-static t_dclst	*find_next_node(t_dclst *node)
+// Function to find the next argument
+// Returns the node found or NULL if there is no more argument
+static t_dclst	*find_next_arg(t_dclst *node)
 {
-	node = node->next;
-	if (is_redir(node))
+	t_dclst	*find;
+	
+	while(!is_tree_branch(node) && !is_eof(node))
 	{
-		node = node->next;
-		while (is_filename(node))
-			node = node->next;
+		if (is_text(node))
+		{
+			if (!is_redir(node->prev))
+			{
+				if (has_space(node->prev))
+					return (node);
+				find = node->prev;
+				while (is_text(find) && !has_space(find))
+					find = find->prev;
+				if (!is_redir(find))
+				{
+					if (is_redir(find->prev))
+						return (node);
+				}
+			}
+		}
+		node = node->next;		
 	}
-	return (node);
+	return (NULL);
 }
 
 // Function to create an array of arguments after a dclst node
@@ -72,11 +87,14 @@ char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 	args = ft_realloc_str_array(NULL, 1);
 	if (!args)
 		return (shell_err_msg("extract args", "malloc failed"), NULL);
+	node = find_next_arg(node);
+	if (!node)
+		return(shell_err_msg("extract args", "invalid arguments"), NULL);
 	i = 0;
-	while (is_text(node))
+	while (node)
 	{
 		arg = manage_dollar((t_token *) node->data, envp, gen->exit_status);
-		while (!has_space(node) && is_text(node->next) && !is_filename(node))
+		while (!has_space(node) && is_text(node->next))
 		{
 			arg = concat_arg(arg, node->next, envp, gen);
 			if (!arg)
@@ -85,9 +103,7 @@ char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 		}
 		arg = manage_wildcards(arg, node, gen);// probleme en vue?
 		args = expand_array(args, arg, &i);
-		node = find_next_node(node);
-		if (!is_text(node) || !args)
-			break ;
+		node = find_next_arg(node->next);
 	}
 	return (args);
 }

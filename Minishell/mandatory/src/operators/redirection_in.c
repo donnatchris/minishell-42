@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:36:16 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 11:30:29 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:48:03 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	redir_in_from_node(t_dclst *node, char ***envp, t_general *gen)
 
 	token = (t_token *) node->next->data;
 	if (!token || token->priority != 6 || !token->start)
-		return (shell_err_msg("redir_in", "invalid arguments 2"));
+		return (shell_err_msg("redir_in", "invalid arguments"));
 	filename = extract_filename(node->next, *envp, gen);
 	if (!filename)
 		return (shell_err_msg("redir_in", "filename is NULL"));
@@ -69,7 +69,7 @@ static int	redir_in_from_node(t_dclst *node, char ***envp, t_general *gen)
 int	redir_in(t_dclst *node, char ***envp, t_general *gen)
 {
 	if (!node || !envp || !gen)
-		return (shell_err_msg("redir_in", "invalid arguments 1"));
+		return (shell_err_msg("redir_in", "invalid arguments"));
 	if (redir_in_from_node(node, envp, gen) == -1)
 		return (-1);
 	while (1)
