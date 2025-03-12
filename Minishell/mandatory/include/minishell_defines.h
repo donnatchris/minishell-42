@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 07:03:04 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/10 13:39:29 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 15:51:38 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ typedef struct s_general
 	char	*pwd;
 	char	*home;
 	char	*input;
+	char	*in_start;
+	char	*in_end;
 	char	*input_cpy;
 	char	**envp;
 	t_dclst	**head;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dclst3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 10:38:36 by christophed       #+#    #+#             */
-/*   Updated: 2025/02/14 17:37:16 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/12 16:26:43 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static void	swap_non_adjacent_nodes(t_dclst *node1, t_dclst *node2)
 // Function to swap 2 nodes in the doubly circular linked list
 int	dclst_swap_nodes(t_dclst **head, t_dclst *node1, t_dclst *node2)
 {
-	if (!head || !*head || !node1 || !node2 || (node1 == node2))
+	if ((!head && !*head) || !node1 || !node2 || (node1 == node2))
 		return (-1);
 	if (*head == node1)
 		*head = node2;

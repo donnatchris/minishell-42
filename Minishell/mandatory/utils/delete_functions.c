@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 10:08:45 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:42:16 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,24 @@ void	delete_tree(t_tree *root)
 	root = NULL;
 }
 
+
+// static void	delete_wildcards(t_general *gen)
+// {
+// 	t_dclst	*current;
+// 	t_token	*tok;
+
+// 	current = *gen->head;
+// 	while (1)
+// 	{
+// 		tok = (t_token *) current->data;
+// 		if (tok->start && (tok->start < gen->in_start || tok->start > gen->in_end))
+// 			free(tok->start);
+// 		current = current->next;
+// 		if (current == *gen->head)
+// 			break;
+// 	}
+// }
+
 // Function to reinitialize the command line
 void	delete_cmd_line(t_general *gen)
 {
@@ -57,7 +75,10 @@ void	delete_cmd_line(t_general *gen)
 	if (gen->input_cpy)
 		free(gen->input_cpy);
 	if (gen->head)
+	{
+		// delete_wildcards(gen);
 		dclst_clear(gen->head);
+	}
 	if (gen->tree)
 		delete_tree(gen->tree);
 	gen->input = NULL;
@@ -72,10 +93,6 @@ void	delete_general(t_general *gen)
 	rl_clear_history();
 	if (!gen)
 		return ;
-	// if (gen->stdout_backup)
-	// 	close(gen->stdout_backup);
-	// if (gen->stdin_backup)
-	// 	close(gen->stdin_backup);
 	if (gen->envp)
 		delete_str_tab(gen->envp);
 	if (gen->pwd)

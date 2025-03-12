@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:21:05 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 06:21:07 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/12 16:52:02 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ char	*manage_wildcards(char *arg, t_dclst *node, t_general *gen)
 {
 	char	**file_array;
 	char	**matching_array;
+	char	*ret;
 	char	pwd[PATH_MAX];
 	int		mode;
 
@@ -98,5 +99,7 @@ char	*manage_wildcards(char *arg, t_dclst *node, t_general *gen)
 		return (delete_str_tab(file_array), arg);
 	delete_str_tab(file_array);
 	insert_additional_nodes(node, matching_array);
-	return (free(arg), matching_array[0]);
+	ret = ft_strdup(matching_array[0]);
+	delete_str_tab(matching_array);	//test
+	return (free(arg), ret);
 }

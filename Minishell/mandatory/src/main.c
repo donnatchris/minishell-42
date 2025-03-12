@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:21:47 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 15:02:09 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:02:43 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ int	main(int ac, char **av, char **envp)
 		gen->input = readline(CYAN "MINISHELL > " RESET);
 		if (!gen->input)
 			break ;
+
+		gen->in_start = gen->input;
+		gen->in_end = gen->input + ft_strlen(gen->input);
+
+			
 		if (gen->input && gen->input[0] != '\n' && gen->input[0] != '\0')
 			add_history(gen->input);
 		if (!gen->input[0] || gen->input[0] == '\n')

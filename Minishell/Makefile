@@ -96,7 +96,7 @@ BONUS_OBJ = $(BONUS_SRC:$(BONUS_SRC_DIR)/%.c=$(BONUS_OBJ_DIR)/%.o)
 # options de compilation mac pour tester la mémoire: -fsanitize=undefined -fsanitize=address -g
 # ou -fsanitize=thread -g pour tester les threads
 ifeq ($(UNAME), Linux)
-	CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR)/headers
+	CFLAGS = -g -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR)/headers
 	LDFLAGS = -lreadline -L$(LIBFT_DIR) -lft_inc
 else ifeq ($(UNAME), Darwin)
 	CFLAGS = -fsanitize=undefined -fsanitize=address -g -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR)/headers -I/opt/homebrew/opt/readline/include
