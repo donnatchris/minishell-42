@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:30:45 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 08:33:02 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 12:11:50 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static int	execute_execve_cmd(char *path, char **args, char **envp, t_general *g
 	pid_t	pid;
 	int		status;
 
+	(void)gen;
 	status = -1;
 	pid = fork();
 	if (pid == -1)

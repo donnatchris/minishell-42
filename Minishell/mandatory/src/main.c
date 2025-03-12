@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:21:47 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/11 14:40:55 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 10:23:40 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	main(int ac, char **av, char **envp)
 		if (check_syntax(gen->head, gen, NO_PARENTHESIS) == -1)
 			continue ;
 		gen->tree = create_tree(*gen->head, (*gen->head)->prev->prev);
-		exec_tree(gen->tree, &gen->envp, gen);
+		exec_tree(gen->tree, gen);
 	}
 	ft_printf("exit\n");
 	delete_general(gen);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/08 14:49:12 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/12 10:38:28 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,13 @@ static char	**find_delimiters(t_dclst *node)
 
 // Function to handle multiple heredoc redirections '<<'
 // return 0 on success, return -1 on failure
-int	redir_heredoc(t_dclst *node, char ***envp, t_general *gen)
+int	redir_heredoc(t_dclst *node, t_general *gen)
 {
 	pid_t	pid;
 	int		pipefd[2];
 	char	**delimiters;
 
-	if (!node || !envp || !gen)
+	if (!node || !gen)
 		return (shell_err_msg("redir_heredoc", "invalid arguments"));
 	if (pipe(pipefd) == -1)
 		return (ft_perror("redir_heredoc", "pipe failed"));
@@ -93,7 +93,7 @@ int	redir_heredoc(t_dclst *node, char ***envp, t_general *gen)
 		heredoc_signals();
 		if (!delimiters)
 			exit(-1);
-		redir_heredoc_read(pipefd, delimiters, *envp, gen);
+		redir_heredoc_read(pipefd, delimiters, gen);
 	}
 	ignore_signals();
 	delete_str_tab(delimiters);

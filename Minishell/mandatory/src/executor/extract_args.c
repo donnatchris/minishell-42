@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:31:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/10 11:39:34 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 10:26:04 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 // Function to add an argument to the current argument
 // Returns the new argument or NULL if it fails
-static char	*concat_arg(char *arg, t_dclst *node, char **envp, t_general *gen)
+static char	*concat_arg(char *arg, t_dclst *node, t_general *gen)
 {
 	char	*next_arg;
 	char	*temp;
 
-	next_arg = manage_dollar((t_token *) node->data, envp, gen->exit_status);
+	next_arg = manage_dollar((t_token *) node->data, gen->envp, gen->exit_status);
 	if (!next_arg)
 		return (shell_err_msg("add_arg", "malloc failed"), NULL);
 	temp = arg;
@@ -78,7 +78,7 @@ static t_dclst	*find_next_arg(t_dclst *node)
 // Function to create an array of arguments after a dclst node
 // Returns the array of arguments
 // RETURN MUST BE FREED AFTER USE
-char	**extract_args(t_dclst *node, char **envp, t_general *gen)
+char	**extract_args(t_dclst *node, t_general *gen)
 {
 	char	*arg;
 	char	**args;
@@ -93,10 +93,10 @@ char	**extract_args(t_dclst *node, char **envp, t_general *gen)
 	i = 0;
 	while (node)
 	{
-		arg = manage_dollar((t_token *) node->data, envp, gen->exit_status);
+		arg = manage_dollar((t_token *) node->data, gen->envp, gen->exit_status);
 		while (!has_space(node) && is_text(node->next))
 		{
-			arg = concat_arg(arg, node->next, envp, gen);
+			arg = concat_arg(arg, node->next, gen);
 			if (!arg)
 				return (NULL);
 			node = node->next;

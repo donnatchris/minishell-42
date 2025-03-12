@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:29:39 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 08:30:29 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 10:33:23 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,23 +68,23 @@ static int	exec_function(char **args, char ***envp, t_general *gen)
 // Function to execute a command taking a node as the command
 // and the followin nodes as arguments
 // Returns the exit status of the command
-int	exec_cmd(t_dclst *node, char ***envp, t_general *gen)
+int	exec_cmd(t_dclst *node, t_general *gen)
 {
 	char	**args;
 	int		status;
 
-	if (!node || !envp || !gen)
+	if (!node || !gen)
 		return (0);
 	status = 0;
-	args = extract_args(node, *envp, gen);
+	args = extract_args(node, gen);
 	if (!args)
 		return (shell_err_msg("exec_node", "extract_args failed"), -1);
 	if (!ft_strncmp(args[0], "exit", 4) && ft_strlen(args[0]) == 4)
-		exit_cmd(args, *envp, gen);
+		exit_cmd(args, gen->envp, gen);
 	else if (!ft_strncmp(args[0], "cd", 2) && ft_strlen(args[0]) == 2)
-		status = cd_cmd(args, envp, gen);
+		status = cd_cmd(args, &gen->envp, gen);
 	else
-		status = exec_function(args, envp, gen);
+		status = exec_function(args, &gen->envp, gen);
 	delete_str_tab(args);
 	return (status);
 }

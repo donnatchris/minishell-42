@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:29:06 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 08:22:59 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 12:04:59 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static t_dclst	*get_next_cmd(t_dclst *node)
 // Function to execute a leaf node
 // (a leaf node is a node that contains a command)
 // Returns the status of the command
-int	exec_leaf(t_dclst *node, char ***envp, t_general *gen)
+int	exec_leaf(t_dclst *node, t_general *gen)
 {
 	t_dclst	*current;
 	int		status;
@@ -97,22 +97,22 @@ int	exec_leaf(t_dclst *node, char ***envp, t_general *gen)
 	current = get_next_heredoc(node);
 	if (current)
 	{
-		status = redir_heredoc(current, envp, gen);
+		status = redir_heredoc(current, gen);
 		if (status)
 			return (status);
 	}
 	current = get_next_redir_in(node);
 	if (current)
 	{
-		status = redir_in(current, envp, gen);
+		status = redir_in(current, gen);
 		if (status)
 			return (status);
 	}
 	current = get_next_redir_out(node);
 	if (current)
-		status = redir_out(current, envp, gen);
+		status = redir_out(current, gen);
 	current = get_next_cmd(node);
-	status = exec_cmd(current, envp, gen);
+	status = exec_cmd(current, gen);
 	end_redir_in(gen->stdin_backup);
 	end_redir_out(gen->stdout_backup);
 	return (status);

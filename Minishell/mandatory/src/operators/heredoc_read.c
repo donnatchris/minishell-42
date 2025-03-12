@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:37:36 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 09:06:50 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 10:27:41 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	init_heredoc_read_values(char **line, int *n_line, size_t *j)
 }
 
 // Function to read lines on the child process until delimiter is found
-void	redir_heredoc_read(int fd[2], char **limiters, char **envp, t_general *gen)
+void	redir_heredoc_read(int fd[2], char **limiters, t_general *gen)
 {
 	int		n_line;
 	size_t	j;
@@ -71,7 +71,7 @@ void	redir_heredoc_read(int fd[2], char **limiters, char **envp, t_general *gen)
 		else if (line && limiters[j] && ft_strlen(line) == ft_strlen(limiters[j]) && !ft_strncmp(line, limiters[j], ft_strlen(limiters[j])))
 			j++;
 		else if (j == limiter_size - 1)
-			print_heredoc_line(line, fd[1], envp, gen->exit_status);
+			print_heredoc_line(line, fd[1], gen->envp, gen->exit_status);
 		if (line)
 			free(line);
 		if (j == limiter_size)

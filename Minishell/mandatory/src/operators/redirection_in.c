@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:36:16 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 08:13:03 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 10:38:07 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static t_dclst	*next_redir_in(t_dclst *node)
 
 // Function to handle a redirection_in '<' from a node
 // Returns 0 on success, -1 on error
-static int	redir_in_from_node(t_dclst *node, char ***envp, t_general *gen)
+static int	redir_in_from_node(t_dclst *node, t_general *gen)
 {
 	t_token	*token;
 	char	*filename;
@@ -52,7 +52,7 @@ static int	redir_in_from_node(t_dclst *node, char ***envp, t_general *gen)
 	token = (t_token *) node->next->data;
 	if (!token || token->priority != 6 || !token->start)
 		return (shell_err_msg("redir_in", "invalid arguments"));
-	filename = extract_filename(node->next, *envp, gen);
+	filename = extract_filename(node->next, gen);
 	if (!filename)
 		return (shell_err_msg("redir_in", "filename is NULL"));
 	fd = open(filename, O_RDONLY);
@@ -67,18 +67,18 @@ static int	redir_in_from_node(t_dclst *node, char ***envp, t_general *gen)
 
 // Function to handle multiple redirection_in '<'
 // Returns 0 on success, -1 on error
-int	redir_in(t_dclst *node, char ***envp, t_general *gen)
+int	redir_in(t_dclst *node, t_general *gen)
 {
-	if (!node || !envp || !gen)
+	if (!node || !gen)
 		return (shell_err_msg("redir_in", "invalid arguments"));
-	if (redir_in_from_node(node, envp, gen) == -1)
+	if (redir_in_from_node(node, gen) == -1)
 		return (-1);
 	while (1)
 	{
 		node = next_redir_in(node);
 		if (!node)
 			break ;
-		if (redir_in_from_node(node, envp, gen) == -1)
+		if (redir_in_from_node(node, gen) == -1)
 			return (-1);
 	}
 	return (0);

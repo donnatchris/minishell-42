@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 08:32:01 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 10:36:46 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,35 +71,34 @@ char		**copy_env(char **envp);
 // cmd_execve.c
 int			execve_cmd(char *cmd, char **args, char **envp, t_general *gen);
 // exec_cmd.c
-int			exec_cmd(t_dclst *node, char ***envp, t_general *gen);
+int			exec_cmd(t_dclst *node, t_general *gen);
 // exec_leaf.c
-int			exec_leaf(t_dclst *node, char ***envp, t_general *gen);
+int			exec_leaf(t_dclst *node, t_general *gen);
 // exec_tree.c
-int			exec_tree(t_tree *tree, char ***envp, t_general *gen);
+int			exec_tree(t_tree *tree, t_general *gen);
 // extract_arguments.c
-char		**extract_args(t_dclst *node, char **envp, t_general *gen);
+char		**extract_args(t_dclst *node, t_general *gen);
 // extract_filename.c
-char		*extract_filename(t_dclst *node, char **envp, t_general *gen);
+char		*extract_filename(t_dclst *node, t_general *gen);
 
 /* ************************************************************************** */
 /*										operators							  */
 /* ************************************************************************** */
 // parenthesis.c
-int			run_parenthesis(t_tree *tree, char ***envp, t_general *gen);
+int			run_parenthesis(t_tree *tree, t_general *gen);
 // pipe.c
-int			pipe_operator(t_tree *tree, char ***envp, t_general *gen);
-int			writing_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
-int			reading_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
+int			pipe_operator(t_tree *tree, t_general *gen);
+int			writing_proc(int fd[], t_tree *tree, t_general *gen);
+int			reading_proc(int fd[], t_tree *tree, t_general *gen);
 // redirection_in.c
 void		end_redir_in(int stdin_backup);
-int			redir_in(t_dclst *node, char ***envp, t_general *gen);
+int			redir_in(t_dclst *node, t_general *gen);
 // redirection_out.c
 void		end_redir_out(int stdout_backup);
-int			redir_out(t_dclst *node, char ***envp, t_general *gen);
+int			redir_out(t_dclst *node, t_general *gen);
 // heredoc.c
-void		redir_heredoc_read(int pipefd[2],
-				char **delimiters, char **envp, t_general *gen);
-int			redir_heredoc(t_dclst *node, char ***envp, t_general *gen);
+void		redir_heredoc_read(int pipefd[2], char **delimiters, t_general *gen);
+int			redir_heredoc(t_dclst *node, t_general *gen);
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */
