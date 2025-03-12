@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/11 14:38:48 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 09:05:13 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ void	delete_general(t_general *gen)
 	rl_clear_history();
 	if (!gen)
 		return ;
-	if (gen->stdout_backup)
-		close(gen->stdout_backup);
-	if (gen->stdin_backup)
-		close(gen->stdin_backup);
+	// if (gen->stdout_backup)
+	// 	close(gen->stdout_backup);
+	// if (gen->stdin_backup)
+	// 	close(gen->stdin_backup);
 	if (gen->envp)
 		delete_str_tab(gen->envp);
 	if (gen->pwd)

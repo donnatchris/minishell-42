@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_read.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:37:36 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/08 18:21:12 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/12 09:06:50 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,13 @@ static void	heredoc_err(int n_line, char *delimiter)
 }
 
 // Function to end redir_heredoc_read
-static void	end_redir_heredoc_read(char *line, int fd[])
+static void	end_redir_heredoc_read(int fd[], char ** limiters, t_general *gen)
 {
-	if (line)
-		free(line);
+	delete_str_tab(limiters);
 	close(fd[1]);
+	close(gen->stdin_backup);
+	close(gen->stdout_backup);
+	delete_general(gen);
 	exit(0);
 }
 
@@ -75,5 +77,5 @@ void	redir_heredoc_read(int fd[2], char **limiters, char **envp, t_general *gen)
 		if (j == limiter_size)
 			break ;
 	}
-	end_redir_heredoc_read(line, fd);
+	end_redir_heredoc_read(fd, limiters, gen);
 }
