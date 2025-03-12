@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:30:45 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/11 14:59:08 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 08:33:02 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static char	*find_exec_path(char *cmd, char **envp)
 
 // Function to execute a command using execve
 // Returns: 0 on success, -1 on error.
-static int	execute_execve_cmd(char *path, char **args, char **envp)
+static int	execute_execve_cmd(char *path, char **args, char **envp, t_general *gen)
 {
 	pid_t	pid;
 	int		status;
@@ -75,11 +75,12 @@ static int	execute_execve_cmd(char *path, char **args, char **envp)
 	if (pid == 0)
 	{
 		child_signals();
+		close(gen->stdin_backup);
+		close(gen->stdout_backup);
 		if (execve(path, args, envp) == -1)
 			ft_perror(path, "exec_ve failed");
 		free(path);
 		exit (status);
-
 	}
 	else
 	{
@@ -97,7 +98,7 @@ static int	execute_execve_cmd(char *path, char **args, char **envp)
 
 // Function to execute a non-built-in command using execve
 // Returns: 0 on success, -1 on error.
-int	execve_cmd(char *cmd, char **args, char **envp)
+int	execve_cmd(char *cmd, char **args, char **envp, t_general *gen)
 {
 	char	*path;
 	int		ret;
@@ -119,7 +120,7 @@ int	execve_cmd(char *cmd, char **args, char **envp)
 		return (shell_err_msg(cmd, "command not found"), 127);
 	if (access(path, X_OK))
 		return (free(path), shell_err_msg(cmd, "permission denied"), 127);
-	ret = execute_execve_cmd(path, args, envp);
+	ret = execute_execve_cmd(path, args, envp, gen);
 	free(path);
 	return (ret);
 }

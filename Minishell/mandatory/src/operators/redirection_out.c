@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:50:32 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 11:28:38 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 08:13:17 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // Returns status on success, -1 on error
 void	end_redir_out(int stdout_backup)
 {
+	close(STDOUT_FILENO);
 	if (dup2(stdout_backup, STDOUT_FILENO) == -1)
 		ft_perror("end_redir_out", "dup2 failed");
 	close(stdout_backup);

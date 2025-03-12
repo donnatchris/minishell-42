@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:29:39 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/12 08:30:29 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	(*hard_builtin(char *cmd))(char **args, char ***envp)
 
 // Function to execute a command (other than exit or cd)
 // Returns the exit status of the command
-static int	exec_function(char **args, char ***envp)
+static int	exec_function(char **args, char ***envp, t_general *gen)
 {
 	int	status;
 	int	(*hard_built_func)(char **, char ***);
@@ -61,7 +61,7 @@ static int	exec_function(char **args, char ***envp)
 	else if (soft_built_func)
 		status = soft_built_func(args, *envp);
 	else
-		status = execve_cmd(args[0], args, *envp);
+		status = execve_cmd(args[0], args, *envp, gen);
 	return (status);
 }
 
@@ -84,7 +84,7 @@ int	exec_cmd(t_dclst *node, char ***envp, t_general *gen)
 	else if (!ft_strncmp(args[0], "cd", 2) && ft_strlen(args[0]) == 2)
 		status = cd_cmd(args, envp, gen);
 	else
-		status = exec_function(args, envp);
+		status = exec_function(args, envp, gen);
 	delete_str_tab(args);
 	return (status);
 }

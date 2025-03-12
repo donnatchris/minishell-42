@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/10 16:34:57 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 08:32:01 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char		**copy_env(char **envp);
 /*										executor							  */
 /* ************************************************************************** */
 // cmd_execve.c
-int			execve_cmd(char *cmd, char **args, char **envp);
+int			execve_cmd(char *cmd, char **args, char **envp, t_general *gen);
 // exec_cmd.c
 int			exec_cmd(t_dclst *node, char ***envp, t_general *gen);
 // exec_leaf.c

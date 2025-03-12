@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:32:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/08 20:08:02 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/12 08:40:33 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

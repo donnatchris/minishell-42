@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:29:06 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/10 13:53:59 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 08:22:59 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,16 +84,16 @@ static t_dclst	*get_next_cmd(t_dclst *node)
 // (a leaf node is a node that contains a command)
 // Returns the status of the command
 int	exec_leaf(t_dclst *node, char ***envp, t_general *gen)
-{//test
+{
 	t_dclst	*current;
 	int		status;
 
-	// gen->stdin_backup = dup(STDIN_FILENO);
-	// if (gen->stdin_backup == -1)
-	// 	return (ft_perror("exec_leaf", "dup failed"));
-	// gen->stdout_backup = dup(STDOUT_FILENO);
-	// if (gen->stdout_backup == -1)
-		// return (close(gen->stdin_backup), ft_perror("exec_leaf", "dup failed"));
+	gen->stdin_backup = dup(STDIN_FILENO);
+	if (gen->stdin_backup == -1)
+		return (ft_perror("exec_leaf", "dup failed"));
+	gen->stdout_backup = dup(STDOUT_FILENO);
+	if (gen->stdout_backup == -1)
+		return (close(gen->stdin_backup), ft_perror("exec_leaf", "dup failed"));
 	current = get_next_heredoc(node);
 	if (current)
 	{
@@ -113,7 +113,7 @@ int	exec_leaf(t_dclst *node, char ***envp, t_general *gen)
 		status = redir_out(current, envp, gen);
 	current = get_next_cmd(node);
 	status = exec_cmd(current, envp, gen);
-	// end_redir_in(gen->stdin_backup);
-	// end_redir_out(gen->stdout_backup);
+	end_redir_in(gen->stdin_backup);
+	end_redir_out(gen->stdout_backup);
 	return (status);
 }
