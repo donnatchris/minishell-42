@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extract_args.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:31:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 16:53:00 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/12 22:56:01 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static t_dclst	*find_next_arg(t_dclst *node)
 		{
 			if (!is_redir(node->prev))
 			{
-				if (has_space(node->prev))
+				if (has_space(node->prev) || !is_text(node->prev)) // modif recente (ajout !is_text)
 					return (node);
 				find = node->prev;
 				while (is_text(find) && !has_space(find))
@@ -83,7 +83,6 @@ char	**extract_args(t_dclst *node, t_general *gen)
 	char	*arg;
 	char	**args;
 	int		i;
-
 	args = ft_realloc_str_array(NULL, 1);
 	if (!args)
 		return (shell_err_msg("extract args", "malloc failed"), NULL);
@@ -99,7 +98,10 @@ char	**extract_args(t_dclst *node, t_general *gen)
 			arg = concat_arg(arg, node->next, gen);
 			if (!arg)
 				return (NULL);
-			node = node->next;
+			if (!has_space(node->next) && is_text(node->next->next))
+				node = node->next;
+			else
+				break ;
 		}
 		arg = manage_wildcards(arg, node, gen);// probleme en vue?
 		args = expand_array(args, arg, &i);
