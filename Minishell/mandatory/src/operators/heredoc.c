@@ -6,107 +6,11 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 15:35:25 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:39:59 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// // Function to find the next heredoc
-// // Returns the node found or NULL if nothing is found
-// static t_dclst	*next_heredoc(t_dclst *node)
-// {
-// 	t_token	*token;
-
-// 	token = (t_token *) node->data;
-// 	while (1)
-// 	{
-// 		node = node->next;
-// 		token = (t_token *) node->data;
-// 		if (token->type == TOKEN_HEREDOC)
-// 			return (node);
-// 		if (!is_text(node))
-// 			break ;
-// 	}
-// 	return (NULL);
-// }
-
-// // Function to count the number of delimiters
-// // Returns the number found
-// static size_t	count_delimiters(t_dclst *node)
-// {
-// 	size_t	size;
-
-// 	size = 1;
-// 	while (1)
-// 	{
-// 		node = next_heredoc(node);
-// 		if (!node)
-// 			break ;
-// 		size++;
-// 	}
-// 	return (size);
-// }
-
-// // Function to find the delimiters and create an array
-// // Returns the next heredoc node, NULL if there is no more heredoc
-// static char	**find_delimiters(t_dclst *node)
-// {
-// 	char	**delimiters;
-// 	size_t	size;
-// 	size_t	i;
-
-// 	size = count_delimiters(node);
-// 	delimiters = (char **) malloc(sizeof(char *) * (size + 1));
-// 	if (!delimiters)
-// 		return (ft_perror("find_delimiters", "malloc failed"), NULL);
-// 	delimiters[0] = ft_strdup(((t_token *) node->next->data)->start);
-// 	i = 1;
-// 	while (i < size)
-// 	{
-// 		node = next_heredoc(node);
-// 		delimiters[i] = ft_strdup(((t_token *) node->next->data)->start);
-// 		i++;
-// 	}
-// 	delimiters[i] = NULL;
-// 	return (delimiters);
-// }
-
-// // Function to handle multiple heredoc redirections '<<'
-// // return 0 on success, return -1 on failure
-// int	redir_heredoc(t_dclst *node, t_general *gen)
-// {
-// 	pid_t	pid;
-// 	int		pipefd[2];
-// 	char	**delimiters;
-
-// 	if (!node || !gen)
-// 		return (shell_err_msg("redir_heredoc", "invalid arguments"));
-// 	if (pipe(pipefd) == -1)
-// 		return (ft_perror("redir_heredoc", "pipe failed"));
-// 	pid = fork();
-// 	if (pid == -1)
-// 		return (ft_perror("redir_heredoc", "fork failed"));
-// 	delimiters = find_delimiters(node);
-// 	if (pid == 0)
-// 	{
-// 		heredoc_signals();
-// 		if (!delimiters)
-// 			exit(-1);
-// 		redir_heredoc_read(pipefd, delimiters, gen);
-// 	}
-// 	ignore_signals();
-// 	delete_str_tab(delimiters);
-// 	waitpid(pid, NULL, 0);
-// 	init_signals();
-// 	close(pipefd[1]);
-// 	if (dup2(pipefd[0], STDIN_FILENO) == -1)
-// 		return (close(pipefd[0]), ft_perror("redir_heredoc", "dup2 failed"));
-// 	return (close(pipefd[0]), 0);
-// }
-
-
-
 
 // Function to redirect input from TEMP_FILE
 // Returns 0 or -1 if it fails
@@ -123,7 +27,7 @@ int redir_heredoc()
 	return (0);
 }
 
-// Function to print the line to the fd
+// Function to print the line written in heredoc to the fd
 static void	print_heredoc_line(int fd, char *line, t_general *gen)
 {
 	char	*temp;
@@ -136,13 +40,27 @@ static void	print_heredoc_line(int fd, char *line, t_general *gen)
 
 // Function to find the delimiters and create an array
 // Returns the next heredoc node, NULL if there is no more heredoc
+// RETURNS MUST BE FREED AFTER USE
 static char	*find_delimiter(t_dclst *node, t_general *gen)
 {
+	t_dclst	*current;
 	t_token *tok;
-	
+	char	*delimiter;
+	char	*temp;
+
 	(void)gen;
-	tok = (t_token *) node->next->data;
-	return (tok->start);
+	current = node->next;
+	tok = (t_token *) current->data;
+	delimiter = ft_strdup(tok->start);
+	while (!tok->space && is_text(current->next))
+	{
+		temp = delimiter;
+		delimiter = ft_strjoin(temp, ((t_token *) current->next->data)->start);
+		free(temp);
+		current = current->next;
+		tok = (t_token *) current->data;
+	}
+	return (delimiter);
 }
 
 // Fonction pour créer un fichier temporaire contenant l'entrée du heredoc
@@ -172,7 +90,7 @@ static int create_heredoc_file(char *delimiter, t_general *gen)
 		print_heredoc_line(fd, line, gen);
 		free(line);
 	}
-	return (close(fd), 0);
+	return (free(delimiter), close(fd), 0);
 }
 
 // Function to create the TEMP_FILE for heredoc
