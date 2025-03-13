@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 07:03:04 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 15:51:38 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 08:49:24 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // defines
 # define SYMBOLS "<>|&;()'\""
 # define WHITESPACES " \t\n\r\v\f"
+# define TEMP_FILE "/tmp/minishell_heredoc.tmp"
 
 // Color definitions
 # define RESET "\033[0m"

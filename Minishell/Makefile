@@ -56,7 +56,6 @@ SRC = \
 	$(SRC_DIR)/operators/pipe.c \
 	$(SRC_DIR)/operators/redirection_in.c \
 	$(SRC_DIR)/operators/redirection_out.c \
-	$(SRC_DIR)/operators/heredoc_read.c \
 	$(SRC_DIR)/operators/heredoc.c \
 	$(SRC_DIR)/parser/binary_tree.c \
 	$(SRC_DIR)/parser/check_synthax.c \

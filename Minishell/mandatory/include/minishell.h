@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 10:36:46 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 09:48:40 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ int			redir_in(t_dclst *node, t_general *gen);
 void		end_redir_out(int stdout_backup);
 int			redir_out(t_dclst *node, t_general *gen);
 // heredoc.c
-void		redir_heredoc_read(int pipefd[2], char **delimiters, t_general *gen);
 int			redir_heredoc(t_dclst *node, t_general *gen);
+void		cleanup_heredoc();
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */
