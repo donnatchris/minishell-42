@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 07:03:04 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 08:49:24 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 11:22:45 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ typedef struct s_general
 	int		exit_status;
 	int		stdin_backup;
 	int		stdout_backup;
+	int		in_pipe;
 }			t_general;
 
 # define NO_HIDDEN 0

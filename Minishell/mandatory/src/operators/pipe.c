@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:32:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 10:18:08 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 11:32:21 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ int	reading_proc(int fd[], t_tree *tree, t_general *gen)
 	exit(status);
 }
 
+
+
+
 // Function to handle the pipe operator
 // Returns exec_tree(tree->right) on success, -1 on error
 int	pipe_operator(t_tree *tree, t_general *gen)
@@ -68,29 +71,39 @@ int	pipe_operator(t_tree *tree, t_general *gen)
 
 	if (!tree || !gen || !tree->left || !tree->right)
 		return (shell_err_msg("handle_pipe", "invalid arguments"));
+	gen->in_pipe = 1;
+	
 	if (pipe(fd) == -1)
 		return (ft_perror("handle_pipe", "pipe failed"));
+	
+	t_dclst *current = NULL;
+	current = get_next_heredoc(tree->left->list_node);
+	if (current)
+		redir_heredoc(current, gen);
+	
 	left_pid = fork();
 	if (left_pid == -1)
 		return (close(fd[0]), close(fd[1]),
 			ft_perror("handle_pipe", "fork failed"));
 	if (left_pid == 0)
 		writing_proc(fd, tree, gen);
-		
+	
+	gen->in_pipe = 0;
 	right_pid = fork();
 	if (right_pid == -1)
 		return (close(fd[0]), close(fd[1]),
 			ft_perror("handle_pipe", "fork failed"));
 	if (right_pid == 0)
 		reading_proc(fd, tree, gen);
-	close(fd[0]);
 	close(fd[1]);
-	ignore_signals();
+	close(fd[0]);
 	if (waitpid(left_pid, &left_status, 0) == -1)
 		ft_perror("handle_pipe", "waitpid failed");
+	ignore_signals();
 	if (waitpid(right_pid, &right_status, 0) == -1)
 		ft_perror("handle_pipe", "waitpid failed");
 	init_signals();
+	cleanup_heredoc();
 	if (WIFSIGNALED(right_status))
 		return (128 + WTERMSIG(right_status));	
 	return (WIFEXITED(right_status) ? WEXITSTATUS(right_status) : -1);

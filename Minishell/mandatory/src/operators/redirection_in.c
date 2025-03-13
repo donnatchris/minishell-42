@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:36:16 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 09:47:31 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 11:30:49 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 // Returns exec_tree on success, -1 on error
 void	end_redir_in(int stdin_backup)
 {
-	cleanup_heredoc();//test
 	close(STDIN_FILENO);
 	if (dup2(stdin_backup, STDIN_FILENO) == -1)
 		ft_perror("redir_out", "dup2 failed");
