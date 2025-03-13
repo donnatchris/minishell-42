@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:32:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 11:32:21 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:23:10 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	writing_proc(int fd[], t_tree *tree, t_general *gen)
 	{
 		close(fd[1]);
 		delete_general(gen);
-		// close(STDOUT_FILENO);
 		ft_perror("handle_pipe", "dup2 failed");
 		exit(42);
 	}
@@ -37,7 +36,7 @@ int	writing_proc(int fd[], t_tree *tree, t_general *gen)
 // Function to handle the parent process (the reading process)
 // Returns the status of the command or -1 if waitpid fails
 int	reading_proc(int fd[], t_tree *tree, t_general *gen)
-{//test
+{
 	int	status;
 
 	child_signals();
@@ -55,9 +54,6 @@ int	reading_proc(int fd[], t_tree *tree, t_general *gen)
 	delete_general(gen);
 	exit(status);
 }
-
-
-
 
 // Function to handle the pipe operator
 // Returns exec_tree(tree->right) on success, -1 on error
@@ -79,7 +75,7 @@ int	pipe_operator(t_tree *tree, t_general *gen)
 	t_dclst *current = NULL;
 	current = get_next_heredoc(tree->left->list_node);
 	if (current)
-		redir_heredoc(current, gen);
+		create_heredoc(current, gen);
 	
 	left_pid = fork();
 	if (left_pid == -1)

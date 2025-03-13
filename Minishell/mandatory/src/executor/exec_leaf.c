@@ -6,80 +6,11 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:29:06 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 11:35:11 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:20:46 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// Function to get the next heredoc node
-// Returns the next heredoc node, NULL if there is no more heredoc
-t_dclst	*get_next_heredoc(t_dclst *node)
-{
-	t_dclst	*current;
-
-	current = node;
-	while (!is_tree_branch(current) && !is_eof(current))
-	{
-		if (is_heredoc(current))
-			return (current);
-		current = current->next;
-	}
-	return (NULL);
-}
-
-// Function to get the next redirection input node
-// Returns the next redirection input node
-// or NULL if there is no more redirection input
-static t_dclst	*get_next_redir_in(t_dclst *node)
-{
-	t_dclst	*current;
-
-	current = node;
-	while (!is_tree_branch(current) && !is_eof(current))
-	{
-		if (is_redir_in(current))
-			return (current);
-		current = current->next;
-	}
-	return (NULL);
-}
-
-// Function to get the next redirection output node
-// Returns the next redirection output node
-// orNULL if there is no more redirection output
-static t_dclst	*get_next_redir_out(t_dclst *node)
-{
-	t_dclst	*current;
-
-	current = node;
-	while (!is_tree_branch(current) && !is_eof(current))
-	{
-		if (is_redir_out(current))
-			return (current);
-		current = current->next;
-	}
-	return (NULL);
-}
-
-// Function to get the next command node
-// Returns the next command node, NULL if there is no more command
-static t_dclst	*get_next_cmd(t_dclst *node)
-{
-	t_dclst	*current;
-
-	current = node;
-	while (!is_tree_branch(current) && !is_eof(current))
-	{
-		if (is_redir(current))
-			current = current->next;
-		else if (is_text(current))
-			return (current);
-		current = current->next;
-	}
-	return (NULL);
-}
-
 
 // Function to execute a leaf node
 // (a leaf node is a node that contains a command)
@@ -99,21 +30,18 @@ int	exec_leaf(t_dclst *node, t_general *gen)
 	if (!gen->in_pipe)
 		current = get_next_heredoc(node);
 	if (current)
+		create_heredoc(current, gen);
+	current = get_next_redir(node);
+	while (current)
 	{
-		status = redir_heredoc(current, gen);
-		if (status)
-			return (status);
+		if (((t_token *) current->data)->type == TOKEN_HEREDOC)
+			redir_heredoc(current, gen);
+		else if (((t_token *) current->data)->type == TOKEN_REDIR_IN)
+			redir_in(current, gen);
+		else if (((t_token *) current->data)->type == TOKEN_REDIR_OUT)
+			redir_out(current, gen);
+		current = get_next_redir(current->next);
 	}
-	current = get_next_redir_in(node);
-	if (current)
-	{
-		status = redir_in(current, gen);
-		if (status)
-			return (status);
-	}
-	current = get_next_redir_out(node);
-	if (current)
-		status = redir_out(current, gen);
 	current = get_next_cmd(node);
 	status = exec_cmd(current, gen);
 	if (!gen->in_pipe)

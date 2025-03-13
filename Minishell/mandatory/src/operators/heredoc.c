@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 09:55:47 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:14:58 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,31 @@ static char	*find_delimiter(t_dclst *node, t_general *gen)
 }
 
 
+
+
+int redir_heredoc()
+{
+    int fd;
+
+    fd = open(TEMP_FILE, O_RDONLY);
+    if (fd == -1)
+        return (ft_perror("redir_heredoc", "open failed"));
+    if (dup2(fd, STDIN_FILENO) == -1)
+        return (close(fd), ft_perror("redir_heredoc", "dup2 failed"));
+    close(fd);
+    return (0);
+}
+
+void	cleanup_heredoc()
+{
+    unlink(TEMP_FILE);
+}
+
+
+
+
 // Fonction pour créer un fichier temporaire contenant l'entrée du heredoc
-static int create_heredoc(const char *delimiter, t_general *gen)
+static int create_heredoc_file(const char *delimiter, t_general *gen)
 {
     int fd;
     char *line;
@@ -162,33 +185,12 @@ static int create_heredoc(const char *delimiter, t_general *gen)
     return (0);
 }
 
-static int redirect_heredoc()
-{
-    int fd;
-
-    fd = open(TEMP_FILE, O_RDONLY);
-    if (fd == -1)
-        return (ft_perror("redir_heredoc", "open failed"));
-    if (dup2(fd, STDIN_FILENO) == -1)
-        return (close(fd), ft_perror("redir_heredoc", "dup2 failed"));
-    close(fd);
-    return (0);
-}
-
-void	cleanup_heredoc()
-{
-    unlink(TEMP_FILE);
-}
-
-int redir_heredoc(t_dclst *node, t_general *gen)
+int create_heredoc(t_dclst *node, t_general *gen)
 {
     char	*delimiter;
 
 	delimiter = find_delimiter(node, gen);
-    if (create_heredoc(delimiter, gen))
+    if (create_heredoc_file(delimiter, gen))
 		return (-1);
-    if (redirect_heredoc())
-		return (cleanup_heredoc(), -1);
-    // cleanup_heredoc();
     return (0);
 }

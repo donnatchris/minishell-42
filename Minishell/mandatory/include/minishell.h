@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 11:35:26 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:22:40 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,9 @@ int			redir_in(t_dclst *node, t_general *gen);
 void		end_redir_out(int stdout_backup);
 int			redir_out(t_dclst *node, t_general *gen);
 // heredoc.c
-int			redir_heredoc(t_dclst *node, t_general *gen);
+int 		create_heredoc(t_dclst *node, t_general *gen);
 void		cleanup_heredoc();
+int 		redir_heredoc();
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */
@@ -156,6 +157,10 @@ int			shell_error_quote(char *cmd, char *msg);
 int			open_error(char *filename);
 // ft_strtol.c
 long		ft_strtol(const char *nptr, char **endptr, int base);
+// get_next_node.c
+t_dclst		*get_next_heredoc(t_dclst *node);
+t_dclst		*get_next_cmd(t_dclst *node);
+t_dclst		*get_next_redir(t_dclst *node);
 // initialize minishell
 t_general	*init_gen(t_general *gen, char **envp, char **av, int ac);
 int			change_shlvl(char ***envp);

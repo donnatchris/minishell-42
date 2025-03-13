@@ -72,6 +72,7 @@ SRC = \
 	$(UTILS_DIR)/delete_functions.c \
 	$(UTILS_DIR)/error_messages.c \
 	$(UTILS_DIR)/ft_strtol.c \
+	$(UTILS_DIR)/get_next_node.c \
 	$(UTILS_DIR)/initialize_minishell.c \
 	$(UTILS_DIR)/node_token_info1.c \
 	$(UTILS_DIR)/node_token_info2.c \
