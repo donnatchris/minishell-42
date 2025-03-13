@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:32:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 13:58:47 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 14:46:20 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,25 @@ int	reading_proc(int fd[], t_tree *tree, t_general *gen)
 	exit(status);
 }
 
+// Function to create all 
+static int	create_heredoc_from_pipe(t_tree *tree, t_general *gen)
+{
+	t_tree	*current_tree;
+	
+	gen->in_pipe = 1;
+	current_tree = tree->left;
+	if (!current_tree)
+		return (1);
+	while (current_tree->type != TREE_COMMAND && current_tree->type != TREE_PARENTHESIS)
+	{
+		current_tree = current_tree->left;
+		if (!current_tree)
+			return (1);
+	}
+	create_heredoc(current_tree->list_node, gen);
+	return (0);
+}
+
 // Function to handle the pipe operator
 // Returns exec_tree(tree->right) on success, -1 on error
 int	pipe_operator(t_tree *tree, t_general *gen)
@@ -69,8 +88,8 @@ int	pipe_operator(t_tree *tree, t_general *gen)
 		return (shell_err_msg("handle_pipe", "invalid arguments"));
 	if (pipe(fd) == -1)
 		return (ft_perror("handle_pipe", "pipe failed"));
-	gen->in_pipe = 1;
-	create_heredoc(tree->left->list_node, gen);
+	if (!gen->in_pipe)
+		create_heredoc_from_pipe(tree, gen);
 	left_pid = fork();
 	if (left_pid == -1)
 		return (close(fd[0]), close(fd[1]),

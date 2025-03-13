@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 13:54:37 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 15:18:50 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	delete_cmd_line(t_general *gen)
 void	delete_general(t_general *gen)
 {
 	rl_clear_history();
-	cleanup_heredoc();
+	unlink(TEMP_FILE);
 	if (!gen)
 		return ;
 	if (gen->envp)

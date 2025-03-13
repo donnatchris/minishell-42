@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 12:20:12 by chdonnat          #+#    #+#             */
-/*   Updated: 2025/03/13 12:21:54 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 14:49:14 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 // Returns the next heredoc node, NULL if there is no more heredoc
 // or NULL if there is no more redirection input
 t_dclst	*get_next_heredoc(t_dclst *node)
-{
+{//test
 	t_dclst	*current;
 
 	current = node;
-	while (!is_tree_branch(current) && !is_eof(current))
+	while (!is_logical_operator(current) && !is_eof(current))
 	{
 		if (is_heredoc(current))
 			return (current);

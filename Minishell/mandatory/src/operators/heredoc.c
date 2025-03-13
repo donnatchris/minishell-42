@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 13:51:32 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 15:35:25 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,20 @@
 
 
 
+// Function to redirect input from TEMP_FILE
+// Returns 0 or -1 if it fails
+int redir_heredoc()
+{
+	int fd;
 
+	fd = open(TEMP_FILE, O_RDONLY);
+	if (fd == -1)
+		return (ft_perror("redir_heredoc", "open failed"));
+	if (dup2(fd, STDIN_FILENO) == -1)
+		return (close(fd), ft_perror("redir_heredoc", "dup2 failed"));
+	close(fd);
+	return (0);
+}
 
 // Function to print the line to the fd
 static void	print_heredoc_line(int fd, char *line, t_general *gen)
@@ -132,32 +145,8 @@ static char	*find_delimiter(t_dclst *node, t_general *gen)
 	return (tok->start);
 }
 
-
-
-
-int redir_heredoc()
-{
-	int fd;
-
-	fd = open(TEMP_FILE, O_RDONLY);
-	if (fd == -1)
-		return (ft_perror("redir_heredoc", "open failed"));
-	if (dup2(fd, STDIN_FILENO) == -1)
-		return (close(fd), ft_perror("redir_heredoc", "dup2 failed"));
-	close(fd);
-	return (0);
-}
-
-void	cleanup_heredoc()
-{
-	unlink(TEMP_FILE);
-}
-
-
-
-
 // Fonction pour créer un fichier temporaire contenant l'entrée du heredoc
-static int create_heredoc_file(const char *delimiter, t_general *gen)
+static int create_heredoc_file(char *delimiter, t_general *gen)
 {
 	int			fd;
 	char		*line;
@@ -175,18 +164,19 @@ static int create_heredoc_file(const char *delimiter, t_general *gen)
 			ft_printf("minishell: warning : here-document at line %d delimited by end-of-file (wanted `%s')\n", n_line, delimiter);
 			break ;
 		}
-		if (strcmp(line, delimiter) == 0)
-		{// strcmp a modifier
+		if (!ft_strncmp(line, delimiter, ft_strlen(line)) && ft_strlen(line) == ft_strlen(delimiter))
+		{
 			free(line);
 			break ;
 		}
 		print_heredoc_line(fd, line, gen);
 		free(line);
 	}
-	close(fd);
-	return (0);
+	return (close(fd), 0);
 }
 
+// Function to create the TEMP_FILE for heredoc
+// Returns 0 or -1 if it fails
 int create_heredoc(t_dclst *node, t_general *gen)
 {
 	t_dclst	*current;
