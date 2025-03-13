@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:29:06 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 12:20:46 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 13:55:32 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,8 @@ int	exec_leaf(t_dclst *node, t_general *gen)
 	gen->stdout_backup = dup(STDOUT_FILENO);
 	if (gen->stdout_backup == -1)
 		return (close(gen->stdin_backup), ft_perror("exec_leaf", "dup failed"));
-	current = NULL;
 	if (!gen->in_pipe)
-		current = get_next_heredoc(node);
-	if (current)
-		create_heredoc(current, gen);
+		create_heredoc(node, gen);
 	current = get_next_redir(node);
 	while (current)
 	{
@@ -44,8 +41,6 @@ int	exec_leaf(t_dclst *node, t_general *gen)
 	}
 	current = get_next_cmd(node);
 	status = exec_cmd(current, gen);
-	if (!gen->in_pipe)
-		cleanup_heredoc();
 	end_redir_in(gen->stdin_backup);
 	end_redir_out(gen->stdout_backup);
 	return (status);

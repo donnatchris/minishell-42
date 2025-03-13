@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 12:14:58 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 13:51:32 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,20 +137,20 @@ static char	*find_delimiter(t_dclst *node, t_general *gen)
 
 int redir_heredoc()
 {
-    int fd;
+	int fd;
 
-    fd = open(TEMP_FILE, O_RDONLY);
-    if (fd == -1)
-        return (ft_perror("redir_heredoc", "open failed"));
-    if (dup2(fd, STDIN_FILENO) == -1)
-        return (close(fd), ft_perror("redir_heredoc", "dup2 failed"));
-    close(fd);
-    return (0);
+	fd = open(TEMP_FILE, O_RDONLY);
+	if (fd == -1)
+		return (ft_perror("redir_heredoc", "open failed"));
+	if (dup2(fd, STDIN_FILENO) == -1)
+		return (close(fd), ft_perror("redir_heredoc", "dup2 failed"));
+	close(fd);
+	return (0);
 }
 
 void	cleanup_heredoc()
 {
-    unlink(TEMP_FILE);
+	unlink(TEMP_FILE);
 }
 
 
@@ -159,38 +159,48 @@ void	cleanup_heredoc()
 // Fonction pour créer un fichier temporaire contenant l'entrée du heredoc
 static int create_heredoc_file(const char *delimiter, t_general *gen)
 {
-    int fd;
-    char *line;
+	int			fd;
+	char		*line;
+	static int	n_line = 0;
 
-    fd = open(TEMP_FILE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd == -1)
+	fd = open(TEMP_FILE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
 		return (ft_perror("create_heredoc", "open failed"));
-    while (1)
+	while (1)
 	{
-        line = readline(CYAN "> " RESET);
-        if (!line)
-		{// message a modifier
-            ft_printf("warning: end-of-file detected (delimiter '%s' not found)\n", delimiter);
-            break ;
-        }
-        if (strcmp(line, delimiter) == 0)
+		n_line++;
+		line = readline(CYAN "> " RESET);
+		if (!line)
+		{
+			ft_printf("minishell: warning : here-document at line %d delimited by end-of-file (wanted `%s')\n", n_line, delimiter);
+			break ;
+		}
+		if (strcmp(line, delimiter) == 0)
 		{// strcmp a modifier
-            free(line);
-            break ;
-        }
+			free(line);
+			break ;
+		}
 		print_heredoc_line(fd, line, gen);
 		free(line);
-    }
-    close(fd);
-    return (0);
+	}
+	close(fd);
+	return (0);
 }
 
 int create_heredoc(t_dclst *node, t_general *gen)
 {
-    char	*delimiter;
+	t_dclst	*current;
+	char	*delimiter;
 
-	delimiter = find_delimiter(node, gen);
-    if (create_heredoc_file(delimiter, gen))
-		return (-1);
-    return (0);
+	current = get_next_heredoc(node);
+	while (1)
+	{
+		if (!current)
+			break ;
+		delimiter = find_delimiter(current, gen);
+		if (create_heredoc_file(delimiter, gen))
+			return (-1);
+		current = get_next_heredoc(current->next);
+	}
+	return (0);
 }

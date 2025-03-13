@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 16:42:16 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 13:54:37 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ void	delete_tree(t_tree *root)
 // Function to reinitialize the command line
 void	delete_cmd_line(t_general *gen)
 {
-	if (!gen)
-		return ;
-	if (gen->stdout_backup)
-		close(gen->stdout_backup);
 	if (gen->stdin_backup)
 		close(gen->stdin_backup);
+	if (gen->stdout_backup)
+		close(gen->stdout_backup);
+	if (!gen)
+		return ;
 	if (gen->input)
 		free(gen->input);
 	if (gen->input_cpy)
@@ -91,6 +91,7 @@ void	delete_cmd_line(t_general *gen)
 void	delete_general(t_general *gen)
 {
 	rl_clear_history();
+	cleanup_heredoc();
 	if (!gen)
 		return ;
 	if (gen->envp)
