@@ -34,6 +34,6 @@ char	*extract_filename(t_dclst *node, t_general *gen)
             return (NULL);
         node = node->next;
     }
-    // filename = manage_wildcards(filename, node, gen);
+    filename = manage_wildcards(filename, node, gen);
 	return (filename);
 }

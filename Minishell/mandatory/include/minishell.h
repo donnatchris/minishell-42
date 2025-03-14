@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 15:19:08 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:36:16 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void		end_redir_out(int stdout_backup);
 int			redir_out(t_dclst *node, t_general *gen);
 // heredoc.c
 int 		create_heredoc(t_dclst *node, t_general *gen);
-int 		redir_heredoc();
+int 		redir_heredoc(void);
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */

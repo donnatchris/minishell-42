@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_out.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:50:32 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 10:29:56 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 21:48:16 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,5 @@ int	redir_out(t_dclst *node, t_general *gen)
 	flag = redir_flag(node);
 	if (redir_out_from_node(node, gen, flag) == -1)
 		return (-1);
-	while (1)
-	{
-		node = next_redir_out(node);
-		if (!node)
-			break ;
-		flag = redir_flag(node);
-		if (redir_out_from_node(node, gen, flag) == -1)
-			return (-1);
-	}
 	return (0);
 }

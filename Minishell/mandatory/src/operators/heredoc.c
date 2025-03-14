@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 16:39:59 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 06:01:13 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // Function to redirect input from TEMP_FILE
 // Returns 0 or -1 if it fails
-int redir_heredoc()
+int redir_heredoc(void)
 {
 	int fd;
 
@@ -25,6 +25,15 @@ int redir_heredoc()
 		return (close(fd), ft_perror("redir_heredoc", "dup2 failed"));
 	close(fd);
 	return (0);
+}
+
+static void	warning_msg(char *delimiter, int n_line)
+{
+	ft_putstr_fd("minishell: warning : here-document at line ", STDOUT_FILENO);
+	ft_putnbr_fd(n_line, STDOUT_FILENO);
+	ft_putstr_fd(" delimited by end-of-file (wanted `", STDOUT_FILENO);
+	ft_putstr_fd(delimiter, STDOUT_FILENO);
+	ft_putstr_fd("')\n", STDOUT_FILENO);
 }
 
 // Function to print the line written in heredoc to the fd
@@ -79,7 +88,7 @@ static int create_heredoc_file(char *delimiter, t_general *gen)
 		line = readline(CYAN "> " RESET);
 		if (!line)
 		{
-			ft_printf("minishell: warning : here-document at line %d delimited by end-of-file (wanted `%s')\n", n_line, delimiter);
+			warning_msg(delimiter, n_line);
 			break ;
 		}
 		if (!ft_strncmp(line, delimiter, ft_strlen(line)) && ft_strlen(line) == ft_strlen(delimiter))
@@ -88,7 +97,8 @@ static int create_heredoc_file(char *delimiter, t_general *gen)
 			break ;
 		}
 		print_heredoc_line(fd, line, gen);
-		free(line);
+		if (line)
+			free(line);
 	}
 	return (free(delimiter), close(fd), 0);
 }

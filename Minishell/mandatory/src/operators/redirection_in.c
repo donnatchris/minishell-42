@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_in.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:36:16 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 11:30:49 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 21:50:57 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,6 @@ void	end_redir_in(int stdin_backup)
 	if (dup2(stdin_backup, STDIN_FILENO) == -1)
 		ft_perror("redir_out", "dup2 failed");
 	close(stdin_backup);
-}
-
-// Function to get the next redirection_in node
-// Returns the next redirection_in node, NULL if there is no more redirection
-static t_dclst	*next_redir_in(t_dclst *node)
-{
-	t_token	*token;
-
-	token = (t_token *) node->data;
-	while (1)
-	{
-		node = node->next;
-		token = (t_token *) node->data;
-		if (token->type == TOKEN_REDIR_IN)
-			return (node);
-		if (!is_text(node))
-			break ;
-	}
-	return (NULL);
 }
 
 // Function to handle a redirection_in '<' from a node
@@ -73,13 +54,5 @@ int	redir_in(t_dclst *node, t_general *gen)
 		return (shell_err_msg("redir_in", "invalid arguments"));
 	if (redir_in_from_node(node, gen) == -1)
 		return (-1);
-	while (1)
-	{
-		node = next_redir_in(node);
-		if (!node)
-			break ;
-		if (redir_in_from_node(node, gen) == -1)
-			return (-1);
-	}
 	return (0);
 }

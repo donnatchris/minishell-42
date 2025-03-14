@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_leaf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:29:06 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 15:06:26 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:36:25 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	exec_leaf(t_dclst *node, t_general *gen)
 	while (current)
 	{
 		if (((t_token *) current->data)->type == TOKEN_HEREDOC)
-			redir_heredoc(current, gen);
+			redir_heredoc();
 		else if (((t_token *) current->data)->type == TOKEN_REDIR_IN)
 			redir_in(current, gen);
 		else if (((t_token *) current->data)->type == TOKEN_REDIR_OUT)
