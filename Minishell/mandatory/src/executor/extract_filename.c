@@ -1,32 +1,33 @@
 #include "../../include/minishell.h"
 
-// static int	is_not_ambiguous(char *arg, t_dclst *node, t_general *gen)
-// {
-// 	char	**file_array;
-// 	char	**matching_array;
-// 	char	*ret;
-// 	char	pwd[PATH_MAX];
-// 	int		mode;
+static int	is_ambiguous(char *arg, t_dclst *node)
+{
+	char	**file_array;
+	char	**matching_array;
+	char	pwd[PATH_MAX];
+	int		mode;
 
-// 	(void) gen;
-// 	if (arg && arg[0] == '.')
-// 		mode = W_HIDDEN;
-// 	else
-// 		mode = NO_HIDDEN;
-// 	if (((t_token *) node->data)->type != TOKEN_WORD || !ft_strchr(arg, '*'))
-// 		return (arg);
-// 	file_array = get_files_in_dir(getcwd(pwd, sizeof(pwd)), mode);
-// 	if (!file_array)
-// 		return (arg);
-// 	matching_array = extract_matching_filenames(arg, file_array);
-// 	if (!matching_array)
-// 		return (delete_str_tab(file_array), arg);
-// 	delete_str_tab(file_array);
-// 	insert_additional_nodes(node, matching_array);
-// 	ret = ft_strdup(matching_array[0]);
-// 	delete_str_tab(matching_array);	//test
-// 	return (free(arg), ret);
-// }
+	if (arg && arg[0] == '.')
+		mode = W_HIDDEN;
+	else
+		mode = NO_HIDDEN;
+	if (((t_token *) node->data)->type != TOKEN_WORD || !ft_strchr(arg, '*'))
+		return (0);
+	file_array = get_files_in_dir(getcwd(pwd, sizeof(pwd)), mode);
+	if (!file_array)
+		return (0);
+	matching_array = extract_matching_filenames(arg, file_array);
+	if (!matching_array)
+		return (delete_str_tab(file_array), 0);
+	delete_str_tab(file_array);
+	if (count_env_size(matching_array) > 1)
+	{
+		shell_err_msg(arg, "ambiguous redirect");
+		return (delete_str_tab(matching_array), 1);
+	}
+	delete_str_tab(matching_array);
+	return (0);
+}
 
 // Function to add an argument to the current argument
 // Returns the new argument or NULL if it fails
@@ -62,6 +63,8 @@ char	*extract_filename(t_dclst *node, t_general *gen)
             return (NULL);
         node = node->next;
     }
+	if (is_ambiguous(filename, node))
+		return (free(filename), NULL);
     filename = manage_wildcards(filename, node, gen);
 	return (filename);
 }

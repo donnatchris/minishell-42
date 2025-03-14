@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_in.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:36:16 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 21:50:57 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/14 11:24:47 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	redir_in_from_node(t_dclst *node, t_general *gen)
 		return (shell_err_msg("redir_in", "invalid arguments"));
 	filename = extract_filename(node->next, gen);
 	if (!filename)
-		return (shell_err_msg("redir_in", "filename is NULL"));
+		return (1);
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		return (open_error(filename));
@@ -52,7 +52,5 @@ int	redir_in(t_dclst *node, t_general *gen)
 {
 	if (!node || !gen)
 		return (shell_err_msg("redir_in", "invalid arguments"));
-	if (redir_in_from_node(node, gen) == -1)
-		return (-1);
-	return (0);
+	return (redir_in_from_node(node, gen));
 }

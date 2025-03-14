@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   exec_leaf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:29:06 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 18:36:25 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/14 11:20:19 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+// Function to restore STDIN and STDOUT
+static void	restore_std(int stdin, int stdout)
+{
+	end_redir_in(stdin);
+	end_redir_out(stdout);
+}
 
 // Function to execute a leaf node
 // (a leaf node is a node that contains a command)
@@ -34,14 +41,19 @@ int	exec_leaf(t_dclst *node, t_general *gen)
 		if (((t_token *) current->data)->type == TOKEN_HEREDOC)
 			redir_heredoc();
 		else if (((t_token *) current->data)->type == TOKEN_REDIR_IN)
-			redir_in(current, gen);
+		{
+			if (redir_in(current, gen))
+				return (restore_std(gen->stdin_backup, gen->stdout_backup), 1);
+		}
 		else if (((t_token *) current->data)->type == TOKEN_REDIR_OUT)
-			redir_out(current, gen);
+		{
+			if (redir_out(current, gen))
+				return (restore_std(gen->stdin_backup, gen->stdout_backup), 1);
+		}
 		current = get_next_redir(current->next);
 	}
 	current = get_next_cmd(node);
 	status = exec_cmd(current, gen);
-	end_redir_in(gen->stdin_backup);
-	end_redir_out(gen->stdout_backup);
+	restore_std(gen->stdin_backup, gen->stdout_backup);
 	return (status);
 }

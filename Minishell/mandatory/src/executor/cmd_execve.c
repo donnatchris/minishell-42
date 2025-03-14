@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:30:45 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 09:38:29 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:39:20 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 // Function to print error message when the command is not found
 static void	execve_err_msg(char *cmd)
 {
-	ft_printf("%s: command not found\n", cmd);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": command not found\n", 2);
 }
 
 // Function to find the path of the executable file
