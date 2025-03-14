@@ -6,11 +6,18 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:30:45 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 16:24:30 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 09:38:29 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+
+// Function to print error message when the command is not found
+static void	execve_err_msg(char *cmd)
+{
+	ft_printf("%s: command not found\n", cmd);
+}
 
 // Function to find the path of the executable file
 // in the PATH environment variable
@@ -113,12 +120,12 @@ int	execve_cmd(char *cmd, char **args, char **envp, t_general *gen)
 			return (shell_err_msg(cmd, "ft_strdup failed"));
 		if (access(path, F_OK))
 			return (free(path), shell_err_msg(cmd,
-					"no such file or directory"), -1);
+					"No such file or directory"), -1);
 	}
 	else
 		path = find_exec_path(cmd, envp);
 	if (!path)
-		return (shell_err_msg(cmd, "No such file or directory"), 127);
+		return (execve_err_msg(cmd), 127);
 	if (access(path, X_OK))
 		return (free(path), shell_err_msg(cmd, "permission denied"), 127);
 	ret = execute_execve_cmd(path, args, envp, gen);
