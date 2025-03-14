@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 15:18:50 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 10:27:02 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,22 @@ void	delete_tree(t_tree *root)
 }
 
 
-// static void	delete_wildcards(t_general *gen)
-// {
-// 	t_dclst	*current;
-// 	t_token	*tok;
+static void	delete_wildcards(t_general *gen)
+{
+	t_dclst	*current;
+	t_token	*tok;
 
-// 	current = *gen->head;
-// 	while (1)
-// 	{
-// 		tok = (t_token *) current->data;
-// 		if (tok->start && (tok->start < gen->in_start || tok->start > gen->in_end))
-// 			free(tok->start);
-// 		current = current->next;
-// 		if (current == *gen->head)
-// 			break;
-// 	}
-// }
+	current = *gen->head;
+	while (1)
+	{
+		tok = (t_token *) current->data;
+		if (tok->start && (tok->start < gen->in_start || tok->start > gen->in_end))
+			free(tok->start);
+		current = current->next;
+		if (current == *gen->head)
+			break;
+	}
+}
 
 // Function to reinitialize the command line
 void	delete_cmd_line(t_general *gen)
@@ -76,7 +76,7 @@ void	delete_cmd_line(t_general *gen)
 		free(gen->input_cpy);
 	if (gen->head)
 	{
-		// delete_wildcards(gen);
+		delete_wildcards(gen);
 		dclst_clear(gen->head);
 	}
 	if (gen->tree)
