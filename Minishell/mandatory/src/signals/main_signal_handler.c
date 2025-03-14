@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_signal_handler.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 05:18:15 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 22:01:04 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/14 15:08:07 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	main_signal_handler(int signum)
 	{
 		if (signum == SIGINT)
 		{
-			ft_putstr_fd("\n", 1);
+			ft_printf("\n", 1);
 			rl_replace_line("", 0);
 			rl_on_new_line();
 			rl_redisplay();

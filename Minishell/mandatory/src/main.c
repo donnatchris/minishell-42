@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:21:47 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 10:38:55 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:26:05 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,6 @@ int	main(int ac, char **av, char **envp)
 		exec_tree(gen->tree, gen);
 	}
 	ft_printf("exit\n");
-	delete_general(gen);
+	delete_before_close(gen);
 	return (0);
 }

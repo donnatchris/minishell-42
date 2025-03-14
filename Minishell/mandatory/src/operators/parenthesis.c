@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:48:16 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 15:04:34 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:08:44 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	run_parenthesis(t_tree *tree, t_general *gen)
 		delete_general(gen);
 		exit(status);
 	}
-	ignore_signals();
+	// ignore_signals();
 	if (waitpid(pid, &status, 0) == -1)
 		return (ft_perror("run_parenthesis", "waitpid failed"), -1);
 	init_signals();

@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 05:01:44 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/11 14:48:44 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:26:28 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	eit_err_msg(char *arg)
 static void	ft_exit(char **args, t_general *gen, int status)
 {
 		delete_str_tab(args);
-		delete_general(gen);
+		delete_before_close(gen);
 		exit(status);
 }
 

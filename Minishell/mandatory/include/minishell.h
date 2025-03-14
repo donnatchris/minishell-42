@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 11:48:51 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:25:48 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ void		delete_str_tab(char **tab);
 void		delete_tree(t_tree *root);
 void		delete_cmd_line(t_general *gen);
 void		delete_general(t_general *gen);
+void		delete_before_close(t_general *gen);
 // error_msg.c
 int			ft_perror(char *cmd, char *msg);
 int			shell_err_msg(char *cmd, char *msg);

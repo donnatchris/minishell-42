@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 15:02:14 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 15:12:56 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:12:00 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	heredoc_signal_handler(int signum)
 
 void	heredoc_signals(void)
 {
-	signal(SIGINT, heredoc_signal_handler);
+	signal(SIGINT,SIG_DFL);
 	signal(EOF, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 }

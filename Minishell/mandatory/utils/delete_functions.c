@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 10:30:50 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:25:25 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,12 @@ void	delete_general(t_general *gen)
 	gen->home = NULL;
 	free(gen);
 	gen = NULL;
+}
+
+// Function to free everything before closing
+void	delete_before_close(t_general *gen)
+{
+	rl_clear_history();
+	unlink(TEMP_FILE);
+	delete_general(gen);
 }

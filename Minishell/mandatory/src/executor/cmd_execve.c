@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:30:45 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 11:39:20 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:09:40 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	execute_execve_cmd(char *path, char **args, char **envp, t_general *g
 		return (ft_perror(path, "fork failed"), -1);
 	if (pid == 0)
 	{
-		child_signals();
+		// child_signals();
 		close(gen->stdin_backup);
 		close(gen->stdout_backup);
 		if (execve(path, args, envp) == -1)
@@ -93,7 +93,7 @@ static int	execute_execve_cmd(char *path, char **args, char **envp, t_general *g
 	}
 	else
 	{
-		ignore_signals();
+		// ignore_signals();
 		if (waitpid(pid, &status, 0) == -1)
 			return (ft_perror(path, "waitpid failed"), status);
 		init_signals();
