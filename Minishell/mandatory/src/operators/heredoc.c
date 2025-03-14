@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 09:05:03 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 14:56:59 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ int redir_heredoc(void)
 
 static void	warning_msg(char *delimiter, int n_line)
 {
-	ft_putstr_fd("minishell: warning : here-document at line ", STDOUT_FILENO);
-	ft_putnbr_fd(n_line, STDOUT_FILENO);
-	ft_putstr_fd(" delimited by end-of-file (wanted `", STDOUT_FILENO);
-	ft_putstr_fd(delimiter, STDOUT_FILENO);
-	ft_putstr_fd("')\n", STDOUT_FILENO);
+	ft_putstr_fd("minishell: warning : here-document at line ", 2);
+	ft_putnbr_fd(n_line, 2);
+	ft_putstr_fd(" delimited by end-of-file (wanted `", 2);
+	ft_putstr_fd(delimiter, 2);
+	ft_putstr_fd("')\n", 2);
 }
 
 // Function to print the line written in heredoc to the fd
