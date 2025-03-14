@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:29:06 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 11:20:19 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:47:43 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,14 @@
 // Function to restore STDIN and STDOUT
 static void	restore_std(int stdin, int stdout)
 {
-	end_redir_in(stdin);
-	end_redir_out(stdout);
+	close(STDIN_FILENO);
+	if (dup2(stdin, STDIN_FILENO) == -1)
+		ft_perror("redir_out", "dup2 failed");
+	close(stdin);
+	close(STDOUT_FILENO);
+	if (dup2(stdout, STDOUT_FILENO) == -1)
+		ft_perror("redir_out", "dup2 failed");
+	close(stdout);
 }
 
 // Function to execute a leaf node

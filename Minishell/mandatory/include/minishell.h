@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 18:36:16 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/14 11:48:51 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,8 @@ int			pipe_operator(t_tree *tree, t_general *gen);
 int			writing_proc(int fd[], t_tree *tree, t_general *gen);
 int			reading_proc(int fd[], t_tree *tree, t_general *gen);
 // redirection_in.c
-void		end_redir_in(int stdin_backup);
 int			redir_in(t_dclst *node, t_general *gen);
 // redirection_out.c
-void		end_redir_out(int stdout_backup);
 int			redir_out(t_dclst *node, t_general *gen);
 // heredoc.c
 int 		create_heredoc(t_dclst *node, t_general *gen);

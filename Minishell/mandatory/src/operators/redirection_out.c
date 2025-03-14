@@ -6,21 +6,11 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:50:32 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 11:24:40 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:48:22 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// Function to restore the standard output
-// Returns status on success, -1 on error
-void	end_redir_out(int stdout_backup)
-{
-	close(STDOUT_FILENO);
-	if (dup2(stdout_backup, STDOUT_FILENO) == -1)
-		ft_perror("end_redir_out", "dup2 failed");
-	close(stdout_backup);
-}
 
 // Function to find the redirection flag
 // Returns O_TRUNC if the redirection is '>',

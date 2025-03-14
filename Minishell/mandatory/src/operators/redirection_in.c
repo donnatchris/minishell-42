@@ -6,21 +6,11 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:36:16 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 11:24:47 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:48:17 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// Function to close redir_out
-// Returns exec_tree on success, -1 on error
-void	end_redir_in(int stdin_backup)
-{
-	close(STDIN_FILENO);
-	if (dup2(stdin_backup, STDIN_FILENO) == -1)
-		ft_perror("redir_out", "dup2 failed");
-	close(stdin_backup);
-}
 
 // Function to handle a redirection_in '<' from a node
 // Returns 0 on success, -1 on error
