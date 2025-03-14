@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_defines.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 07:03:04 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 07:03:06 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/13 11:22:45 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // defines
 # define SYMBOLS "<>|&;()'\""
 # define WHITESPACES " \t\n\r\v\f"
+# define TEMP_FILE "/tmp/minishell_heredoc.tmp"
 
 // Color definitions
 # define RESET "\033[0m"
@@ -84,11 +85,16 @@ typedef struct s_general
 	char	*pwd;
 	char	*home;
 	char	*input;
+	char	*in_start;
+	char	*in_end;
 	char	*input_cpy;
 	char	**envp;
 	t_dclst	**head;
 	t_tree	*tree;
 	int		exit_status;
+	int		stdin_backup;
+	int		stdout_backup;
+	int		in_pipe;
 }			t_general;
 
 # define NO_HIDDEN 0

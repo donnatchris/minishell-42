@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   write_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:27:53 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/10 16:35:14 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,25 @@ char	**ft_realloc_env(char ***envp, char *new_entry)
 // Function to add a new variable to the environment
 // from a key but without a value
 // Returns 0 on success, -1 on failure
-int	create_env_var_void(const char *key, char sep, char ***envp)
-{
+int	create_env_var(const char *key, char sep, const char *value, char ***envp)
+{//test
 	char	*new_entry;
+	char	*temp;
 
 	if (!envp || !key)
 		return (shell_err_msg("create_env_var_void", "invalid arguments"));
-	if (sep == '=')
-		new_entry = ft_strjoin(key, "=");
-	else
+	if (sep != '=')
 		new_entry = ft_strdup(key);
+	else
+	{
+		new_entry = ft_strjoin(key, "=");
+		if (value)
+		{
+			temp = new_entry;
+			new_entry = ft_strjoin(new_entry, value);
+			free(temp);
+		}
+	}
 	if (!new_entry)
 		return (shell_err_msg("create_env_var_void",
 				"ft_strjoin or ft_strdup failed"));
@@ -65,36 +74,6 @@ int	create_env_var_void(const char *key, char sep, char ***envp)
 	return (0);
 }
 
-// Function to add a new variable to the environment
-// from a key and a value
-// Returns 0 on success, -1 on failure
-int	create_env_var(const char *key, char sep, const char *value, char ***envp)
-{
-	char	*temp;
-	char	*new_entry;
-	char	**new_envp;
-	size_t	size;
-
-	if (!value)
-		return (create_env_var_void(key, sep, envp));
-	temp = ft_strjoin(key, "=");
-	if (!temp)
-		return (shell_err_msg("create_env_var",
-				"ft_strjoin or ft_strdup failed"));
-	new_entry = ft_strjoin(temp, value);
-	free(temp);
-	if (!new_entry)
-		return (shell_err_msg("create_env_var", "strjoin failed"));
-	size = count_env_size(*envp);
-	new_envp = ft_realloc_env(envp, new_entry);
-	if (!new_envp)
-		return (free(new_entry), shell_err_msg("create_env_var",
-				"realloc failed"));
-	new_envp[size] = new_entry;
-	new_envp[size + 1] = NULL;
-	*envp = new_envp;
-	return (0);
-}
 
 // Function to update an existing variable in the environment
 // Returns 0 on success, -1 on failure

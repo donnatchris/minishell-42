@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_signal_handler.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 15:02:14 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/08 15:22:54 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/14 15:12:00 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,17 @@
 
 void	heredoc_signal_handler(int signum)
 {
-	if (signum == EOF)
+	if (signum == SIGINT)
 	{
-		ft_putstr_fd("LOOOOOL", 1);
-		exit(0);
+		g_signals = SIGINT;
 	}
 }
 
 void	heredoc_signals(void)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(EOF, heredoc_signal_handler);
+	signal(SIGINT,SIG_DFL);
+	signal(EOF, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	
-	// signal(SIGINT, heredoc_signal_handler);
-	// signal(EOF, heredoc_signal_handler);
-	// signal(SIGQUIT, SIG_IGN);
 }
 // Function to ignore all the signals
 void	ignore_signals(void)
@@ -37,4 +32,11 @@ void	ignore_signals(void)
 	signal(SIGINT, SIG_IGN);
 	signal(EOF, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void	child_signals(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(EOF, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }

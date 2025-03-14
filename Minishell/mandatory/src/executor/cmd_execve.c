@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_execve.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:30:45 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/08 08:44:29 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/14 15:09:40 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+
+// Function to print error message when the command is not found
+static void	execve_err_msg(char *cmd)
+{
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": command not found\n", 2);
+}
 
 // Function to find the path of the executable file
 // in the PATH environment variable
@@ -52,7 +60,7 @@ static char	*find_exec_path(char *cmd, char **envp)
 
 	path = ft_getenv("PATH", envp);
 	if (!path)
-		return (shell_err_msg(path, "PATH not set"), NULL);
+		return (NULL);
 	path_split = ft_split(path, ':');
 	if (!path_split)
 		return (shell_err_msg(path, "ft_split failed"), NULL);
@@ -63,26 +71,29 @@ static char	*find_exec_path(char *cmd, char **envp)
 
 // Function to execute a command using execve
 // Returns: 0 on success, -1 on error.
-static int	execute_execve_cmd(char *path, char **args, char **envp)
+static int	execute_execve_cmd(char *path, char **args, char **envp, t_general *gen)
 {
 	pid_t	pid;
 	int		status;
 
+	(void)gen;
 	status = -1;
 	pid = fork();
 	if (pid == -1)
 		return (ft_perror(path, "fork failed"), -1);
 	if (pid == 0)
 	{
+		// child_signals();
+		close(gen->stdin_backup);
+		close(gen->stdout_backup);
 		if (execve(path, args, envp) == -1)
-		{
 			ft_perror(path, "exec_ve failed");
-			exit (status);
-		}
+		free(path);
+		exit (status);
 	}
 	else
 	{
-		ignore_signals();
+		// ignore_signals();
 		if (waitpid(pid, &status, 0) == -1)
 			return (ft_perror(path, "waitpid failed"), status);
 		init_signals();
@@ -96,7 +107,7 @@ static int	execute_execve_cmd(char *path, char **args, char **envp)
 
 // Function to execute a non-built-in command using execve
 // Returns: 0 on success, -1 on error.
-int	execve_cmd(char *cmd, char **args, char **envp)
+int	execve_cmd(char *cmd, char **args, char **envp, t_general *gen)
 {
 	char	*path;
 	int		ret;
@@ -107,18 +118,18 @@ int	execve_cmd(char *cmd, char **args, char **envp)
 	{
 		path = ft_strdup(cmd);
 		if (!path)
-			return (shell_err_msg(cmd, "ft_strdup failed"), -1);
+			return (shell_err_msg(cmd, "ft_strdup failed"));
 		if (access(path, F_OK))
 			return (free(path), shell_err_msg(cmd,
-					"no such file or directory"), -1);
+					"No such file or directory"), -1);
 	}
 	else
 		path = find_exec_path(cmd, envp);
 	if (!path)
-		return (shell_err_msg(cmd, "command not found"), -1);
+		return (execve_err_msg(cmd), 127);
 	if (access(path, X_OK))
-		return (free(path), shell_err_msg(cmd, "permission denied"), -1);
-	ret = execute_execve_cmd(path, args, envp);
+		return (free(path), shell_err_msg(cmd, "permission denied"), 127);
+	ret = execute_execve_cmd(path, args, envp, gen);
 	free(path);
 	return (ret);
 }

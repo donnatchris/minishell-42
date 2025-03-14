@@ -29,6 +29,9 @@ MAIN = $(SRC_DIR)/main.c
 # Main file for bonus part
 BONUS_MAIN = $(BONUS_SRC_DIR)/main.c
 
+# Arguments for valgrind
+VALARGS = --suppressions=./valgrind.sup --leak-check=full --track-origins=yes --show-leak-kinds=all --trace-children=yes --track-fds=yes
+
 # Sources files for mandatory part	$(SRC_DIR)/iso.c
 SRC = \
 	$(DCLST_DIR)/dclst1.c \
@@ -53,7 +56,6 @@ SRC = \
 	$(SRC_DIR)/operators/pipe.c \
 	$(SRC_DIR)/operators/redirection_in.c \
 	$(SRC_DIR)/operators/redirection_out.c \
-	$(SRC_DIR)/operators/heredoc_read.c \
 	$(SRC_DIR)/operators/heredoc.c \
 	$(SRC_DIR)/parser/binary_tree.c \
 	$(SRC_DIR)/parser/check_synthax.c \
@@ -70,6 +72,7 @@ SRC = \
 	$(UTILS_DIR)/delete_functions.c \
 	$(UTILS_DIR)/error_messages.c \
 	$(UTILS_DIR)/ft_strtol.c \
+	$(UTILS_DIR)/get_next_node.c \
 	$(UTILS_DIR)/initialize_minishell.c \
 	$(UTILS_DIR)/node_token_info1.c \
 	$(UTILS_DIR)/node_token_info2.c \
@@ -93,7 +96,7 @@ BONUS_OBJ = $(BONUS_SRC:$(BONUS_SRC_DIR)/%.c=$(BONUS_OBJ_DIR)/%.o)
 # options de compilation mac pour tester la mémoire: -fsanitize=undefined -fsanitize=address -g
 # ou -fsanitize=thread -g pour tester les threads
 ifeq ($(UNAME), Linux)
-	CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR)/headers
+	CFLAGS = -g -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR)/headers
 	LDFLAGS = -lreadline -L$(LIBFT_DIR) -lft_inc
 else ifeq ($(UNAME), Darwin)
 	CFLAGS = -fsanitize=undefined -fsanitize=address -g -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR)/headers -I/opt/homebrew/opt/readline/include
@@ -151,6 +154,10 @@ fclean: clean
 
 # Rule to recompile the project
 re: fclean all
+
+# Rule to execute prgm with valgrind
+val: 
+	valgrind $(VALARGS) ./$(NAME)
 
 # Phony rule
 .PHONY: all clean fclean re bonus

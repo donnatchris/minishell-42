@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_synthax.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:00:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/08 09:07:30 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/13 16:49:11 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,10 +118,7 @@ int	check_nodes(t_dclst *current, t_general *gen, int mode)
 // Returns 0 if the syntax is correct, -1 otherwise
 int	check_syntax(t_dclst **head, t_general *gen, int mode)
 {
-	t_dclst	*current;
-
 	if (!head || !*head)
 		return (-1);
-	current = *head;
-	return (check_nodes(current, gen, mode));
+	return (check_nodes(*head, gen, mode));
 }

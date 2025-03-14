@@ -6,20 +6,11 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:50:32 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 11:28:38 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:48:22 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// Function to restore the standard output
-// Returns status on success, -1 on error
-void	end_redir_out(int stdout_backup)
-{
-	if (dup2(stdout_backup, STDOUT_FILENO) == -1)
-		ft_perror("end_redir_out", "dup2 failed");
-	close(stdout_backup);
-}
 
 // Function to find the redirection flag
 // Returns O_TRUNC if the redirection is '>',
@@ -53,7 +44,7 @@ t_dclst	*next_redir_out(t_dclst *node)
 
 // Function to handle one redirection '>' or '>>'
 // Returns 0 on success, -1 on error
-int	redir_out_from_node(t_dclst *node, char ***envp, t_general *gen, int flag)
+int	redir_out_from_node(t_dclst *node, t_general *gen, int flag)
 {
 	t_token	*token;
 	char	*filename;
@@ -62,9 +53,9 @@ int	redir_out_from_node(t_dclst *node, char ***envp, t_general *gen, int flag)
 	token = (t_token *) node->next->data;
 	if (!token || token->priority != 6 || !token->start)
 		return (shell_err_msg("redir_from_node", "invalid arguments"));
-	filename = extract_filename(node->next, *envp, gen);
+	filename = extract_filename(node->next, gen);
 	if (!filename)
-		return (shell_err_msg("redir_out", "filename is NULL"));
+		return (1);
 	fd = open(filename, O_CREAT | O_WRONLY | flag, 0644);
 	if (fd == -1)
 		return (open_error(filename));
@@ -77,23 +68,12 @@ int	redir_out_from_node(t_dclst *node, char ***envp, t_general *gen, int flag)
 
 // Function to handle multiple redirections '>' or '>>'
 // Returns 0 on success, -1 on error
-int	redir_out(t_dclst *node, char ***envp, t_general *gen)
+int	redir_out(t_dclst *node, t_general *gen)
 {
 	int		flag;
 
-	if (!node || !envp || !gen)
+	if (!node || !gen)
 		return (shell_err_msg("redir_out", "invalid arguments"));
 	flag = redir_flag(node);
-	if (redir_out_from_node(node, envp, gen, flag) == -1)
-		return (-1);
-	while (1)
-	{
-		node = next_redir_out(node);
-		if (!node)
-			break ;
-		flag = redir_flag(node);
-		if (redir_out_from_node(node, envp, gen, flag) == -1)
-			return (-1);
-	}
-	return (0);
+	return (redir_out_from_node(node, gen, flag));
 }

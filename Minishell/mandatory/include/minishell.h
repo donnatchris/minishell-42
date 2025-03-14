@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 11:59:54 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:25:48 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,7 @@ char		*ft_getenv(const char *var, char **envp);
 int			compare_env_vars(const char *s1, const char *s2);
 // write_env.c
 char		**ft_realloc_env(char ***envp, char *new_entry);
-int			create_env_var_void(const char *key, char sep, char ***envp);
-int			create_env_var(const char *key, char sep,
-				const char *value, char ***envp);
+int	create_env_var(const char *key, char sep, const char *value, char ***envp);
 int			update_env_var(const char *key,
 				char sep, const char *value, char ***envp);
 char		**copy_env(char **envp);
@@ -71,37 +69,35 @@ char		**copy_env(char **envp);
 /*										executor							  */
 /* ************************************************************************** */
 // cmd_execve.c
-int			execve_cmd(char *cmd, char **args, char **envp);
+int			execve_cmd(char *cmd, char **args, char **envp, t_general *gen);
 // exec_cmd.c
-int			exec_cmd(t_dclst *node, char ***envp, t_general *gen);
+int			exec_cmd(t_dclst *node, t_general *gen);
 // exec_leaf.c
-int			exec_leaf(t_dclst *node, char ***envp, t_general *gen);
+int			exec_leaf(t_dclst *node, t_general *gen);
+t_dclst	*get_next_heredoc(t_dclst *node);
 // exec_tree.c
-int			exec_tree(t_tree *tree, char ***envp, t_general *gen);
+int			exec_tree(t_tree *tree, t_general *gen);
 // extract_arguments.c
-char		**extract_args(t_dclst *node, char **envp, t_general *gen);
+char		**extract_args(t_dclst *node, t_general *gen);
 // extract_filename.c
-char		*extract_filename(t_dclst *node, char **envp, t_general *gen);
+char		*extract_filename(t_dclst *node, t_general *gen);
 
 /* ************************************************************************** */
 /*										operators							  */
 /* ************************************************************************** */
 // parenthesis.c
-int			run_parenthesis(t_tree *tree, char ***envp, t_general *gen);
+int			run_parenthesis(t_tree *tree, t_general *gen);
 // pipe.c
-int			pipe_operator(t_tree *tree, char ***envp, t_general *gen);
-int			writing_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
-int			reading_proc(int fd[], t_tree *tree, char ***envp, t_general *gen);
+int			pipe_operator(t_tree *tree, t_general *gen);
+int			writing_proc(int fd[], t_tree *tree, t_general *gen);
+int			reading_proc(int fd[], t_tree *tree, t_general *gen);
 // redirection_in.c
-void		end_redir_in(int stdin_backup);
-int			redir_in(t_dclst *node, char ***envp, t_general *gen);
+int			redir_in(t_dclst *node, t_general *gen);
 // redirection_out.c
-void		end_redir_out(int stdout_backup);
-int			redir_out(t_dclst *node, char ***envp, t_general *gen);
+int			redir_out(t_dclst *node, t_general *gen);
 // heredoc.c
-void		redir_heredoc_read(int pipefd[2],
-				char **delimiters, char **envp, t_general *gen);
-int			redir_heredoc(t_dclst *node, char ***envp, t_general *gen);
+int 		create_heredoc(t_dclst *node, t_general *gen);
+int 		redir_heredoc(void);
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */
@@ -124,10 +120,11 @@ t_dclst		**tokenize(char *input);
 /* ************************************************************************** */
 // signal_handler.c
 void		init_signals(void);
-void		signal_handler(int signum);
+void		main_signal_handler(int signum);
 void		ignore_signals(void);
 void		heredoc_signals(void);
 void		heredoc_signal_handler(int signum);
+void		child_signals();
 /* ************************************************************************** */
 /*									text_transformer						  */
 /* ************************************************************************** */
@@ -150,6 +147,7 @@ void		delete_str_tab(char **tab);
 void		delete_tree(t_tree *root);
 void		delete_cmd_line(t_general *gen);
 void		delete_general(t_general *gen);
+void		delete_before_close(t_general *gen);
 // error_msg.c
 int			ft_perror(char *cmd, char *msg);
 int			shell_err_msg(char *cmd, char *msg);
@@ -157,6 +155,10 @@ int			shell_error_quote(char *cmd, char *msg);
 int			open_error(char *filename);
 // ft_strtol.c
 long		ft_strtol(const char *nptr, char **endptr, int base);
+// get_next_node.c
+t_dclst		*get_next_heredoc(t_dclst *node);
+t_dclst		*get_next_cmd(t_dclst *node);
+t_dclst		*get_next_redir(t_dclst *node);
 // initialize minishell
 t_general	*init_gen(t_general *gen, char **envp, char **av, int ac);
 int			change_shlvl(char ***envp);

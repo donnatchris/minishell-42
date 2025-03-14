@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_functions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:27:52 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 20:56:24 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/10 14:20:54 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

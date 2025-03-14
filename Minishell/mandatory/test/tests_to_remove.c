@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tests_to_remove.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:00:16 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 06:45:35 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/10 09:21:55 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	print_a_token(t_token *token)
 		ft_printf("TOKEN_REDIR_OUT: ");
 	else
 		print_other_tokens(token);
-	print_string(token->start, token->end);
+	// print_string(token->start, token->end);
 	ft_printf("%s\n", token->start);
 	if (token->space)
 		ft_printf("\thas space\n");

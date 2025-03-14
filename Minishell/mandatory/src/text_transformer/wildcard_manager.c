@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:21:05 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 06:21:07 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/14 10:24:38 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ static void	affect_token_values(t_token *token, char *matching_str)
 static void	insert_additional_nodes(t_dclst *node, char **matching_array)
 {
 	t_dclst	*current;
-	t_dclst	*new_node;
 	t_token	*token;
 	size_t	i;
 
@@ -63,9 +62,6 @@ static void	insert_additional_nodes(t_dclst *node, char **matching_array)
 		}
 		affect_token_values(token, matching_array[i]);
 		insert_new_node(token, current);
-		new_node = dclst_create_node(token);
-		if (!new_node)
-			return ;
 		current = current->next;
 		i++;
 	}
@@ -80,6 +76,7 @@ char	*manage_wildcards(char *arg, t_dclst *node, t_general *gen)
 {
 	char	**file_array;
 	char	**matching_array;
+	char	*ret;
 	char	pwd[PATH_MAX];
 	int		mode;
 
@@ -98,5 +95,7 @@ char	*manage_wildcards(char *arg, t_dclst *node, t_general *gen)
 		return (delete_str_tab(file_array), arg);
 	delete_str_tab(file_array);
 	insert_additional_nodes(node, matching_array);
-	return (free(arg), matching_array[0]);
+	ret = ft_strdup(matching_array[0]);
+	delete_str_tab(matching_array);	//test
+	return (free(arg), ret);
 }

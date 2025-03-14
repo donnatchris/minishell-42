@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 05:06:07 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 05:24:20 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/10 16:03:23 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static void	export_var(char *arg, char *name, char ***envp)
 	else if (*(value + 1) == '\0')
 		update_env_var(name, '=', NULL, envp);
 	else
-		update_env_var(name, '=', value + 1, envp);
+		update_env_var(name, '=', (value + 1), envp);
 	free(name);
 }
 

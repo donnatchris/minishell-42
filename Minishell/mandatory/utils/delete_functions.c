@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   delete_functions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 06:23:43 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/14 15:25:25 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,31 @@ void	delete_tree(t_tree *root)
 	root = NULL;
 }
 
+// Function to free the tok->start of the dclst nodes added by manage_wildcards 
+static void	delete_wildcards(t_general *gen)
+{
+	t_dclst	*current;
+	t_token	*tok;
+
+	current = *gen->head;
+	while (1)
+	{
+		tok = (t_token *) current->data;
+		if (tok->start && (tok->start < gen->in_start || tok->start > gen->in_end))
+			free(tok->start);
+		current = current->next;
+		if (current == *gen->head)
+			break;
+	}
+}
+
 // Function to reinitialize the command line
 void	delete_cmd_line(t_general *gen)
 {
+	if (gen->stdin_backup)
+		close(gen->stdin_backup);
+	if (gen->stdout_backup)
+		close(gen->stdout_backup);
 	if (!gen)
 		return ;
 	if (gen->input)
@@ -53,7 +75,10 @@ void	delete_cmd_line(t_general *gen)
 	if (gen->input_cpy)
 		free(gen->input_cpy);
 	if (gen->head)
+	{
+		delete_wildcards(gen);
 		dclst_clear(gen->head);
+	}
 	if (gen->tree)
 		delete_tree(gen->tree);
 	gen->input = NULL;
@@ -65,15 +90,28 @@ void	delete_cmd_line(t_general *gen)
 // Function to free the general structure
 void	delete_general(t_general *gen)
 {
+	rl_clear_history();
+	unlink(TEMP_FILE);
 	if (!gen)
 		return ;
-	delete_cmd_line(gen);
 	if (gen->envp)
 		delete_str_tab(gen->envp);
 	if (gen->pwd)
 		free(gen->pwd);
 	if (gen->home)
 		free(gen->home);
+	delete_cmd_line(gen);
+	gen->envp = NULL;
+	gen->pwd = NULL;
+	gen->home = NULL;
 	free(gen);
 	gen = NULL;
+}
+
+// Function to free everything before closing
+void	delete_before_close(t_general *gen)
+{
+	rl_clear_history();
+	unlink(TEMP_FILE);
+	delete_general(gen);
 }
