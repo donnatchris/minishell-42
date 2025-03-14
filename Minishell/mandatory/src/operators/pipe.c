@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:32:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 15:09:46 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 16:02:19 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ int	pipe_operator(t_tree *tree, t_general *gen)
 			ft_perror("handle_pipe", "fork failed"));
 	if (left_pid == 0)
 		writing_proc(fd, tree, gen);
-	gen->in_pipe = 0;
 	right_pid = fork();
 	if (right_pid == -1)
 		return (close(fd[0]), close(fd[1]),
@@ -108,6 +107,7 @@ int	pipe_operator(t_tree *tree, t_general *gen)
 	if (waitpid(left_pid, &left_status, 0) == -1)
 		ft_perror("handle_pipe", "waitpid failed");
 	// ignore_signals();
+	gen->in_pipe = 0;
 	if (waitpid(right_pid, &right_status, 0) == -1)
 		ft_perror("handle_pipe", "waitpid failed");
 	init_signals();
