@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize_minishell.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:08 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/09 00:38:36 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/14 10:33:31 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

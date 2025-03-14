@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 10:27:02 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/14 10:30:50 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	delete_tree(t_tree *root)
 	root = NULL;
 }
 
-
+// Function to free the tok->start of the dclst nodes added by manage_wildcards 
 static void	delete_wildcards(t_general *gen)
 {
 	t_dclst	*current;
