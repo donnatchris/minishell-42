@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_defines.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 07:03:04 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/13 11:22:45 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/15 08:48:54 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 // defines
 # define SYMBOLS "<>|&;()'\""
 # define WHITESPACES " \t\n\r\v\f"
+# define NO_HIDDEN 0
+# define W_HIDDEN 1
+# define NO_PARENTHESIS 0
+# define IN_PARENTHESIS 1
 # define TEMP_FILE "/tmp/minishell_heredoc.tmp"
 
 // Color definitions
@@ -96,10 +100,5 @@ typedef struct s_general
 	int		stdout_backup;
 	int		in_pipe;
 }			t_general;
-
-# define NO_HIDDEN 0
-# define W_HIDDEN 1
-# define NO_PARENTHESIS 0
-# define IN_PARENTHESIS 1
 
 #endif

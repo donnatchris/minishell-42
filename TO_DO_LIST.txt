@@ -1,16 +1,9 @@
 TO DO LIST:
 
-- ft_exit: récupère la valeur de retour de la dernière commande?
+- exec parenthesis: leaks avec wildcards (mettre un flag pour savoir si token->start a ete malloc)
 
-- dans unset : utiliser realloc
+- gestion CTRL C dans heredoc et autres
 
-- wildcards ok mais allocation de la mémoire du nouveau token->start pas free
-
-- gérer les signaux dans append_input comme pour heredoc?
-    -> generaliser la gestion de signaux a l execution de l arbre binaire
-
-- cat <<eof | grep truc
-
-- wildcards dans les noms de fichier: erreur si plusieurs fichiers possibles
+- check synthax qui part de droite a gauche
 
 - tests multiples

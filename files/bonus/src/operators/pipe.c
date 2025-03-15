@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:32:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 16:02:19 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/15 08:40:37 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	reading_proc(int fd[], t_tree *tree, t_general *gen)
 	{
 		close(fd[0]);
 		delete_general(gen);
-		// close(STDIN_FILENO);
 		ft_perror("handle_pipe", "dup2 failed");
 		exit(42);
 	}
@@ -104,13 +103,11 @@ int	pipe_operator(t_tree *tree, t_general *gen)
 		reading_proc(fd, tree, gen);
 	close(fd[1]);
 	close(fd[0]);
-	if (waitpid(left_pid, &left_status, 0) == -1)
-		ft_perror("handle_pipe", "waitpid failed");
-	// ignore_signals();
 	gen->in_pipe = 0;
+	if (waitpid(left_pid, &left_status, 0) == -1)
+		ft_perror("handle_pipe", "left waitpid failed");
 	if (waitpid(right_pid, &right_status, 0) == -1)
-		ft_perror("handle_pipe", "waitpid failed");
-	init_signals();
+		ft_perror("handle_pipe", "right waitpid failed");
 	if (WIFSIGNALED(right_status))
 		return (128 + WTERMSIG(right_status));	
 	return (WIFEXITED(right_status) ? WEXITSTATUS(right_status) : -1);

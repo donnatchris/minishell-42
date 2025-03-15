@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   delete_functions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 15:25:25 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/15 08:49:16 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ void	delete_cmd_line(t_general *gen)
 void	delete_general(t_general *gen)
 {
 	rl_clear_history();
-	unlink(TEMP_FILE);
 	if (!gen)
 		return ;
 	if (gen->envp)

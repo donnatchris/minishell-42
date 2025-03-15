@@ -8,9 +8,9 @@ NAME = minishell
 BONUS = minishell_bonus
 
 # Directories for mandatory part
-SRC_DIR = mandatory/src
-UTILS_DIR = mandatory/utils
-INC_DIR = mandatory/include
+SRC_DIR = files/bonus/src
+UTILS_DIR = files/bonus/utils
+INC_DIR = files/bonus/include
 OBJ_DIR = obj/mandatory
 
 # Directories for bonus part
@@ -20,8 +20,8 @@ BONUS_INC_DIR = bonus/include
 BONUS_OBJ_DIR = obj/bonus
 
 # Directories for common part
-LIBFT_DIR = libft
-DCLST_DIR = dclst
+LIBFT_DIR = files/libft
+DCLST_DIR = files/dclst
 
 # Main file for mandatory part
 MAIN = $(SRC_DIR)/main.c
@@ -79,7 +79,7 @@ SRC = \
 	$(UTILS_DIR)/node_token_info3.c \
 	$(UTILS_DIR)/token_error_message.c \
 	$(UTILS_DIR)/utils_functions.c \
-	mandatory/test/tests_to_remove.c \
+	files/bonus/test/tests_to_remove.c \
 	$(MAIN)
 
 # Sources files for bonus part
