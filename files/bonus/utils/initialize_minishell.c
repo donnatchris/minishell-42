@@ -3,17 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   initialize_minishell.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:08 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 16:54:52 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/15 10:22:32 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+// Function to initialize the shell path in the general structure
+static void	init_shell(t_general *gen)
+{
+	char	*shell;
+
+	shell = ft_strjoin(gen->pwd, "/minishell");
+	if (!shell)
+		shell_err_msg("init_shell", "ft_strjoin failed");
+	else
+	{
+		update_env_var("SHELL", '=', shell, &gen->envp);
+		free(shell);
+	}
+}
+
 // Function to initialize the home value in the general structure
-void	init_home_gen(t_general *gen)
+static void	init_home(t_general *gen)
 {
 	char	*home;
 
@@ -27,28 +42,21 @@ void	init_home_gen(t_general *gen)
 }
 
 // Function to store the initial working directory in the general structure
-void	init_gen_pwd(t_general *gen)
+static void	init_pwd(t_general *gen)
 {
 	char	pwd[PATH_MAX];
 
+	unset_one_env_var("OLDPWD", &gen->envp);
 	if (!getcwd(pwd, sizeof(pwd)))
-	{
 		shell_err_msg("init_gen_pwd", "getcwd failed");
-		delete_general(gen);
-		exit(1);
-	}
 	gen->pwd = ft_strdup(pwd);
 	if (!gen->pwd)
-	{
 		shell_err_msg("init_gen_pwd", "ft_strdup failed");
-		delete_general(gen);
-		exit(1);
-	}
 }
 
 // Function to increment the value of the SHLVL variable
 // Returns 0 on success, -1 on error
-int	change_shlvl(char ***envp)
+static int	change_shlvl(char ***envp)
 {
 	char	*shlvl;
 	char	*new_shlvl;
@@ -61,7 +69,7 @@ int	change_shlvl(char ***envp)
 		i = ft_atoi(shlvl);
 	new_shlvl = ft_itoa(i + 1);
 	if (!new_shlvl)
-		return (shell_err_msg("change_shlvl", "ft_itoa failed"), -1);
+		return (shell_err_msg("change_shlvl", "ft_itoa failed"));
 	update_env_var("SHLVL", '=', new_shlvl, envp);
 	free(new_shlvl);
 	return (0);
@@ -76,23 +84,20 @@ t_general	*init_gen(t_general *gen, char **envp, char **av, int ac)
 	gen = (t_general *) malloc(sizeof(t_general));
 	if (!gen)
 	{
-		shell_err_msg("main", "malloc failed");
+		shell_err_msg("init_gen", "malloc failed");
 		exit (1);
 	}
 	ft_memset(gen, 0, sizeof(t_general));
 	gen->envp = copy_env(envp);
 	if (!gen->envp)
 	{
-		shell_err_msg("init_minishell", "failed to copy envp");
+		shell_err_msg("init_gen", "failed to copy envp");
 		delete_general(gen);
 		exit(1);
 	}
-	if (change_shlvl(&gen->envp) == -1)
-	{
-		delete_general(gen);
-		exit(1);
-	}
-	init_gen_pwd(gen);
-	init_home_gen(gen);
+	change_shlvl(&gen->envp);
+	init_pwd(gen);
+	init_home(gen);
+	init_shell(gen);
 	return (gen);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:57:09 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/10 16:42:01 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/15 09:52:11 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,7 @@ int	cd_cmd(char **args, char ***envp, t_general *gen)
 	actualize_cd_env(gen->pwd, envp, gen, new_pwd);
 	if (new_pwd)
 		free(new_pwd);
+	if (args[1] && args[1][0] == '-' && args[1][1] == '\0')
+		ft_printf("%s\n", ft_getenv("PWD", *envp));
 	return (0);
 }
