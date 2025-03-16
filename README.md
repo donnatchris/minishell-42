@@ -57,6 +57,37 @@ For input or output redirections, the program first checks if more than one file
 
 ---
 
+#### **BUILTINS:**
+The builtins are the commands directly coded into minishell.
+
+### **`cd`:**
+I chose to implement non-mandatory arguments, such as:
+- `cd ~` (changes to the user's home directory),
+- `cd -` (returns to the previous working directory),
+- `cd` without arguments (changes to the home directory).  
+
+Once the working directory is changed, the environment variables `PWD` and `OLDPWD` are updated.
+
+### **`pwd`:**
+Simply prints the current working directory.
+
+### **`env`:**
+Prints the environment variables array, excluding variables without a value (those registered without an `=`).
+
+### **`export`:**
+- When used without arguments, the `export` command displays the environment variables sorted alphabetically (including those without an associated value) in a specific format.  
+- When used with arguments, it adds new environment variables or updates the value of existing ones, after verifying that the variable name follows certain rules:
+  - The first character of the name must be a letter or `_`.
+  - Subsequent characters must be alphanumeric or `_`.
+
+### **`unset`:**
+This command simply removes an environment variable. `unset` never returns an error, so even if the variable does not exist, it exits without an error.
+
+### **`exit`:**
+`exit` allows the program to terminate cleanly, returning either the exit status of the last command executed or the exit status provided as an argument.
+
+---
+
 ## SOME COMMANDS YOU CAN USE:
 
 compile the program and suppress the .o files:
