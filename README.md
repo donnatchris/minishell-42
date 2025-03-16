@@ -139,6 +139,8 @@ execute the program
 - readme.md for quick explanation and main commands of the project
 - valgrind.sup is a file containig a list of readline() leaks to suppress when executing valgring
 
+---
+
 ## TOKENS IN MINISHELL
 
 A **token** is a sequence of characters in a string that represents a single unit of meaningful data.
@@ -152,10 +154,10 @@ These can include commands, arguments, operators (such as `|`, `&&`, `>`, `<`), 
 Minishell parses the input by first breaking it into tokens, which are then used to construct an abstract syntax tree (AST) or to directly interpret and execute the commands.
 Handling tokens correctly allows Minishell to process complex command lines, perform redirections, handle pipes, and expand environment variables, enabling it to execute user commands accurately and efficiently.
 
-To ensure the correct execution of commands, tokens should be processed in the following order of priority:
+To ensure the correct execution of commands, here are the tokenisation I use:
 
 1. **Parentheses `()`**  
-   - Used for grouping commands and controlling the execution order within the shell. Handle first to correctly identify subexpressions.
+   - Used for grouping commands and controlling the execution order within the shell.
 
 2. **Logical AND `&&`**  
    - Used to execute the second command only if the first command succeeds. High priority to allow proper chaining of conditional commands.
@@ -167,19 +169,17 @@ To ensure the correct execution of commands, tokens should be processed in the f
    - Allows output from one command to be passed as input to another. It should be processed next to handle command pipelines.
 
 5. **Redirections `<`, `>`, `>>`, `<<`**  
-   - Used to redirect input and output, including appending (`>>`) and reading until a delimiter (`<<`). These should be handled after pipes to set up proper input/output flows.
+   - Used to redirect input and output, including appending (`>>`) and reading until a delimiter (`<<`).
+These should be handled after pipes to set up proper input/output flows, except that heredoc ('<<') temporary file is created before the pipes execution.
 
-6. **Command Substitution `$()`**  
-   - Used to execute commands inside `$()` and replace them with their output. Should be processed before normal arguments.
-
-7. **Environment Variable Expansion `$VAR`**  
-   - Expands environment variables like `$HOME`, `$PATH`, etc., to their actual values. These need to be handled before final command execution.
-
-8. **Arguments (words, strings, etc.)**  
+6. **Arguments**  
    - The command name and its arguments are processed last, once all operators and special tokens are handled.
+   - I use 3 types of arguments:
+  	- **word** are consecutive caracters containing no space
+      	- **strings** are caracters contained inside double quotes
+      	- **litteral** are caracters contained inside signe quotes (the matacaracters inside wil not be interpreted)
 
-By following this order of priority, the shell will ensure that commands, their operators, and redirections are properly parsed and executed.
-
+---
 
 ## DOCUMENTATION:
 
@@ -196,7 +196,6 @@ However, at the end of the DOCUMENTATION section, you will find a SHORT REMINDER
 ### GITHUB COOPERATION
 
 Here are the main commands to wotk with multiples branches:
-
 
 #### Create a new branch and switch to that branch
 ```bash
@@ -271,11 +270,8 @@ A **binary tree** is a hierarchical data structure in which each node has at mos
 Overall, binary trees are widely used in computer science for organizing and manipulating hierarchical data. They serve as the foundation for many more advanced data structures and algorithms.
 
 #### **In Minishell**  
-In **Minishell**, you will use the binary tree structure to:  
-✅ **Parse and organize the user input** by breaking down commands, operators, and arguments into nodes, enabling efficient management of the command pipeline.  
-✅ **Handle operator precedence** by constructing the binary tree to reflect the proper execution order, ensuring that operations like `|`, `>`, `<`, and logical operators (e.g., `&&`, `||`) are processed in the correct sequence.  
-✅ **Support command chaining and redirections** by storing expressions in the tree and recursively managing left and right subtrees to handle complex command structures.  
-✅ **Optimize the evaluation process** by traversing the tree to evaluate the correctness of the syntax and expand environment variables (e.g., `$PATH`, `$HOME`) within the context of each command.
+In **Minishell**, you I use the binary tree structure only to:  
+✅ **Handle operator precedence** by constructing the binary tree to reflect the proper execution order, ensuring that operations like logical operators (e.g., `&&`, `||`) and pipes (`|`) are processed in the correct sequence. 
 
 ---
 
