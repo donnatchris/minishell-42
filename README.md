@@ -74,11 +74,18 @@ Simply prints the current working directory.
 ### **`env`:**
 Prints the environment variables array, excluding variables without a value (those registered without an `=`).
 
+**Note:**  
+Functions to manipulate environment variables (needed for export, unset, cd, ...) can be found in the ENV directory.
+
 ### **`export`:**
 - When used without arguments, the `export` command displays the environment variables sorted alphabetically (including those without an associated value) in a specific format.  
 - When used with arguments, it adds new environment variables or updates the value of existing ones, after verifying that the variable name follows certain rules:
   - The first character of the name must be a letter or `_`.
   - Subsequent characters must be alphanumeric or `_`.
+
+**Note:**  
+- Variables are stored in the following format: `NAME=VALUE`.
+- If a variable is exported without a value, it is stored without the `=` character, unless it already exists in the environment variables list. In that case, it is stored with the `=` character after its name but without an associated value.
 
 ### **`unset`:**
 This command simply removes an environment variable. `unset` never returns an error, so even if the variable does not exist, it exits without an error.
@@ -87,6 +94,10 @@ This command simply removes an environment variable. `unset` never returns an er
 `exit` allows the program to terminate cleanly, returning either the exit status of the last command executed or the exit status provided as an argument.
 
 ---
+
+#### **SIGNALS:**
+Contains the functions to handle signals.
+
 
 ## SOME COMMANDS YOU CAN USE:
 
