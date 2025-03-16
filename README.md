@@ -28,10 +28,7 @@ For tokens, I aimed to work solely with pointers referencing parts of the input 
 
 Once the token list is created, its syntax is validated in the `check_syntax` function. If the input ends with `||`, `&&`, or `|`, an additional prompt is opened for the user to complete their input. If the input syntax is invalid, an error message is displayed.
 
----
-
-#### **BINARY TREE:**
-The token list is then passed to a function that creates a binary tree by traversing the list from right to left, searching for operators like `||`, `&&`, `|`, or `;`. Each operator points to its left and right parts, and the tree is built recursively until reaching the leaves. Each leaf simply points to the leftmost token between operators.
+The token list is then passed to a function that creates a **binary tree** by traversing the list from right to left, searching for operators like `||`, `&&`, `|`, or `;`. Each operator points to its left and right parts, and the tree is built recursively until reaching the leaves. Each leaf simply points to the leftmost token between operators. Binary tree is not necessary if you do not plan to do the bonus part.
 
 ---
 
