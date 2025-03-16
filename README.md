@@ -8,6 +8,58 @@ By chdonnat (Christophe Donnat from 42 Perpignan, France)
 
 ### ABOUT MY PROJECT:
 
+This minishell project was implemented with bonuses and several features that are not mandatory according to the subject.
+
+As with my previous projects, I used functions to manipulate doubly linked circular lists (which I created during the FDF project), although using a linear list might have been simpler. All the functions for manipulating these lists can be found in the `/dclst` folder.  
+Here’s an overview of how the project works:
+
+---
+
+#### **General Structure:**
+Once the program starts, a general structure is initialized. This structure contains most of the elements and will be fully freed upon program termination, even though many elements will be reset with each user input.  
+At startup, the structure dynamically allocates and stores a copy of the environment variables (while also updating the `SHLVL` and `SHELL` variables). This copy is used for environment variable management throughout the minishell's execution.
+
+---
+
+#### **LEXER:**
+Once the user input is recorded, it is split into different tokens, stored in structures (organized as linked lists). Each token contains a portion of the user's input string, along with additional information (e.g., the token type, whether there is a space after the token, whether it is enclosed in single or double quotes, and whether the string was dynamically allocated).  
+
+For tokens, I aimed to work solely with pointers referencing parts of the input string to avoid dynamically allocating memory for the string fragments stored in the tokens. However, this effort proved somewhat unnecessary later in the program. Specifically, when handling wildcards, I create new tokens with dynamically allocated strings, which is why I had to add a flag to determine which strings to free later. Nonetheless, this approach remains interesting for those not planning to implement the project's bonuses.  
+
+Once the token list is created, its syntax is validated in the `check_syntax` function. If the input ends with `||`, `&&`, or `|`, an additional prompt is opened for the user to complete their input. If the input syntax is invalid, an error message is displayed.
+
+---
+
+#### **BINARY TREE:**
+The token list is then passed to a function that creates a binary tree by traversing the list from right to left, searching for operators like `||`, `&&`, `|`, or `;`. Each operator points to its left and right parts, and the tree is built recursively until reaching the leaves. Each leaf simply points to the leftmost token between operators.
+
+---
+
+#### **EXECUTOR:**
+The executor traverses the binary tree in the `exec_tree` function. If it encounters a leaf, it executes it. If it encounters an operator, it executes the left and right parts (under certain conditions). The pipe operator is more complex because it must create heredocs if they are found in its child branches before creating the pipe (whereas heredocs are normally created during leaf execution if there are no pipes).  
+
+When the executor reaches a leaf, the `exec_leaf()` function processes input and output redirections from left to right, then proceeds to the `exec_cmd` function, which creates an array of strings via the `extract_args` function (the arguments are first processed in the TEXT TRANSFORMER functions to replace characters as needed). This array contains the command and its arguments. Depending on the first argument in the array (the command name), the array is sent to the appropriate function: if the command corresponds to a builtin (the few commands coded into minishell), the relevant function is called with the array as an argument; otherwise, the `execve_cmd` function is called.  
+
+The `execve_cmd()` function checks if the command is located in one of the directories listed in the `PATH` environment variable, then executes the command in a child process via `execve()`. If the command is not found, an error message is displayed.  
+
+Parentheses are both a token and a special type of leaf in the tree: the content within parentheses is recursively processed in a subshell executed in a child process. The content inside the parentheses is tokenized by the lexer and then executed by the executor.  
+
+As you can see, I didn’t really implement traditional parsing. Instead, the function executing the leaf and the one creating the argument array are responsible for navigating the token list correctly to find the appropriate redirections and arguments.  
+The functions for executing redirections, parentheses, and pipes are located in the "OPERATORS" folder.
+
+---
+
+#### **TEXT TRANSFORMER:**
+During the creation of the argument array, the strings contained in the tokens pass through the `manage_dollar()` function, which returns a dynamically allocated string after replacing `$` with the corresponding environment variable value (if it exists; otherwise, it is replaced with an empty string).  
+
+In the dollar manager, I also added support for `~` (which is not required by the subject): if a string contains only the `~` symbol or starts with `~/`, this character is replaced with the absolute path to the user's home directory (I store the value of the `HOME` variable in the general structure when minishell starts, meaning that if this value is modified before launching minishell, `~` will not work correctly).  
+
+The text transformer also includes functions for handling wildcards: first, an array of strings containing the names of files and directories in the current directory is created. Then, each entry is compared with the input to find matches for the wildcard, and a new array of strings is created with each matching entry. Based on this array, new tokens are created and inserted into the token list.  
+
+For input or output redirections, the program first checks if more than one file or directory name matches the wildcard. If so, an error message is displayed.
+
+---
+
 ## SOME COMMANDS YOU CAN USE:
 
 compile the program and suppress the .o files:
