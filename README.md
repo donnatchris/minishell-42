@@ -137,7 +137,7 @@ This command simply removes an environment variable. `unset` never returns an er
 #### **SIGNALS:**
 Contains the functions to handle signals.
 
----
+----
 
 ## DOCUMENTATION:
 
