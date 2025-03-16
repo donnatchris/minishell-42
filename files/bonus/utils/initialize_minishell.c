@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:08 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/15 10:22:32 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 16:57:21 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static void	init_shell(t_general *gen)
 }
 
 // Function to initialize the home value in the general structure
+// (if there is no HOME variable, the home value is set to
+// the current working directory)
 static void	init_home(t_general *gen)
 {
 	char	*home;
@@ -39,6 +41,8 @@ static void	init_home(t_general *gen)
 		if (!gen->home)
 			shell_err_msg("init_home_gen", "ft_strdup failed");
 	}
+	else
+		gen->home = ft_strdup(gen->pwd);
 }
 
 // Function to store the initial working directory in the general structure
@@ -51,7 +55,11 @@ static void	init_pwd(t_general *gen)
 		shell_err_msg("init_gen_pwd", "getcwd failed");
 	gen->pwd = ft_strdup(pwd);
 	if (!gen->pwd)
+	{
 		shell_err_msg("init_gen_pwd", "ft_strdup failed");
+		delete_before_close(gen);
+		exit(1);
+	}
 }
 
 // Function to increment the value of the SHLVL variable
