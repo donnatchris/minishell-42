@@ -1,7 +1,0 @@
-TO DO LIST:
-
-- gestion CTRL C dans heredoc et autres (faire un processus enfant?)
-
-- gérer heredoc quand le delimiteur contient des parenthèses?
-
-- tests multiples
