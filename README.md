@@ -87,9 +87,11 @@ When used without arguments, the `export` command displays the environment varia
 When used with arguments, it adds new environment variables or updates the value of existing ones, after verifying that the variable name follows certain rules:
 - The first character of the name must be a letter or `_`.
 - Subsequent characters must be alphanumeric or `_`.
+
 **Note:**  
 Variables are stored in the following format: `NAME=VALUE`.
-If a variable is exported without a value, it is stored without the `=` character, unless it already exists in the environment variables list. In that case, it is stored with the `=` character after its name but without an associated value.
+If a variable is exported without a value, it is stored without the `=` character, unless it already exists in the environment variables list.
+In that case, it is stored with the `=` character after its name but without an associated value.
 
 ### **unset:**
 This command simply removes an environment variable. `unset` never returns an error, so even if the variable does not exist, it exits without an error.
