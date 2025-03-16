@@ -140,7 +140,7 @@ Contains the functions to handle signals.
 ---
 ---
 
-## DOCUMENTATION:
+# DOCUMENTATION:
 
 For explanations on functions and concepts already used in previous projects, refer to the README files of my other projects:
 
