@@ -141,46 +141,6 @@ execute the program
 
 ---
 
-## TOKENS IN MINISHELL
-
-A **token** is a sequence of characters in a string that represents a single unit of meaningful data.
-In programming and parsing, tokens are the building blocks that the parser breaks input into for further processing.
-Tokens can include keywords, identifiers, operators, literals, or symbols that are meaningful within a specific context.
-For example, in a programming language, a token might represent a keyword like `if`, an operator like `+`, or a number like `42`.
-In general, tokens allow the parser to understand and categorize different parts of an input string.
-
-In the context of **Minishell**, tokens are the elements extracted from the user's input command line.
-These can include commands, arguments, operators (such as `|`, `&&`, `>`, `<`), special symbols (like parentheses for grouping), or environment variables (e.g., `$HOME`).
-Minishell parses the input by first breaking it into tokens, which are then used to construct an abstract syntax tree (AST) or to directly interpret and execute the commands.
-Handling tokens correctly allows Minishell to process complex command lines, perform redirections, handle pipes, and expand environment variables, enabling it to execute user commands accurately and efficiently.
-
-To ensure the correct execution of commands, here are the tokenisation I use:
-
-1. **Parentheses `()`**  
-   - Used for grouping commands and controlling the execution order within the shell.
-
-2. **Logical AND `&&`**  
-   - Used to execute the second command only if the first command succeeds. High priority to allow proper chaining of conditional commands.
-
-3. **Logical OR `||`**  
-   - Used to execute the second command only if the first command fails. Similar priority to `&&` for conditional command chaining.
-
-4. **Pipe `|`**  
-   - Allows output from one command to be passed as input to another. It should be processed next to handle command pipelines.
-
-5. **Redirections `<`, `>`, `>>`, `<<`**  
-   - Used to redirect input and output, including appending (`>>`) and reading until a delimiter (`<<`).
-These should be handled after pipes to set up proper input/output flows, except that heredoc ('<<') temporary file is created before the pipes execution.
-
-6. **Arguments**  
-   - The command name and its arguments are processed last, once all operators and special tokens are handled.
-   - I use 3 types of arguments:
-  	- **word** are consecutive caracters containing no space
-      	- **strings** are caracters contained inside double quotes
-      	- **litteral** are caracters contained inside signe quotes (the matacaracters inside wil not be interpreted)
-
----
-
 ## DOCUMENTATION:
 
 For explanations on functions and concepts already used in previous projects, refer to the README files of my other projects:
@@ -226,6 +186,46 @@ git merge origin <name_of_the_branch>
 
 git push origin main
 ```
+
+---
+
+### Tokens in minishell
+
+A **token** is a sequence of characters in a string that represents a single unit of meaningful data.
+In programming and parsing, tokens are the building blocks that the parser breaks input into for further processing.
+Tokens can include keywords, identifiers, operators, literals, or symbols that are meaningful within a specific context.
+For example, in a programming language, a token might represent a keyword like `if`, an operator like `+`, or a number like `42`.
+In general, tokens allow the parser to understand and categorize different parts of an input string.
+
+In the context of **Minishell**, tokens are the elements extracted from the user's input command line.
+These can include commands, arguments, operators (such as `|`, `&&`, `>`, `<`), special symbols (like parentheses for grouping), or environment variables (e.g., `$HOME`).
+Minishell parses the input by first breaking it into tokens, which are then used to construct an abstract syntax tree (AST) or to directly interpret and execute the commands.
+Handling tokens correctly allows Minishell to process complex command lines, perform redirections, handle pipes, and expand environment variables, enabling it to execute user commands accurately and efficiently.
+
+To ensure the correct execution of commands, here are the tokenisation I use:
+
+1. **Parentheses `()`**  
+   - Used for grouping commands and controlling the execution order within the shell.
+
+2. **Logical AND `&&`**  
+   - Used to execute the second command only if the first command succeeds. High priority to allow proper chaining of conditional commands.
+
+3. **Logical OR `||`**  
+   - Used to execute the second command only if the first command fails. Similar priority to `&&` for conditional command chaining.
+
+4. **Pipe `|`**  
+   - Allows output from one command to be passed as input to another. It should be processed next to handle command pipelines.
+
+5. **Redirections `<`, `>`, `>>`, `<<`**  
+   - Used to redirect input and output, including appending (`>>`) and reading until a delimiter (`<<`).
+These should be handled after pipes to set up proper input/output flows, except that heredoc ('<<') temporary file is created before the pipes execution.
+
+6. **Arguments**  
+   - The command name and its arguments are processed last, once all operators and special tokens are handled.
+   - I use 3 types of arguments:
+  	- **word** are consecutive caracters containing no space
+      	- **strings** are caracters contained inside double quotes
+      	- **litteral** are caracters contained inside signe quotes (the matacaracters inside wil not be interpreted)
 
 ---
 
