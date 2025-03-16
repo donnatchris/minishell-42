@@ -40,7 +40,7 @@ execute the program
           		- text_transformer/ files for managing '$', '*' and '~'
 		- utils/ directory for secondary files
 		- include/ directory for headers
-	- mandatory/ directory for the mandatory part (empty)
+	- mandatory/ directory for the mandatory part (empty - everything is in the bonus directory)
 - Makefile (with rules: make bonus clean fclean re)
 - readme.md for quick explanation and main commands of the project
 - valgrind.sup is a file containig a list of readline() leaks to suppress when executing valgring
