@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:31:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/16 12:13:03 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 15:28:37 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ static char	**expand_array(char **args, char *arg, int *i)
 static t_dclst	*find_next_arg(t_dclst *node)
 {
 	t_dclst	*find;
-	
-	while(!is_tree_branch(node) && !is_eof(node))
+
+	while (!is_tree_branch(node) && !is_eof(node))
 	{
 		if (is_text(node))
 		{
 			if (!is_redir(node->prev))
 			{
-				if (has_space(node->prev) || !is_text(node->prev)) // modif recente (ajout !is_text)
+				if (has_space(node->prev) || !is_text(node->prev))
 					return (node);
 				find = node->prev;
 				while (is_text(find) && !has_space(find))
@@ -70,7 +70,7 @@ static t_dclst	*find_next_arg(t_dclst *node)
 				}
 			}
 		}
-		node = node->next;		
+		node = node->next;
 	}
 	return (NULL);
 }
@@ -83,12 +83,9 @@ char	**extract_args(t_dclst *node, t_general *gen)
 	char	*arg;
 	char	**args;
 	int		i;
+
 	args = ft_realloc_str_array(NULL, 1);
-	if (!args)
-		return (shell_err_msg("extract args", "malloc failed"), NULL);
 	node = find_next_arg(node);
-	if (!node)
-		return(NULL);
 	i = 0;
 	while (node)
 	{

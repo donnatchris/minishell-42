@@ -56,30 +56,30 @@ SRC = \
 	$(SRC_DIR)/operators/pipe.c \
 	$(SRC_DIR)/operators/redirection_in.c \
 	$(SRC_DIR)/operators/redirection_out.c \
+	$(SRC_DIR)/operators/heredoc_delimiter.c \
 	$(SRC_DIR)/operators/heredoc.c \
 	$(SRC_DIR)/parser/binary_tree.c \
 	$(SRC_DIR)/parser/check_synthax.c \
 	$(SRC_DIR)/parser/get_token1.c \
 	$(SRC_DIR)/parser/get_token2.c \
 	$(SRC_DIR)/parser/lexer.c \
-	$(SRC_DIR)/signals/heredoc_signal_handler.c \
 	$(SRC_DIR)/signals/main_signal_handler.c \
 	$(SRC_DIR)/text_transformer/dollar_manager.c \
 	$(SRC_DIR)/text_transformer/filenames_extraction.c \
 	$(SRC_DIR)/text_transformer/filenames_searcher.c \
 	$(SRC_DIR)/text_transformer/get_files_in_dir.c \
 	$(SRC_DIR)/text_transformer/wildcard_manager.c \
-	$(UTILS_DIR)/delete_functions.c \
-	$(UTILS_DIR)/error_messages.c \
+	$(UTILS_DIR)/delete_functions1.c \
+	$(UTILS_DIR)/delete_functions2.c \
+	$(UTILS_DIR)/error_messages1.c \
+	$(UTILS_DIR)/error_messages2.c \
 	$(UTILS_DIR)/ft_strtol.c \
 	$(UTILS_DIR)/get_next_node.c \
 	$(UTILS_DIR)/initialize_minishell.c \
 	$(UTILS_DIR)/node_token_info1.c \
 	$(UTILS_DIR)/node_token_info2.c \
 	$(UTILS_DIR)/node_token_info3.c \
-	$(UTILS_DIR)/token_error_message.c \
 	$(UTILS_DIR)/utils_functions.c \
-	files/bonus/test/tests_to_remove.c \
 	$(MAIN)
 
 # Sources files for bonus part
@@ -93,8 +93,7 @@ OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 BONUS_OBJ = $(BONUS_SRC:$(BONUS_SRC_DIR)/%.c=$(BONUS_OBJ_DIR)/%.o)
 
 # Compilation options (for Linux and MacOS)
-# options de compilation mac pour tester la mémoire: -fsanitize=undefined -fsanitize=address -g
-# ou -fsanitize=thread -g pour tester les threads
+# compilation options to test memory leaks on mac: -fsanitize=undefined -fsanitize=address -g
 ifeq ($(UNAME), Linux)
 	CFLAGS = -g -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR)/headers
 	LDFLAGS = -lreadline -L$(LIBFT_DIR) -lft_inc
@@ -114,9 +113,10 @@ $(NAME): $(OBJ) $(LIBFT_DIR)/libft_inc.a
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 
 # Rule to compile the bonus part
-bonus: $(BONUS)
-$(BONUS): $(BONUS_OBJ) $(LIBFT_DIR)/libft_inc.a
-	$(CC) $(CFLAGS) -o $(BONUS) $^ $(LDFLAGS)
+# bonus: $(BONUS)
+# $(BONUS): $(BONUS_OBJ) $(LIBFT_DIR)/libft_inc.a
+# 	$(CC) $(CFLAGS) -o $(BONUS) $^ $(LDFLAGS)
+bonus: all
 
 # Rule to compile libft
 $(LIBFT_DIR)/libft_inc.a:
@@ -136,10 +136,6 @@ $(BONUS_OBJ_DIR)/%.o: $(BONUS_SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 $(BONUS_OBJ_DIR)/%.o: $(BONUS_UTILS_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(BONUS_OBJ_DIR)/%.o: $(BONUS_UTILS_DIR)/%.c
-	@mkdir -p $(BONUS_OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Rule to clean the objects files

@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:21:47 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/16 08:31:44 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 15:04:57 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,17 @@
 // Global variable for handling signals
 int	g_signals;
 
-static void	starting_message()
+static void	starting_message(void)
 {
-	const char	*msg = BLUE "Welcome to minishell, a simple shell by chdonnat and nifromon." RESET;
-	int			i;
-	int			delay = 13000;
+	char	*msg;
+	int		i;
+	int		delay;
 
+	delay = 10000;
+	msg = BLUE "Welcome to minishell, a (not so) simple shell\
+	- by chdonnat and nifromon" RESET;
 	ft_printf("\033[2J");
-    ft_printf("\033[H");
+	ft_printf("\033[H");
 	i = -1;
 	while (msg[++i])
 	{

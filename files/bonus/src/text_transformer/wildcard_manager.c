@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:21:05 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/15 20:54:59 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 16:20:16 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static t_dclst	*insert_new_node(t_token *token, t_dclst *anchor)
 }
 
 // function to affect the values of the token
-static void	affect_token_values(t_token *token, char *matching_str)
+static void	affect_tok_values(t_token *token, char *matching_str)
 {
 	token->type = TOKEN_LITTERAL;
 	token->start = ft_strdup(matching_str);
@@ -61,7 +61,7 @@ static void	insert_additional_nodes(t_dclst *node, char **matching_array)
 			shell_err_msg("insert_additionnal_nodes", "malloc failed");
 			return ;
 		}
-		affect_token_values(token, matching_array[i]);
+		affect_tok_values(token, matching_array[i]);
 		insert_new_node(token, current);
 		current = current->next;
 		i++;
@@ -97,6 +97,6 @@ char	*manage_wildcards(char *arg, t_dclst *node, t_general *gen)
 	delete_str_tab(file_array);
 	insert_additional_nodes(node, matching_array);
 	ret = ft_strdup(matching_array[0]);
-	delete_str_tab(matching_array);	//test
+	delete_str_tab(matching_array);
 	return (free(arg), ret);
 }

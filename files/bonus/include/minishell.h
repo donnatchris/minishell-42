@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/16 12:27:22 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 16:27:17 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,15 @@ void		exit_cmd(char **args, char **envp, t_general *gen);
 /*										env									  */
 /* ************************************************************************** */
 // read_env.c
-size_t		count_env_size(char **envp);
+size_t		count_array_size(char **envp);
 char		**find_env_var(const char *var, char **envp);
 char		*ft_getenv(const char *var, char **envp);
 int			compare_env_vars(const char *s1, const char *s2);
+char		*find_var_name_end(char *ptr);
 // write_env.c
 char		**ft_realloc_env(char ***envp, char *new_entry);
-int	create_env_var(const char *key, char sep, const char *value, char ***envp);
+int			create_env_var(const char *key, char sep, const char *value,
+				char ***envp);
 int			update_env_var(const char *key,
 				char sep, const char *value, char ***envp);
 char		**copy_env(char **envp);
@@ -75,7 +77,7 @@ int			execve_cmd(char *cmd, char **args, char **envp, t_general *gen);
 int			exec_cmd(t_dclst *node, t_general *gen);
 // exec_leaf.c
 int			exec_leaf(t_dclst *node, t_general *gen);
-t_dclst	*get_next_heredoc(t_dclst *node);
+t_dclst		*get_next_heredoc(t_dclst *node);
 // exec_tree.c
 int			exec_tree(t_tree *tree, t_general *gen);
 // extract_arguments.c
@@ -90,15 +92,15 @@ char		*extract_filename(t_dclst *node, t_general *gen);
 int			run_parenthesis(t_tree *tree, t_general *gen);
 // pipe.c
 int			pipe_operator(t_tree *tree, t_general *gen);
-int			writing_proc(int fd[], t_tree *tree, t_general *gen);
-int			reading_proc(int fd[], t_tree *tree, t_general *gen);
 // redirection_in.c
 int			redir_in(t_dclst *node, t_general *gen);
 // redirection_out.c
 int			redir_out(t_dclst *node, t_general *gen);
+// heredo_delimiter.c
+t_delim		*find_delimiter(t_dclst *node);
 // heredoc.c
-int 		create_heredoc(t_dclst *node, t_general *gen);
-int 		redir_heredoc(void);
+int			create_heredoc(t_dclst *node, t_general *gen);
+int			redir_heredoc(void);
 /* ************************************************************************** */
 /*										parser								  */
 /* ************************************************************************** */
@@ -122,10 +124,6 @@ t_dclst		**tokenize(char *input);
 // signal_handler.c
 void		init_signals(void);
 void		main_signal_handler(int signum);
-void		ignore_signals(void);
-void		heredoc_signals(void);
-void		heredoc_signal_handler(int signum);
-void		child_signals();
 /* ************************************************************************** */
 /*									text_transformer						  */
 /* ************************************************************************** */
@@ -143,18 +141,24 @@ char		*manage_wildcards(char *arg, t_dclst *node, t_general *gen);
 /* ************************************************************************** */
 /*										utils								  */
 /* ************************************************************************** */
-// delete_functions.c
-void		delete_delim(t_delim *delim);
-void		delete_str_tab(char **tab);
-void		delete_tree(t_tree *root);
+// delete_functions1.c
 void		delete_cmd_line(t_general *gen);
 void		delete_general(t_general *gen);
 void		delete_before_close(t_general *gen);
-// error_msg.c
+// delete_functions2.c
+void		delete_delim(t_delim *delim);
+void		delete_str_tab(char **tab);
+void		delete_tree(t_tree *root);
+// error_messages1.c
 int			ft_perror(char *cmd, char *msg);
 int			shell_err_msg(char *cmd, char *msg);
 int			shell_error_quote(char *cmd, char *msg);
 int			open_error(char *filename);
+// error_messages2.c
+int			print_token_error(t_token *token);
+int			print_parenthesis_error(void);
+void		execve_err_msg(char *cmd);
+void		warning_msg(char *delimiter, int n_line);
 // ft_strtol.c
 long		ft_strtol(const char *nptr, char **endptr, int base);
 // get_next_node.c
@@ -180,20 +184,9 @@ int			has_space(t_dclst *node);
 int			is_filename(t_dclst *node);
 int			is_and_or(t_dclst *node);
 int			is_semicolon(t_dclst *node);
-// token_error_message.c
-int			print_token_error(t_token *token);
-int			print_parenthesis_error();
 // utils_functions.c
 char		**ft_realloc_str_array(char **tab, size_t new_size);
 char		*cut_name(char *str);
 int			is_valid_var_name(char *str);
-/* ************************************************************************** */
-/*										test								  */
-/* ************************************************************************** */
-// tests_to_remove.c
-void		print_tree(t_tree *root);
-void		print_string(char *start, char *end);
-void		print_a_token(t_token *token);
-void		print_dclst_tokens(t_dclst **head);
 
 #endif

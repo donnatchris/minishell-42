@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:03:51 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/15 20:59:34 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 16:13:54 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,18 @@ static void	null_terminate_token(t_dclst **head)
 	}
 }
 
+// Function to affect the values of the token structure
+static void	affect_token_value(t_token *token, int type, char *start, char *end)
+{
+	token->type = type;
+	token->start = start;
+	token->end = end;
+	token->space = 0;
+	token->str_is_malloc = 0;
+	if (ft_strchr(WHITESPACES, *end))
+		token->space = 1;
+}
+
 // Function to split the input into tokens
 // and store them in the doubly circular linked list
 // Returns 0 if the function succeeds or -1 if an error occurs
@@ -93,13 +105,7 @@ static int	tokenize_to_dclst(char *input, t_dclst **head)
 		token = (t_token *) malloc(sizeof(t_token) + 1);
 		if (!token)
 			return (-1);
-		token->type = type;
-		token->start = start;
-		token->end = end;
-		token->space = 0;
-		token->str_is_malloc = 0;
-		if (ft_strchr(WHITESPACES, *end))
-			token->space = 1;
+		affect_token_value(token, type, start, end);
 		dclst_add_back(head, token);
 	}
 	return (0);

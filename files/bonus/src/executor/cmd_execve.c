@@ -3,22 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_execve.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:30:45 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 15:09:40 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/16 15:13:52 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-
-// Function to print error message when the command is not found
-static void	execve_err_msg(char *cmd)
-{
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": command not found\n", 2);
-}
 
 // Function to find the path of the executable file
 // in the PATH environment variable
@@ -69,34 +61,34 @@ static char	*find_exec_path(char *cmd, char **envp)
 	return (exec_path);
 }
 
+// Function to execute execve in a child process
+static void	exec_child_proc(char *path, char **args, t_general *gen)
+{
+	close(gen->stdin_backup);
+	close(gen->stdout_backup);
+	if (execve(path, args, gen->envp) == -1)
+		ft_perror(path, "exec_ve failed");
+	free(path);
+	exit(-1);
+}
+
 // Function to execute a command using execve
 // Returns: 0 on success, -1 on error.
-static int	execute_execve_cmd(char *path, char **args, char **envp, t_general *gen)
+static int	exe_execve_cmd(char *path, char **args, t_general *gen)
 {
 	pid_t	pid;
 	int		status;
 
-	(void)gen;
 	status = -1;
 	pid = fork();
 	if (pid == -1)
 		return (ft_perror(path, "fork failed"), -1);
 	if (pid == 0)
-	{
-		// child_signals();
-		close(gen->stdin_backup);
-		close(gen->stdout_backup);
-		if (execve(path, args, envp) == -1)
-			ft_perror(path, "exec_ve failed");
-		free(path);
-		exit (status);
-	}
+		exec_child_proc(path, args, gen);
 	else
 	{
-		// ignore_signals();
 		if (waitpid(pid, &status, 0) == -1)
 			return (ft_perror(path, "waitpid failed"), status);
-		init_signals();
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 		if (WIFSIGNALED(status))
@@ -129,7 +121,7 @@ int	execve_cmd(char *cmd, char **args, char **envp, t_general *gen)
 		return (execve_err_msg(cmd), 127);
 	if (access(path, X_OK))
 		return (free(path), shell_err_msg(cmd, "permission denied"), 127);
-	ret = execute_execve_cmd(path, args, envp, gen);
+	ret = exe_execve_cmd(path, args, gen);
 	free(path);
 	return (ret);
 }

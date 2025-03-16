@@ -1,5 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   extract_filename.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/16 15:14:57 by christophed       #+#    #+#             */
+/*   Updated: 2025/03/16 16:21:48 by christophed      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
+// Function to check if the argument is ambiguous
+// Meaning that the argument contains a wildcard and matches multiple files
+// Returns 1 if the argument is ambiguous, 0 otherwise
 static int	is_ambiguous(char *arg, t_dclst *node)
 {
 	char	**file_array;
@@ -20,7 +35,7 @@ static int	is_ambiguous(char *arg, t_dclst *node)
 	if (!matching_array)
 		return (delete_str_tab(file_array), 0);
 	delete_str_tab(file_array);
-	if (count_env_size(matching_array) > 1)
+	if (count_array_size(matching_array) > 1)
 	{
 		shell_err_msg(arg, "ambiguous redirect");
 		return (delete_str_tab(matching_array), 1);
@@ -52,19 +67,19 @@ static char	*concat_filenames(char *filename, t_dclst *node, t_general *gen)
 // Returns the array of arguments
 // RETURN MUST BE FREED AFTER USE
 char	*extract_filename(t_dclst *node, t_general *gen)
-{//test
+{
 	char	*filename;
 
-    filename = manage_dollar((t_token *) node->data, gen);
-    while (!has_space(node) && is_text(node->next))
-    {
-        filename = concat_filenames(filename, node->next, gen);
-        if (!filename)
-            return (NULL);
-        node = node->next;
-    }
+	filename = manage_dollar((t_token *) node->data, gen);
+	while (!has_space(node) && is_text(node->next))
+	{
+		filename = concat_filenames(filename, node->next, gen);
+		if (!filename)
+			return (NULL);
+		node = node->next;
+	}
 	if (is_ambiguous(filename, node))
 		return (free(filename), NULL);
-    filename = manage_wildcards(filename, node, gen);
+	filename = manage_wildcards(filename, node, gen);
 	return (filename);
 }

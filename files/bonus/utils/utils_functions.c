@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_functions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:27:52 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/10 14:20:54 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/16 14:40:42 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 // Function to reallocate a string array
 // Returns the new string array
 // RETURN MUST BE FREED AFTER USE
-char **ft_realloc_str_array(char **tab, size_t new_size)
+char	**ft_realloc_str_array(char **tab, size_t new_size)
 {
-	char **new_tab;
-	size_t i;
+	char	**new_tab;
+	size_t	i;
 
 	if (new_size == 0)
 		return (delete_str_tab(tab), NULL);
@@ -40,7 +40,7 @@ char **ft_realloc_str_array(char **tab, size_t new_size)
 		i++;
 	}
 	free(tab);
-	return new_tab;
+	return (new_tab);
 }
 
 // Function to cut the variable name from the string
