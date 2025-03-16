@@ -6,7 +6,7 @@ By chdonnat (Christophe Donnat from 42 Perpignan, France)
 ### BONUS PART:
 
 
-### ABOUT MY PROJECT:
+## ABOUT MY PROJECT:
 
 This minishell project was implemented with bonuses and several features that are not mandatory according to the subject.
 
