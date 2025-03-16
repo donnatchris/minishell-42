@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/16 08:00:06 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 12:27:22 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,7 @@ char		*manage_wildcards(char *arg, t_dclst *node, t_general *gen);
 /*										utils								  */
 /* ************************************************************************** */
 // delete_functions.c
+void		delete_delim(t_delim *delim);
 void		delete_str_tab(char **tab);
 void		delete_tree(t_tree *root);
 void		delete_cmd_line(t_general *gen);

@@ -6,11 +6,21 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/15 20:58:05 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 12:27:12 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+// Function to delete a delim structure
+void	delete_delim(t_delim *delim)
+{
+	if (!delim)
+		return ;
+	if (delim->str)
+		free(delim->str);
+	free(delim);
+}
 
 // Function to free the command array
 void	delete_str_tab(char **tab)

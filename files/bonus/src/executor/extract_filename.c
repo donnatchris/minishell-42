@@ -36,7 +36,7 @@ static char	*concat_filenames(char *filename, t_dclst *node, t_general *gen)
 	char	*next_arg;
 	char	*temp;
 
-	next_arg = manage_dollar((t_token *) node->data, gen->envp, gen->exit_status);
+	next_arg = manage_dollar((t_token *) node->data, gen);
 	if (!next_arg)
 		return (shell_err_msg("add_arg", "malloc failed"), filename);
 	temp = filename;
@@ -55,7 +55,7 @@ char	*extract_filename(t_dclst *node, t_general *gen)
 {//test
 	char	*filename;
 
-    filename = manage_dollar((t_token *) node->data, gen->envp, gen->exit_status);
+    filename = manage_dollar((t_token *) node->data, gen);
     while (!has_space(node) && is_text(node->next))
     {
         filename = concat_filenames(filename, node->next, gen);

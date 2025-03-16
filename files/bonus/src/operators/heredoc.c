@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/15 21:21:44 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 12:36:06 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,16 @@ static void	warning_msg(char *delimiter, int n_line)
 }
 
 // Function to print the line written in heredoc to the fd
-static void	print_heredoc_line(int fd, char *line, t_general *gen)
+static void	print_heredoc_line(int fd, char *line, t_general *gen, t_delim *delim)
 {
 	char	*temp;
 
-	temp = replace_each_dollar(line, gen);
+	if (delim->is_litteral)
+		temp = ft_strdup(line);
+	else
+		temp = replace_each_dollar(line, gen);
+	if (!temp)
+		return ;
 	ft_putstr_fd(temp, fd);
 	free(temp);
 	ft_putstr_fd("\n", fd);
@@ -50,21 +55,28 @@ static void	print_heredoc_line(int fd, char *line, t_general *gen)
 // Function to find the delimiters and create an array
 // Returns the next heredoc node, NULL if there is no more heredoc
 // RETURNS MUST BE FREED AFTER USE
-static char	*find_delimiter(t_dclst *node, t_general *gen)
+static t_delim	*find_delimiter(t_dclst *node)
 {
+	t_delim	*delimiter;
 	t_dclst	*current;
 	t_token *tok;
-	char	*delimiter;
 	char	*temp;
 
-	(void)gen;
+	delimiter = (t_delim *) malloc(sizeof(t_delim));
+	if (!delimiter)
+		return (shell_err_msg("find_delimiter", "malloc failed"), NULL);
+	ft_memset(delimiter, 0, sizeof(t_delim));
 	current = node->next;
 	tok = (t_token *) current->data;
-	delimiter = ft_strdup(tok->start);
+	delimiter->str = ft_strdup(tok->start);
+	if (!delimiter->str)
+		return (shell_err_msg("find_delimiter", "ft_strdup failed"), NULL);
 	while (!tok->space && is_text(current->next))
 	{
-		temp = delimiter;
-		delimiter = ft_strjoin(temp, ((t_token *) current->next->data)->start);
+		if (tok->type != TOKEN_WORD)
+			delimiter->is_litteral = 1;
+		temp = delimiter->str;
+		delimiter->str = ft_strjoin(temp, ((t_token *) current->next->data)->start);
 		free(temp);
 		current = current->next;
 		tok = (t_token *) current->data;
@@ -73,7 +85,7 @@ static char	*find_delimiter(t_dclst *node, t_general *gen)
 }
 
 // Fonction pour créer un fichier temporaire contenant l'entrée du heredoc
-static int create_heredoc_file(char *delimiter, t_general *gen)
+static int create_heredoc_file(t_delim *delim, t_general *gen)
 {
 	int			fd;
 	char		*line;
@@ -88,19 +100,19 @@ static int create_heredoc_file(char *delimiter, t_general *gen)
 		line = readline(CYAN "> " RESET);
 		if (!line)
 		{
-			warning_msg(delimiter, n_line);
+			warning_msg(delim->str, n_line);
 			break ;
 		}
-		if (!ft_strncmp(line, delimiter, ft_strlen(line)) && ft_strlen(line) == ft_strlen(delimiter))
+		if (!ft_strncmp(line, delim->str, ft_strlen(line)) && ft_strlen(line) == ft_strlen(delim->str))
 		{
 			free(line);
 			break ;
 		}
-		print_heredoc_line(fd, line, gen);
+		print_heredoc_line(fd, line, gen, delim);
 		if (line)
 			free(line);
 	}
-	return (free(delimiter), close(fd), 0);
+	return (delete_delim(delim), close(fd), 0);
 }
 
 // Function to create the TEMP_FILE for heredoc
@@ -108,14 +120,16 @@ static int create_heredoc_file(char *delimiter, t_general *gen)
 int create_heredoc(t_dclst *node, t_general *gen)
 {
 	t_dclst	*current;
-	char	*delimiter;
+	t_delim	*delimiter;
 
 	current = get_next_heredoc(node);
 	while (1)
 	{
 		if (!current)
 			break ;
-		delimiter = find_delimiter(current, gen);
+		delimiter = find_delimiter(current);
+		if (!delimiter)
+			return (-1);
 		if (create_heredoc_file(delimiter, gen))
 			return (-1);
 		current = get_next_heredoc(current->next);
