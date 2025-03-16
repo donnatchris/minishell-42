@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:29:39 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/12 10:33:23 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/16 12:13:12 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	exec_cmd(t_dclst *node, t_general *gen)
 	status = 0;
 	args = extract_args(node, gen);
 	if (!args)
-		return (shell_err_msg("exec_node", "extract_args failed"), -1);
+		return (0);
 	if (!ft_strncmp(args[0], "exit", 4) && ft_strlen(args[0]) == 4)
 		exit_cmd(args, gen->envp, gen);
 	else if (!ft_strncmp(args[0], "cd", 2) && ft_strlen(args[0]) == 2)
