@@ -3,8 +3,14 @@ By chdonnat (Christophe Donnat from 42 Perpignan, France)
 
 ## AIM OF THE PROJECT:
 
+The goal of the project is to create a simplified shell that closely mimics the behavior of `bash`. This includes handling parsing, redirections, pipes, signals, and executing commands via `execve()`, except for built-in commands, which must be directly coded into minishell.
+
 ### BONUS PART:
 
+To earn bonus points, the shell must handle:
+- Logical operators: `&&` (AND) and `||` (OR).
+- Parentheses `()` for command grouping.
+- Wildcards `*` for filename expansion.
 
 ## ABOUT MY PROJECT:
 
@@ -60,7 +66,7 @@ For input or output redirections, the program first checks if more than one file
 #### **BUILTINS:**
 The builtins are the commands directly coded into minishell.
 
-### **`cd`:**
+### **cd:**
 I chose to implement non-mandatory arguments, such as:
 - `cd ~` (changes to the user's home directory),
 - `cd -` (returns to the previous working directory),
@@ -68,26 +74,24 @@ I chose to implement non-mandatory arguments, such as:
 
 Once the working directory is changed, the environment variables `PWD` and `OLDPWD` are updated.
 
-### **`pwd`:**
+### **pwd:**
 Simply prints the current working directory.
 
-### **`env`:**
+### **env:**
 Prints the environment variables array, excluding variables without a value (those registered without an `=`).
-
 **Note:**  
 Functions to manipulate environment variables (needed for export, unset, cd, ...) can be found in the ENV directory.
 
-### **`export`:**
+### **export:**
 - When used without arguments, the `export` command displays the environment variables sorted alphabetically (including those without an associated value) in a specific format.  
 - When used with arguments, it adds new environment variables or updates the value of existing ones, after verifying that the variable name follows certain rules:
   - The first character of the name must be a letter or `_`.
   - Subsequent characters must be alphanumeric or `_`.
-
 **Note:**  
 - Variables are stored in the following format: `NAME=VALUE`.
 - If a variable is exported without a value, it is stored without the `=` character, unless it already exists in the environment variables list. In that case, it is stored with the `=` character after its name but without an associated value.
 
-### **`unset`:**
+### **unset:**
 This command simply removes an environment variable. `unset` never returns an error, so even if the variable does not exist, it exits without an error.
 
 ### **`exit`:**
