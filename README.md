@@ -138,7 +138,6 @@ This command simply removes an environment variable. `unset` never returns an er
 Contains the functions to handle signals.
 
 ---
----
 
 # DOCUMENTATION:
 
@@ -2634,5 +2633,3 @@ void perror(const char *s);
 - `s`: A string that is printed before the error message, providing context.
 - **Returns**: None.
 - **Purpose**: Prints a description of the last error that occurred (using `errno`), preceded by the string `s`.
-
---- 
