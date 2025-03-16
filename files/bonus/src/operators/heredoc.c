@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/16 12:36:06 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 13:06:24 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,13 @@ static t_delim	*find_delimiter(t_dclst *node)
 	current = node->next;
 	tok = (t_token *) current->data;
 	delimiter->str = ft_strdup(tok->start);
+	if (tok->type != TOKEN_WORD)
+		delimiter->is_litteral = 1;
 	if (!delimiter->str)
 		return (shell_err_msg("find_delimiter", "ft_strdup failed"), NULL);
 	while (!tok->space && is_text(current->next))
 	{
-		if (tok->type != TOKEN_WORD)
+		if (tok->type != TOKEN_WORD || ((t_token *) current->next->data)->type != TOKEN_WORD)
 			delimiter->is_litteral = 1;
 		temp = delimiter->str;
 		delimiter->str = ft_strjoin(temp, ((t_token *) current->next->data)->start);
