@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 05:18:15 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/16 08:04:15 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 17:25:14 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,12 @@ void	main_signal_handler(int signum)
 		}
 	}
 	return ;
+}
+
+// Function to handle signals while in heredoc mode
+void	heredoc_signals(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(EOF, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }

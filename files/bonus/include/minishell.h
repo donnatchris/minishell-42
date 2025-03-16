@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/16 16:27:17 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 17:25:47 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ t_dclst		**tokenize(char *input);
 // signal_handler.c
 void		init_signals(void);
 void		main_signal_handler(int signum);
+void		heredoc_signals(void);
 /* ************************************************************************** */
 /*									text_transformer						  */
 /* ************************************************************************** */
