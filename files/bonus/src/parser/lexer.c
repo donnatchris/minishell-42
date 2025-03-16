@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:03:51 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 04:10:44 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/15 20:59:34 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ static int	tokenize_to_dclst(char *input, t_dclst **head)
 		token->start = start;
 		token->end = end;
 		token->space = 0;
+		token->str_is_malloc = 0;
 		if (ft_strchr(WHITESPACES, *end))
 			token->space = 1;
 		dclst_add_back(head, token);

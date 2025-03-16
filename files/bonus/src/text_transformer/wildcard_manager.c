@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:21:05 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 10:24:38 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/15 20:54:59 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static void	affect_token_values(t_token *token, char *matching_str)
 	token->end = NULL;
 	token->space = 1;
 	token->priority = 6;
+	token->str_is_malloc = 1;
 }
 
 // Function to insert additional nodes in the doubly circular linked list

@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 07:03:04 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/15 10:19:07 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/15 20:54:15 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_token
 	int		space;
 	char	*start;
 	char	*end;
+	int		str_is_malloc;
 }			t_token;
 
 typedef enum e_token_type

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_signal_handler.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 05:18:15 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 15:08:07 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/16 08:04:15 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 // Function to initialize the signal handling
 void	init_signals(void)
 {
+	g_signals = 0;
 	signal(SIGINT, main_signal_handler);
 	signal(EOF, main_signal_handler);
 	signal(SIGQUIT, SIG_IGN);

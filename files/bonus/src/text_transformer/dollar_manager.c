@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 05:19:05 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/08 12:21:46 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/15 21:20:19 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,17 +86,25 @@ char	*replace_w_ex_stat(char *str, char *doll_p, char **envp, int ex_stat)
 // Function to replace every $ of a string
 // with the corresponding variable in the envp
 // Returns a pointer to the new string or NULL if it fails
-char	*replace_each_dollar(char *str, char **envp, int ex_stat)
+char	*replace_each_dollar(char *str, t_general *gen)
 {
 	char	*ptr;
 	char	*res;
 	int		i;
 
-	if (!str || !envp)
+	if (!str || !gen || !gen->envp)
 		return (shell_err_msg("replace_each_doll", "invalid arg"), NULL);
 	res = ft_strdup(str);
 	if (!res)
 		return (shell_err_msg("replace_each_doll", "ft_strdup failed"), NULL);
+	if (res[0] == '~' && (res[1] == '/' || res[1] == '\0'))
+	{
+		ptr = res;
+		res = ft_strjoin(gen->home, ptr + 1);
+		free(ptr);
+		if (!res)
+			return (shell_err_msg("replace_each_doll", "ft_strjoin failed"), NULL);
+	}
 	i = 0;
 	while (1)
 	{
@@ -110,9 +118,9 @@ char	*replace_each_dollar(char *str, char **envp, int ex_stat)
 		}
 		str = res;
 		if (*(ptr + 1) == '?')
-			res = replace_w_ex_stat(str, ptr, envp, ex_stat);
+			res = replace_w_ex_stat(str, ptr, gen->envp, gen->exit_status);
 		else
-			res = replace_a_dollar(str, ptr, envp);
+			res = replace_a_dollar(str, ptr, gen->envp);
 		free(str);
 		if (!res)
 			return (NULL);
@@ -124,11 +132,11 @@ char	*replace_each_dollar(char *str, char **envp, int ex_stat)
 // Takes a token with a non allocated string (start)
 // Returns a pointer to the dynamically allocated new string or NULL if it fails
 // RETURN MUST BE FREE AFTER USE
-char	*manage_dollar(t_token *token, char **envp, int ex_stat)
+char	*manage_dollar(t_token *token, t_general *gen)
 {
 	char	*str;
 
-	if (!token || !envp || !token->start)
+	if (!token || !gen)
 		return (shell_err_msg("manage_dollar", "invalid arg"), NULL);
 	if (token->type < TOKEN_STRING || token->type > TOKEN_LITTERAL)
 		return (shell_err_msg("manage_dollar", "invalid token type"), NULL);
@@ -139,7 +147,7 @@ char	*manage_dollar(t_token *token, char **envp, int ex_stat)
 			return (shell_err_msg("manage_dollar", "ft_strdup failed"), NULL);
 	}
 	else
-		str = replace_each_dollar(token->start, envp, ex_stat);
+		str = replace_each_dollar(token->start, gen);
 	if (!str)
 		return (NULL);
 	return (str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parenthesis.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:48:16 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 16:59:57 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/15 21:21:58 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int	run_parenthesis(t_tree *tree, t_general *gen)
 		delete_general(gen);
 		exit(status);
 	}
-	// ignore_signals();
 	if (waitpid(pid, &status, 0) == -1)
 		return (ft_perror("run_parenthesis", "waitpid failed"), -1);
 	init_signals();

@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:42 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/15 08:49:16 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/15 20:58:05 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	delete_tree(t_tree *root)
 }
 
 // Function to free the tok->start of the dclst nodes added by manage_wildcards 
-static void	delete_wildcards(t_general *gen)
+static void	delete_strings(t_general *gen)
 {
 	t_dclst	*current;
 	t_token	*tok;
@@ -53,8 +53,12 @@ static void	delete_wildcards(t_general *gen)
 	while (1)
 	{
 		tok = (t_token *) current->data;
-		if (tok->start && (tok->start < gen->in_start || tok->start > gen->in_end))
+		if (tok->str_is_malloc)
+		{
 			free(tok->start);
+			tok->start = NULL;
+			tok->str_is_malloc = 0;
+		}
 		current = current->next;
 		if (current == *gen->head)
 			break;
@@ -76,7 +80,7 @@ void	delete_cmd_line(t_general *gen)
 		free(gen->input_cpy);
 	if (gen->head)
 	{
-		delete_wildcards(gen);
+		delete_strings(gen);
 		dclst_clear(gen->head);
 	}
 	if (gen->tree)

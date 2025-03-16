@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/15 10:13:58 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 08:00:06 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,8 @@ void		child_signals();
 /*									text_transformer						  */
 /* ************************************************************************** */
 // dollar_manager.c
-char		*replace_each_dollar(char *str, char **envp, int exit_status);
-char		*manage_dollar(t_token *token, char **envp, int exit_status);
+char		*replace_each_dollar(char *str, t_general *gen);
+char		*manage_dollar(t_token *token, t_general *gen);
 // filenames_extraction.c
 char		**extract_matching_filenames(char *arg, char **file_array);
 // filenames_searcher.c
@@ -177,8 +177,11 @@ int			is_redir_out(t_dclst *node);
 // node_token_info3.c
 int			has_space(t_dclst *node);
 int			is_filename(t_dclst *node);
+int			is_and_or(t_dclst *node);
+int			is_semicolon(t_dclst *node);
 // token_error_message.c
 int			print_token_error(t_token *token);
+int			print_parenthesis_error();
 // utils_functions.c
 char		**ft_realloc_str_array(char **tab, size_t new_size);
 char		*cut_name(char *str);

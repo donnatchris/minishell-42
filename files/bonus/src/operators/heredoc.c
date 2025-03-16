@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 15:27:49 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/15 21:21:44 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	print_heredoc_line(int fd, char *line, t_general *gen)
 {
 	char	*temp;
 
-	temp = replace_each_dollar(line, gen->envp, gen->exit_status);
+	temp = replace_each_dollar(line, gen);
 	ft_putstr_fd(temp, fd);
 	free(temp);
 	ft_putstr_fd("\n", fd);
