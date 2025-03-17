@@ -6,26 +6,11 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:23:08 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/16 16:57:21 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/17 17:30:50 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-// Function to initialize the shell path in the general structure
-static void	init_shell(t_general *gen)
-{
-	char	*shell;
-
-	shell = ft_strjoin(gen->pwd, "/minishell");
-	if (!shell)
-		shell_err_msg("init_shell", "ft_strjoin failed");
-	else
-	{
-		update_env_var("SHELL", '=', shell, &gen->envp);
-		free(shell);
-	}
-}
 
 // Function to initialize the home value in the general structure
 // (if there is no HOME variable, the home value is set to
@@ -106,6 +91,5 @@ t_general	*init_gen(t_general *gen, char **envp, char **av, int ac)
 	change_shlvl(&gen->envp);
 	init_pwd(gen);
 	init_home(gen);
-	init_shell(gen);
 	return (gen);
 }
