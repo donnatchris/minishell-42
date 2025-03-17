@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_error_message.c                              :+:      :+:    :+:   */
+/*   error_messages2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:27:25 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/10 11:55:34 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/16 15:35:50 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,23 @@ int	print_token_error(t_token *token)
 	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
 	print_token(token);
 	ft_printf("\n");
-	return (-1);
+	return (258);
+}
+
+int	print_parenthesis_error(void)
+{
+	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
+	ft_putstr_fd("`)'", 2);
+	ft_printf("\n");
+	return (258);
+}
+
+// Function to print a warning message when the heredoc is not closed
+void	warning_msg(char *delimiter, int n_line)
+{
+	ft_putstr_fd("minishell: warning : here-document at line ", 2);
+	ft_putnbr_fd(n_line, 2);
+	ft_putstr_fd(" delimited by end-of-file (wanted `", 2);
+	ft_putstr_fd(delimiter, 2);
+	ft_putstr_fd("')\n", 2);
 }

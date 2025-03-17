@@ -1,9 +1,0 @@
-TO DO LIST:
-
-- exec parenthesis: leaks avec wildcards (mettre un flag pour savoir si token->start a ete malloc)
-
-- gestion CTRL C dans heredoc et autres
-
-- check synthax qui part de droite a gauche
-
-- tests multiples

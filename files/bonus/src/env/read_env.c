@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:23:26 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/07 04:23:29 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 16:26:24 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // Function to count environment size
 // Returns the number of variables in the environment
-size_t	count_env_size(char **envp)
+size_t	count_array_size(char **envp)
 {
 	size_t	i;
 
@@ -84,4 +84,17 @@ int	compare_env_vars(const char *s1, const char *s2)
 	if (*s1 == '=' || *s2 == '=')
 		return (*s1 - *s2);
 	return (*s1 - *s2);
+}
+
+// Function to find the end of a variable name
+// Returns a pointer to the end of the variable name or NULL if there is no name
+char	*find_var_name_end(char *ptr)
+{
+	if (!ptr)
+		return (NULL);
+	if (!ft_isalpha(*ptr) && *ptr != '_')
+		return (ptr);
+	while (ft_isalnum(*ptr) || *ptr == '_')
+		ptr++;
+	return (ptr);
 }

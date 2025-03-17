@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 15:27:49 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:10:18 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 // Function to redirect input from TEMP_FILE
 // Returns 0 or -1 if it fails
-int redir_heredoc(void)
+int	redir_heredoc(void)
 {
-	int fd;
+	int	fd;
 
 	fd = open(TEMP_FILE, O_RDONLY);
 	if (fd == -1)
@@ -27,53 +27,24 @@ int redir_heredoc(void)
 	return (0);
 }
 
-static void	warning_msg(char *delimiter, int n_line)
-{
-	ft_putstr_fd("minishell: warning : here-document at line ", 2);
-	ft_putnbr_fd(n_line, 2);
-	ft_putstr_fd(" delimited by end-of-file (wanted `", 2);
-	ft_putstr_fd(delimiter, 2);
-	ft_putstr_fd("')\n", 2);
-}
-
 // Function to print the line written in heredoc to the fd
-static void	print_heredoc_line(int fd, char *line, t_general *gen)
+static void	print_heredoc_line(int fd, char *line, t_general *gen, t_delim *lim)
 {
 	char	*temp;
 
-	temp = replace_each_dollar(line, gen->envp, gen->exit_status);
+	if (lim->is_litteral)
+		temp = ft_strdup(line);
+	else
+		temp = replace_each_dollar(line, gen);
+	if (!temp)
+		return ;
 	ft_putstr_fd(temp, fd);
 	free(temp);
 	ft_putstr_fd("\n", fd);
 }
 
-// Function to find the delimiters and create an array
-// Returns the next heredoc node, NULL if there is no more heredoc
-// RETURNS MUST BE FREED AFTER USE
-static char	*find_delimiter(t_dclst *node, t_general *gen)
-{
-	t_dclst	*current;
-	t_token *tok;
-	char	*delimiter;
-	char	*temp;
-
-	(void)gen;
-	current = node->next;
-	tok = (t_token *) current->data;
-	delimiter = ft_strdup(tok->start);
-	while (!tok->space && is_text(current->next))
-	{
-		temp = delimiter;
-		delimiter = ft_strjoin(temp, ((t_token *) current->next->data)->start);
-		free(temp);
-		current = current->next;
-		tok = (t_token *) current->data;
-	}
-	return (delimiter);
-}
-
 // Fonction pour créer un fichier temporaire contenant l'entrée du heredoc
-static int create_heredoc_file(char *delimiter, t_general *gen)
+static int	create_heredoc_file(t_delim *delim, t_general *gen)
 {
 	int			fd;
 	char		*line;
@@ -82,43 +53,70 @@ static int create_heredoc_file(char *delimiter, t_general *gen)
 	fd = open(TEMP_FILE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (ft_perror("create_heredoc", "open failed"));
-	while (1)
+	while (++n_line)
 	{
-		n_line++;
 		line = readline(CYAN "> " RESET);
 		if (!line)
 		{
-			warning_msg(delimiter, n_line);
+			warning_msg(delim->str, n_line);
 			break ;
 		}
-		if (!ft_strncmp(line, delimiter, ft_strlen(line)) && ft_strlen(line) == ft_strlen(delimiter))
+		if (!ft_strncmp(line, delim->str, ft_strlen(line))
+			&& ft_strlen(line) == ft_strlen(delim->str))
 		{
 			free(line);
 			break ;
 		}
-		print_heredoc_line(fd, line, gen);
-		if (line)
-			free(line);
+		print_heredoc_line(fd, line, gen, delim);
+		free(line);
 	}
-	return (free(delimiter), close(fd), 0);
+	return (delete_delim(delim), close(fd), 0);
 }
 
-// Function to create the TEMP_FILE for heredoc
+// Function to create the TEMP_FILE in a child process
 // Returns 0 or -1 if it fails
-int create_heredoc(t_dclst *node, t_general *gen)
+void	heredoc_child_proc(t_dclst *node, t_general *gen)
 {
 	t_dclst	*current;
-	char	*delimiter;
+	t_delim	*delimiter;
 
+	heredoc_signals();
 	current = get_next_heredoc(node);
 	while (1)
 	{
 		if (!current)
 			break ;
-		delimiter = find_delimiter(current, gen);
+		delimiter = find_delimiter(current);
+		if (!delimiter)
+		{
+			delete_general(gen);
+			exit(-1);
+		}
 		if (create_heredoc_file(delimiter, gen))
-			return (-1);
+		{
+			delete_general(gen);
+			exit(-1);
+		}
 		current = get_next_heredoc(current->next);
 	}
+	delete_general(gen);
+	exit(0);
+}
+
+// Function to create the TEMP_FILE for heredoc
+// Returns 0 or -1 if it fails
+int	create_heredoc(t_dclst *node, t_general *gen)
+{
+	int		pid;
+
+	pid = fork();
+	if (pid == -1)
+		return (ft_perror("create_heredoc", "fork failed"));
+	if (pid == 0)
+		heredoc_child_proc(node, gen);
+	if (waitpid(pid, NULL, 0) == -1)
+		return (ft_perror("create_heredoc", "waitpid failed"));
+	if (WIFEXITED(pid) && WEXITSTATUS(pid) == -1)
+		return (-1);
 	return (0);
 }

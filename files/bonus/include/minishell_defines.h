@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 07:03:04 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/15 08:48:54 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/16 14:36:54 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@
 extern int	g_signals;
 
 // structures and enums
+typedef struct s_delim
+{
+	char	*str;
+	int		is_litteral;
+}			t_delim;
+
 typedef struct s_token
 {
 	int		type;
@@ -43,6 +49,7 @@ typedef struct s_token
 	int		space;
 	char	*start;
 	char	*end;
+	int		str_is_malloc;
 }			t_token;
 
 typedef enum e_token_type

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   write_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:27:53 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/10 16:35:14 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/16 16:21:48 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	**ft_realloc_env(char ***envp, char *new_entry)
 
 	if (!envp)
 		return (shell_err_msg("ft_realloc_env", "invalid arguments"), NULL);
-	new_envp = (char **) malloc(sizeof(char *) * (count_env_size(*envp) + 2));
+	new_envp = (char **) malloc(sizeof(char *) * (count_array_size(*envp) + 2));
 	if (!new_envp)
 		return (shell_err_msg("copy_env", "malloc failed"), NULL);
 	i = 0;
@@ -47,7 +47,7 @@ char	**ft_realloc_env(char ***envp, char *new_entry)
 // from a key but without a value
 // Returns 0 on success, -1 on failure
 int	create_env_var(const char *key, char sep, const char *value, char ***envp)
-{//test
+{
 	char	*new_entry;
 	char	*temp;
 
@@ -73,7 +73,6 @@ int	create_env_var(const char *key, char sep, const char *value, char ***envp)
 	free(new_entry);
 	return (0);
 }
-
 
 // Function to update an existing variable in the environment
 // Returns 0 on success, -1 on failure
@@ -114,7 +113,7 @@ char	**copy_env(char **envp)
 
 	if (!envp)
 		return (shell_err_msg("copy_env", "invalid arguments"), NULL);
-	size = count_env_size(envp);
+	size = count_array_size(envp);
 	new_envp = (char **) malloc(sizeof(char *) * (size + 1));
 	if (!new_envp)
 		return (shell_err_msg("copy_env:", "malloc failed"), NULL);

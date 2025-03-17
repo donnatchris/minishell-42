@@ -3,10 +3,14 @@ By chdonnat (Christophe Donnat from 42 Perpignan, France)
 
 ## AIM OF THE PROJECT:
 
+The goal of the project is to create a simplified shell that closely mimics the behavior of `bash`. This includes handling parsing, redirections, pipes, signals, and executing commands via `execve()`, except for built-in commands, which must be directly coded into minishell.
+
 ### BONUS PART:
 
-
-### ABOUT MY PROJECT:
+To earn bonus points, the shell must handle:
+- Logical operators: `&&` (AND) and `||` (OR).
+- Parentheses `()` for command grouping.
+- Wildcards `*` for filename expansion.
 
 ## SOME COMMANDS YOU CAN USE:
 
@@ -18,129 +22,124 @@ execute the program
 
 	./minishell
 
+ execute the program with valgrind excluding readline() leaks:
+
+	make val
+
 ## ARCHITECTURE:
 - minishell/ directory with the whole project
 	- libft/ directory with the libft (+ get_next_line and ft_printf)
  	- dclst/ directory with functions and header for using doubly circular linked list
-	- mandatory/ directory with files for the mandatory part
-		- src/ directory for main files of the project
-  			- builtins/
-     			- env/
-        		- executor/
-          		- parser/ files for splitting the user input into tokens and storing them in a binary tree
-            		- signals/
+	- bonus/ directory with files for the bonus part
+		- src/ directory containing the main files of the project
+  			- builtins/ files for builtins commands
+     			- env/ files with functions needed to interact with environment variables
+        		- executor/ files to execute the command line
+          		- lexer/ files for splitting the user input into tokens, store them in a chained list, check the syntax and create a binary tree
+            		- signals/ files for handling signals
+          		- text_transformer/ files for managing '$', '*' and '~'
 		- utils/ directory for secondary files
 		- include/ directory for headers
-	- bonus/ directory for the bonus part
-	- Makefile (with rules: make bonus clean fclean re)
+	- mandatory/ directory for the mandatory part (empty - everything is in the bonus directory)
+- Makefile (with rules: make bonus clean fclean re)
 - readme.md for quick explanation and main commands of the project
+- valgrind.sup is a file containig a list of readline() leaks to suppress when executing valgring
 
+## ABOUT MY PROJECT:
 
-## MINISHELL INPUT HANDLING LIST
+This minishell project was implemented with bonuses and several features that are not mandatory according to the subject.
 
-1. **Prompt**:  
-   - Display a prompt when waiting for a new command.
+As with my previous projects, I used functions to manipulate doubly linked circular lists (which I created during the FDF project), although using a linear list might have been simpler. All the functions for manipulating these lists can be found in the `/dclst` folder.  
+Here’s an overview of how the project works:
 
-2. **History**:  
-   - Implement a working history (store previously entered commands).
+---
 
-3. **Command Execution**:  
-   - Search and launch the correct executable:
-     - Use the `PATH` variable or relative/absolute paths to find executables.
+#### **General Structure:**
+Once the program starts, a general structure is initialized. This structure contains most of the elements and will be fully freed upon program termination, even though many elements will be reset with each user input.  
+At startup, the structure dynamically allocates and stores a copy of the environment variables (while also updating the `SHLVL` and `SHELL` variables). This copy is used for environment variable management throughout the minishell's execution.
 
-4. **Signals**:  
-   - Handle signals without using more than one global variable for the signal number.
-   - Properly handle signals like `ctrl-C`, `ctrl-D`, and `ctrl-\`.
+---
 
-5. **Unclosed Quotes**:  
-   - Do not interpret unclosed quotes or unsupported special characters (e.g., `\`, `;`).
+#### **LEXER:**
+Once the user input is recorded, it is split into different tokens, stored in structures (organized as linked lists). Each token contains a portion of the user's input string, along with additional information (e.g., the token type, whether there is a space after the token, whether it is enclosed in single or double quotes, and whether the string was dynamically allocated).  
 
-6. **Single Quotes (' ')**:  
-   - Treat text inside single quotes (`'`) as literal and prevent interpretation of metacharacters.
+For tokens, I aimed to work solely with pointers referencing parts of the input string to avoid dynamically allocating memory for the string fragments stored in the tokens. However, this effort proved somewhat unnecessary later in the program. Specifically, when handling wildcards, I create new tokens with dynamically allocated strings, which is why I had to add a flag to determine which strings to free later. Nonetheless, this approach remains interesting for those not planning to implement the project's bonuses.  
 
-7. **Double Quotes (" ")**:  
-   - Treat text inside double quotes (`"`) as literal, but allow the expansion of `$` (environment variables).
+Once the token list is created, its syntax is validated in the `check_syntax` function. If the input ends with `||`, `&&`, or `|`, an additional prompt is opened for the user to complete their input. If the input syntax is invalid, an error message is displayed.
 
-8. **Redirections**:  
-   - **Input Redirection**: Handle `<` for input redirection.
-   - **Output Redirection**: Handle `>` for output redirection.
-   - **Heredoc**: Handle `<<` to read input until a delimiter is seen.
-   - **Append Output**: Handle `>>` to append output to a file.
+The token list is then passed to a function that creates a **binary tree** by traversing the list from right to left, searching for operators like `||`, `&&`, `|`, or `;`. Each operator points to its left and right parts, and the tree is built recursively until reaching the leaves. Each leaf simply points to the leftmost token between operators. Binary tree is not necessary if you do not plan to do the bonus part.
 
-9. **Pipes (|)**:  
-   - Handle pipe redirections (`|`) to connect multiple commands. The output of one command becomes the input of the next.
+---
 
-10. **Environment Variables**:  
-    - Expand `$` followed by a valid variable name to its value in the environment.
-    - Handle `$?` to expand to the exit status of the last foreground pipeline.
+#### **EXECUTOR:**
+The executor traverses the binary tree in the `exec_tree` function. If it encounters a leaf, it executes it. If it encounters an operator, it executes the left and right parts (under certain conditions). The pipe operator is more complex because it must create heredocs if they are found in its child branches before creating the pipe (whereas heredocs are normally created during leaf execution if there are no pipes).  
 
-11. **Builtins**:  
-    Implement the following builtins:
-    - `echo` with `-n` option.
-    - `cd` with relative or absolute paths.
-    - `pwd` with no options.
-    - `export` with no options.
-    - `unset` with no options.
-    - `env` with no options or arguments.
-    - `exit` with no options.
+When the executor reaches a leaf, the `exec_leaf()` function processes input and output redirections from left to right, then proceeds to the `exec_cmd` function, which creates an array of strings via the `extract_args` function (the arguments are first processed in the TEXT TRANSFORMER functions to replace characters as needed). This array contains the command and its arguments. Depending on the first argument in the array (the command name), the array is sent to the appropriate function: if the command corresponds to a builtin (the few commands coded into minishell), the relevant function is called with the array as an argument; otherwise, the `execve_cmd` function is called.  
 
-12. **Special Key Handling**:
-    - **Ctrl-C**: Displays a new prompt on a new line.
-    - **Ctrl-D**: Exits the shell.
-    - **Ctrl-\**: Does nothing.
+The `execve_cmd()` function checks if the command is located in one of the directories listed in the `PATH` environment variable, then executes the command in a child process via `execve()`. If the command is not found, an error message is displayed.  
 
-### **Bonus Features** (If Implementing Bonus Part):
+Parentheses are both a token and a special type of leaf in the tree: the content within parentheses is recursively processed in a subshell executed in a child process. The content inside the parentheses is tokenized by the lexer and then executed by the executor.  
 
-13. **Logical Operators**:  
-    - Handle `&&` (logical AND) and `||` (logical OR) with parenthesis for priorities.
+As you can see, I didn’t really implement traditional parsing. Instead, the function executing the leaf and the one creating the argument array are responsible for navigating the token list correctly to find the appropriate redirections and arguments.  
+The functions for executing redirections, parentheses, and pipes are located in the "OPERATORS" folder.
 
-14. **Wildcards**:  
-    - Handle the `*` wildcard for the current working directory.
+---
 
+#### **TEXT TRANSFORMER:**
+During the creation of the argument array, the strings contained in the tokens pass through the `manage_dollar()` function, which returns a dynamically allocated string after replacing `$` with the corresponding environment variable value (if it exists; otherwise, it is replaced with an empty string).  
 
-## TOKENS IN MINISHELL
+In the dollar manager, I also added support for `~` (which is not required by the subject): if a string contains only the `~` symbol or starts with `~/`, this character is replaced with the absolute path to the user's home directory (I store the value of the `HOME` variable in the general structure when minishell starts, meaning that if this value is modified before launching minishell, `~` will not work correctly).  
 
-A **token** is a sequence of characters in a string that represents a single unit of meaningful data.
-In programming and parsing, tokens are the building blocks that the parser breaks input into for further processing.
-Tokens can include keywords, identifiers, operators, literals, or symbols that are meaningful within a specific context.
-For example, in a programming language, a token might represent a keyword like `if`, an operator like `+`, or a number like `42`.
-In general, tokens allow the parser to understand and categorize different parts of an input string.
+The text transformer also includes functions for handling wildcards: first, an array of strings containing the names of files and directories in the current directory is created. Then, each entry is compared with the input to find matches for the wildcard, and a new array of strings is created with each matching entry. Based on this array, new tokens are created and inserted into the token list.  
 
-In the context of **Minishell**, tokens are the elements extracted from the user's input command line.
-These can include commands, arguments, operators (such as `|`, `&&`, `>`, `<`), special symbols (like parentheses for grouping), or environment variables (e.g., `$HOME`).
-Minishell parses the input by first breaking it into tokens, which are then used to construct an abstract syntax tree (AST) or to directly interpret and execute the commands.
-Handling tokens correctly allows Minishell to process complex command lines, perform redirections, handle pipes, and expand environment variables, enabling it to execute user commands accurately and efficiently.
+For input or output redirections, the program first checks if more than one file or directory name matches the wildcard. If so, an error message is displayed.
 
-To ensure the correct execution of commands, tokens should be processed in the following order of priority:
+---
 
-1. **Parentheses `()`**  
-   - Used for grouping commands and controlling the execution order within the shell. Handle first to correctly identify subexpressions.
+#### **BUILTINS:**
+The builtins are the commands directly coded into minishell.
 
-2. **Logical AND `&&`**  
-   - Used to execute the second command only if the first command succeeds. High priority to allow proper chaining of conditional commands.
+### **cd:**
+I chose to implement non-mandatory arguments, such as:
+- `cd ~` (changes to the user's home directory),
+- `cd -` (returns to the previous working directory),
+- `cd` without arguments (changes to the home directory).  
 
-3. **Logical OR `||`**  
-   - Used to execute the second command only if the first command fails. Similar priority to `&&` for conditional command chaining.
+Once the working directory is changed, the environment variables `PWD` and `OLDPWD` are updated.
 
-4. **Pipe `|`**  
-   - Allows output from one command to be passed as input to another. It should be processed next to handle command pipelines.
+### **pwd:**
+Simply prints the current working directory.
 
-5. **Redirections `<`, `>`, `>>`, `<<`**  
-   - Used to redirect input and output, including appending (`>>`) and reading until a delimiter (`<<`). These should be handled after pipes to set up proper input/output flows.
+### **env:**
+Prints the environment variables array, excluding variables without a value (those registered without an `=`).
+**Note:**  
+Functions to manipulate environment variables (needed for export, unset, cd, ...) can be found in the ENV directory.
 
-6. **Command Substitution `$()`**  
-   - Used to execute commands inside `$()` and replace them with their output. Should be processed before normal arguments.
+### **export:**
+When used without arguments, the `export` command displays the environment variables sorted alphabetically (including those without an associated value) in a specific format.  
+When used with arguments, it adds new environment variables or updates the value of existing ones, after verifying that the variable name follows certain rules:
+- The first character of the name must be a letter or `_`.
+- Subsequent characters must be alphanumeric or `_`.
 
-7. **Environment Variable Expansion `$VAR`**  
-   - Expands environment variables like `$HOME`, `$PATH`, etc., to their actual values. These need to be handled before final command execution.
+**Note:**  
+Variables are stored in the following format: `NAME=VALUE`.
+If a variable is exported without a value, it is stored without the `=` character, unless it already exists in the environment variables list.
+In that case, it is stored with the `=` character after its name but without an associated value.
 
-8. **Arguments (words, strings, etc.)**  
-   - The command name and its arguments are processed last, once all operators and special tokens are handled.
+### **unset:**
+This command simply removes an environment variable. `unset` never returns an error, so even if the variable does not exist, it exits without an error.
 
-By following this order of priority, the shell will ensure that commands, their operators, and redirections are properly parsed and executed.
+### **`exit`:**
+`exit` allows the program to terminate cleanly, returning either the exit status of the last command executed or the exit status provided as an argument.
 
+---
 
-## DOCUMENTATION:
+#### **SIGNALS:**
+Contains the functions to handle signals.
+
+---
+
+# DOCUMENTATION:
 
 For explanations on functions and concepts already used in previous projects, refer to the README files of my other projects:
 
@@ -155,7 +154,6 @@ However, at the end of the DOCUMENTATION section, you will find a SHORT REMINDER
 ### GITHUB COOPERATION
 
 Here are the main commands to wotk with multiples branches:
-
 
 #### Create a new branch and switch to that branch
 ```bash
@@ -186,6 +184,46 @@ git merge origin <name_of_the_branch>
 
 git push origin main
 ```
+
+---
+
+### Tokens in minishell
+
+A **token** is a sequence of characters in a string that represents a single unit of meaningful data.
+In programming and parsing, tokens are the building blocks that the parser breaks input into for further processing.
+Tokens can include keywords, identifiers, operators, literals, or symbols that are meaningful within a specific context.
+For example, in a programming language, a token might represent a keyword like `if`, an operator like `+`, or a number like `42`.
+In general, tokens allow the parser to understand and categorize different parts of an input string.
+
+In the context of **Minishell**, tokens are the elements extracted from the user's input command line.
+These can include commands, arguments, operators (such as `|`, `&&`, `>`, `<`), special symbols (like parentheses for grouping), or environment variables (e.g., `$HOME`).
+Minishell parses the input by first breaking it into tokens, which are then used to construct an abstract syntax tree (AST) or to directly interpret and execute the commands.
+Handling tokens correctly allows Minishell to process complex command lines, perform redirections, handle pipes, and expand environment variables, enabling it to execute user commands accurately and efficiently.
+
+To ensure the correct execution of commands, here are the tokenisation I use:
+
+1. **Parentheses `()`**  
+   - Used for grouping commands and controlling the execution order within the shell.
+
+2. **Logical AND `&&`**  
+   - Used to execute the second command only if the first command succeeds. High priority to allow proper chaining of conditional commands.
+
+3. **Logical OR `||`**  
+   - Used to execute the second command only if the first command fails. Similar priority to `&&` for conditional command chaining.
+
+4. **Pipe `|`**  
+   - Allows output from one command to be passed as input to another. It should be processed next to handle command pipelines.
+
+5. **Redirections `<`, `>`, `>>`, `<<`**  
+   - Used to redirect input and output, including appending (`>>`) and reading until a delimiter (`<<`).
+These should be handled after pipes to set up proper input/output flows, except that heredoc ('<<') temporary file is created before the pipes execution.
+
+6. **Arguments**  
+   - The command name and its arguments are processed last, once all operators and special tokens are handled.
+   - I use 3 types of arguments:
+  	- **word** are consecutive caracters containing no space
+      	- **strings** are caracters contained inside double quotes
+      	- **litteral** are caracters contained inside signe quotes (the matacaracters inside wil not be interpreted)
 
 ---
 
@@ -230,11 +268,8 @@ A **binary tree** is a hierarchical data structure in which each node has at mos
 Overall, binary trees are widely used in computer science for organizing and manipulating hierarchical data. They serve as the foundation for many more advanced data structures and algorithms.
 
 #### **In Minishell**  
-In **Minishell**, you will use the binary tree structure to:  
-✅ **Parse and organize the user input** by breaking down commands, operators, and arguments into nodes, enabling efficient management of the command pipeline.  
-✅ **Handle operator precedence** by constructing the binary tree to reflect the proper execution order, ensuring that operations like `|`, `>`, `<`, and logical operators (e.g., `&&`, `||`) are processed in the correct sequence.  
-✅ **Support command chaining and redirections** by storing expressions in the tree and recursively managing left and right subtrees to handle complex command structures.  
-✅ **Optimize the evaluation process** by traversing the tree to evaluate the correctness of the syntax and expand environment variables (e.g., `$PATH`, `$HOME`) within the context of each command.
+In **Minishell**, you I use the binary tree structure only to:  
+✅ **Handle operator precedence** by constructing the binary tree to reflect the proper execution order, ensuring that operations like logical operators (e.g., `&&`, `||`) and pipes (`|`) are processed in the correct sequence. 
 
 ---
 
@@ -2598,5 +2633,3 @@ void perror(const char *s);
 - `s`: A string that is printed before the error message, providing context.
 - **Returns**: None.
 - **Purpose**: Prints a description of the last error that occurred (using `errno`), preceded by the string `s`.
-
---- 

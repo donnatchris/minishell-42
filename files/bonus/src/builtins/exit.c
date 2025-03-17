@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 05:01:44 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/14 15:26:28 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/16 14:49:50 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ static void	eit_err_msg(char *arg)
 
 static void	ft_exit(char **args, t_general *gen, int status)
 {
-		delete_str_tab(args);
-		delete_before_close(gen);
-		exit(status);
+	delete_str_tab(args);
+	delete_before_close(gen);
+	exit(status);
 }
 
 // Function to handle the exit command
@@ -61,4 +61,3 @@ void	exit_cmd(char **args, char **envp, t_general *gen)
 	}
 	ft_exit(args, gen, (exit_status) % 256);
 }
-

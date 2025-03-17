@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:57:09 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/10 16:42:01 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/15 21:28:44 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,7 @@ static char	*find_cd_path(char *input, char **envp, char *home, char *old)
 		return (shell_err_msg("cd", "HOME not set"), NULL);
 	if (!input || *input == '\0')
 		input = home;
-	if (input[0] == '~')
-	{
-		if (!home)
-			return (shell_err_msg("cd", "HOME not set"), NULL);
-		return (ft_strjoin(home, input + 1));
-	}
-	else if (!ft_strncmp(input, "-", 1) && ft_strlen(input) == 1)
+	if (!ft_strncmp(input, "-", 1) && ft_strlen(input) == 1)
 	{
 		if (!old)
 			return (shell_err_msg("cd", "OLDPWD not set"), NULL);
@@ -76,7 +70,7 @@ int	cd_cmd(char **args, char ***envp, t_general *gen)
 		return (shell_err_msg("cd", "invalid arguments"));
 	old = ft_getenv("OLDPWD", *envp);
 	path = args[1];
-	new_pwd = find_cd_path(path, *envp, gen->home, old);
+	new_pwd = find_cd_path(path, *envp, ft_getenv("HOME", *envp), old);
 	if (!new_pwd)
 		return (-1);
 	if (chdir(new_pwd) == -1)
@@ -86,5 +80,7 @@ int	cd_cmd(char **args, char ***envp, t_general *gen)
 	actualize_cd_env(gen->pwd, envp, gen, new_pwd);
 	if (new_pwd)
 		free(new_pwd);
+	if (args[1] && args[1][0] == '-' && args[1][1] == '\0')
+		ft_printf("%s\n", ft_getenv("PWD", *envp));
 	return (0);
 }
