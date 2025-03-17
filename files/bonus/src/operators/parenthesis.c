@@ -3,14 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   parenthesis.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:48:16 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/15 21:21:58 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/17 15:22:18 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+// Function to free the tok->start of the dclst nodes added by manage_wildcards 
+static void	delete_par_strings(t_dclst **head)
+{
+	t_dclst	*current;
+	t_token	*tok;
+
+	current = *head;
+	while (1)
+	{
+		tok = (t_token *) current->data;
+		if (tok->str_is_malloc)
+		{
+			free(tok->start);
+			tok->start = NULL;
+			tok->str_is_malloc = 0;
+		}
+		current = current->next;
+		if (current == *head)
+			break ;
+	}
+}
 
 // Function to run a minishell inside the minishell
 // Returns the status of the last command or -1 on error
@@ -21,6 +43,7 @@ static int	mini_minishell(t_dclst **head, t_general *gen)
 
 	tree = create_tree(*head, (*head)->prev->prev);
 	status = exec_tree(tree, gen);
+	delete_par_strings(head);
 	delete_tree(tree);
 	return (status);
 }
@@ -48,7 +71,6 @@ int	run_parenthesis(t_tree *tree, t_general *gen)
 	}
 	if (waitpid(pid, &status, 0) == -1)
 		return (ft_perror("run_parenthesis", "waitpid failed"), -1);
-	init_signals();
 	if (WIFSIGNALED(status))
 		return (128 + WTERMSIG(status));
 	return (WEXITSTATUS(status));

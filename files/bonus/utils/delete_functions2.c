@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   delete_functions2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:45:25 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/16 14:48:32 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/17 14:47:12 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
