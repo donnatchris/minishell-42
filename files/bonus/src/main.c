@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:21:47 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/16 15:04:57 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/17 15:32:05 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,22 @@
 // Global variable for handling signals
 int	g_signals;
 
+// Function to create latency
+static void	ft_usleep(int time)
+{
+	int	i;
+
+	i = 0;
+	while (i < time)
+		i++;
+}
+
+// Function to print a message at the start of minishell
 static void	starting_message(void)
 {
 	char	*msg;
 	int		i;
-	int		delay;
 
-	delay = 10000;
 	msg = BLUE "Welcome to minishell, a (not so) simple shell\
 	- by chdonnat and nifromon" RESET;
 	ft_printf("\033[2J");
@@ -30,7 +39,7 @@ static void	starting_message(void)
 	while (msg[++i])
 	{
 		ft_putchar_fd(msg[i], STDOUT_FILENO);
-		usleep(delay);
+		ft_usleep(3000000);
 	}
 	ft_putchar_fd('\n', STDOUT_FILENO);
 }

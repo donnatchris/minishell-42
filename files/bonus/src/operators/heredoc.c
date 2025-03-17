@@ -6,7 +6,7 @@
 /*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/17 10:10:18 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:09:35 by chdonnat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void	heredoc_child_proc(t_dclst *node, t_general *gen)
 	t_dclst	*current;
 	t_delim	*delimiter;
 
-	heredoc_signals();
 	current = get_next_heredoc(node);
 	while (1)
 	{
