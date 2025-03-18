@@ -1,33 +1,19 @@
 # Find the operating system
 UNAME := $(shell uname)
 
-# Name of the executable for mandatory part
+# Name of the executable
 NAME = minishell
 
-# Name of the executable for bonus part
-BONUS = minishell_bonus
-
-# Directories for mandatory part
+# Directories
 SRC_DIR = files/bonus/src
 UTILS_DIR = files/bonus/utils
 INC_DIR = files/bonus/include
 OBJ_DIR = obj/mandatory
-
-# Directories for bonus part
-BONUS_SRC_DIR = bonus/src
-BONUS_UTILS_DIR = bonus/utils
-BONUS_INC_DIR = bonus/include
-BONUS_OBJ_DIR = obj/bonus
-
-# Directories for common part
 LIBFT_DIR = files/libft
 DCLST_DIR = files/dclst
 
-# Main file for mandatory part
+# Main file
 MAIN = $(SRC_DIR)/main.c
-
-# Main file for bonus part
-BONUS_MAIN = $(BONUS_SRC_DIR)/main.c
 
 # Arguments for valgrind
 VALARGS = --suppressions=./valgrind.sup --leak-check=full --track-origins=yes --show-leak-kinds=all --trace-children=yes --track-fds=yes
@@ -82,15 +68,8 @@ SRC = \
 	$(UTILS_DIR)/utils_functions.c \
 	$(MAIN)
 
-# Sources files for bonus part
-BONUS_SRC =	\
-	$(BONUS_MAIN)
-
-# Objects files for mandatory part
+# Objects files
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-
-# Objects files for bonus part
-BONUS_OBJ = $(BONUS_SRC:$(BONUS_SRC_DIR)/%.c=$(BONUS_OBJ_DIR)/%.o)
 
 # Compilation options (for Linux and MacOS)
 # compilation options to test memory leaks on mac: -fsanitize=undefined -fsanitize=address -g
@@ -112,29 +91,17 @@ all: $(NAME)
 $(NAME): $(OBJ) $(LIBFT_DIR)/libft_inc.a
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 
-# Rule to compile the bonus part
-# bonus: $(BONUS)
-# $(BONUS): $(BONUS_OBJ) $(LIBFT_DIR)/libft_inc.a
-# 	$(CC) $(CFLAGS) -o $(BONUS) $^ $(LDFLAGS)
 bonus: all
 
 # Rule to compile libft
 $(LIBFT_DIR)/libft_inc.a:
 	$(MAKE) -C $(LIBFT_DIR)
 
-# Rules to compile the objects files of the mandatory part
+# Rules to compile the objects files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 $(OBJ_DIR)/%.o: $(UTILS_DIR)/%.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Rules to compile the objects files of the bonus part
-$(BONUS_OBJ_DIR)/%.o: $(BONUS_SRC_DIR)/%.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
-$(BONUS_OBJ_DIR)/%.o: $(BONUS_UTILS_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 

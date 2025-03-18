@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:52:40 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/17 15:09:35 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/18 19:25:07 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,62 @@ static int	create_heredoc_file(t_delim *delim, t_general *gen)
 	return (delete_delim(delim), close(fd), 0);
 }
 
-// Function to create the TEMP_FILE in a child process
-// Returns 0 or -1 if it fails
-void	heredoc_child_proc(t_dclst *node, t_general *gen)
+// // Function to create the TEMP_FILE in a child process
+// // Returns 0 or -1 if it fails
+// void	heredoc_child_proc(t_dclst *node, t_general *gen)
+// {
+// 	t_dclst	*current;
+// 	t_delim	*delimiter;
+
+// 	current = get_next_heredoc(node);
+// 	while (1)
+// 	{
+// 		if (!current)
+// 			break ;
+// 		delimiter = find_delimiter(current);
+// 		if (!delimiter)
+// 		{
+// 			delete_general(gen);
+// 			exit(-1);
+// 		}
+// 		if (create_heredoc_file(delimiter, gen))
+// 		{
+// 			delete_general(gen);
+// 			exit(-1);
+// 		}
+// 		current = get_next_heredoc(current->next);
+// 	}
+// 	delete_general(gen);
+// 	exit(0);
+// }
+
+// // Function to create the TEMP_FILE for heredoc
+// // Returns 0 or -1 if it fails
+// int	create_heredoc(t_dclst *node, t_general *gen)
+// {
+// 	int		pid;
+
+// 	pid = fork();
+// 	if (pid == -1)
+// 		return (ft_perror("create_heredoc", "fork failed"));
+// 	if (pid == 0)
+// 		heredoc_child_proc(node, gen);
+// 	if (waitpid(pid, NULL, 0) == -1)
+// 		return (ft_perror("create_heredoc", "waitpid failed"));
+// 	if (WIFEXITED(pid) && WEXITSTATUS(pid) == -1)
+// 		return (-1);
+// 	return (0);
+// }
+
+// Function to create the TEMP_FILE for heredoc
+// Returns 0 or -1 if it fails it fails
+int	create_heredoc(t_dclst *node, t_general *gen)
 {
 	t_dclst	*current;
 	t_delim	*delimiter;
 
+	if (!node || !gen)
+		return (-1);
 	current = get_next_heredoc(node);
 	while (1)
 	{
@@ -87,35 +136,10 @@ void	heredoc_child_proc(t_dclst *node, t_general *gen)
 			break ;
 		delimiter = find_delimiter(current);
 		if (!delimiter)
-		{
-			delete_general(gen);
-			exit(-1);
-		}
+			return (-1);
 		if (create_heredoc_file(delimiter, gen))
-		{
-			delete_general(gen);
-			exit(-1);
-		}
+			return (-1);
 		current = get_next_heredoc(current->next);
 	}
-	delete_general(gen);
-	exit(0);
-}
-
-// Function to create the TEMP_FILE for heredoc
-// Returns 0 or -1 if it fails
-int	create_heredoc(t_dclst *node, t_general *gen)
-{
-	int		pid;
-
-	pid = fork();
-	if (pid == -1)
-		return (ft_perror("create_heredoc", "fork failed"));
-	if (pid == 0)
-		heredoc_child_proc(node, gen);
-	if (waitpid(pid, NULL, 0) == -1)
-		return (ft_perror("create_heredoc", "waitpid failed"));
-	if (WIFEXITED(pid) && WEXITSTATUS(pid) == -1)
-		return (-1);
 	return (0);
 }
