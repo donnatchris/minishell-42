@@ -6,7 +6,7 @@
 /*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:32:29 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/16 15:56:56 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/18 07:51:45 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,10 @@ int	pipe_operator(t_tree *tree, t_general *gen)
 
 	if (!tree || !gen || !tree->left || !tree->right)
 		return (shell_err_msg("handle_pipe", "invalid arguments"));
-	if (pipe(fd) == -1)
-		return (ft_perror("handle_pipe", "pipe failed"));
 	if (!gen->in_pipe)
 		create_heredoc_from_pipe(tree, gen);
+	if (pipe(fd) == -1)
+		return (ft_perror("handle_pipe", "pipe failed"));
 	left_pid = fork();
 	if (left_pid == -1)
 		return (close(fd[0]), close(fd[1]),
