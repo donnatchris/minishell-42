@@ -4,35 +4,20 @@ UNAME := $(shell uname)
 # Name of the executable for mandatory part
 NAME = minishell
 
-# Name of the executable for bonus part
-BONUS = minishell_bonus
-
-# Directories for mandatory part
+# Directories for bonus part
 SRC_DIR = files/bonus/src
 UTILS_DIR = files/bonus/utils
 INC_DIR = files/bonus/include
-OBJ_DIR = obj/mandatory
-
-# Directories for bonus part
-BONUS_SRC_DIR = bonus/src
-BONUS_UTILS_DIR = bonus/utils
-BONUS_INC_DIR = bonus/include
-BONUS_OBJ_DIR = obj/bonus
+OBJ_DIR = obj/bonus
 
 # Directories for common part
 LIBFT_DIR = files/libft
 DCLST_DIR = files/dclst
 
-# Main file for mandatory part
+# Main file for bonus part
 MAIN = $(SRC_DIR)/main.c
 
-# Main file for bonus part
-BONUS_MAIN = $(BONUS_SRC_DIR)/main.c
-
-# Arguments for valgrind
-VALARGS = --suppressions=./valgrind.sup --leak-check=full --track-origins=yes --show-leak-kinds=all --trace-children=yes --track-fds=yes
-
-# Sources files for mandatory part	$(SRC_DIR)/iso.c
+# Sources files for bonus part
 SRC = \
 	$(DCLST_DIR)/dclst1.c \
 	$(DCLST_DIR)/dclst2.c \
@@ -82,15 +67,8 @@ SRC = \
 	$(UTILS_DIR)/utils_functions.c \
 	$(MAIN)
 
-# Sources files for bonus part
-BONUS_SRC =	\
-	$(BONUS_MAIN)
-
 # Objects files for mandatory part
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-
-# Objects files for bonus part
-BONUS_OBJ = $(BONUS_SRC:$(BONUS_SRC_DIR)/%.c=$(BONUS_OBJ_DIR)/%.o)
 
 # Compilation options (for Linux and MacOS)
 # compilation options to test memory leaks on mac: -fsanitize=undefined -fsanitize=address -g
@@ -113,9 +91,6 @@ $(NAME): $(OBJ) $(LIBFT_DIR)/libft_inc.a
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 
 # Rule to compile the bonus part
-# bonus: $(BONUS)
-# $(BONUS): $(BONUS_OBJ) $(LIBFT_DIR)/libft_inc.a
-# 	$(CC) $(CFLAGS) -o $(BONUS) $^ $(LDFLAGS)
 bonus: all
 
 # Rule to compile libft
@@ -130,30 +105,18 @@ $(OBJ_DIR)/%.o: $(UTILS_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Rules to compile the objects files of the bonus part
-$(BONUS_OBJ_DIR)/%.o: $(BONUS_SRC_DIR)/%.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
-$(BONUS_OBJ_DIR)/%.o: $(BONUS_UTILS_DIR)/%.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
-
 # Rule to clean the objects files
 clean:
-	$(MAKE) -C $(LIBFT_DIR) clean
+	make -C $(LIBFT_DIR) clean
 	rm -rf obj
 
 # Rule to clean the objects files and the executables
 fclean: clean
-	$(MAKE) -C $(LIBFT_DIR) fclean
-	rm -rf $(NAME) $(BONUS)
+	make -C $(LIBFT_DIR) fclean
+	rm -rf $(NAME)
 
 # Rule to recompile the project
 re: fclean all
-
-# Rule to execute prgm with valgrind
-val: 
-	valgrind $(VALARGS) ./$(NAME)
 
 # Phony rule
 .PHONY: all clean fclean re bonus

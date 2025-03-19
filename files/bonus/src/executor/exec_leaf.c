@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_leaf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
+/*   By: nifromon <nifromon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 04:29:06 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/16 15:01:35 by christophed      ###   ########.fr       */
+/*   Updated: 2025/03/19 22:15:54 by nifromon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	exec_leaf(t_dclst *node, t_general *gen)
 			status += redir_heredoc();
 		else if (((t_token *) current->data)->type == TOKEN_REDIR_IN)
 			status += redir_in(current, gen);
-		else if (((t_token *) current->data)->type == TOKEN_REDIR_OUT)
+		else if (is_redir_out(current))
 			status += redir_out(current, gen);
 		current = get_next_redir(current->next);
 	}
