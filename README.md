@@ -24,6 +24,8 @@ execute the program
 
  execute the program with valgrind excluding readline() leaks:
 
+ (this uses the valgrind.sup file to suppress readline() leaks)
+
 	make val
 
 ## ARCHITECTURE:
