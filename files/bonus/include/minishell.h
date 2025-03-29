@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chdonnat <chdonnat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: christophedonnat <christophedonnat@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 06:48:46 by christophed       #+#    #+#             */
-/*   Updated: 2025/03/17 15:09:56 by chdonnat         ###   ########.fr       */
+/*   Updated: 2025/03/29 09:32:24 by christophed      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ t_dclst		**tokenize(char *input);
 // signal_handler.c
 void		init_signals(void);
 void		main_signal_handler(int signum);
+void		heredoc_signals(void);
 /* ************************************************************************** */
 /*									text_transformer						  */
 /* ************************************************************************** */

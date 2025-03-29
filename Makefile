@@ -107,16 +107,20 @@ $(OBJ_DIR)/%.o: $(UTILS_DIR)/%.c
 
 # Rule to clean the objects files
 clean:
-	make -C $(LIBFT_DIR) clean
+	$(MAKE) -C $(LIBFT_DIR) clean
 	rm -rf obj
 
 # Rule to clean the objects files and the executables
 fclean: clean
-	make -C $(LIBFT_DIR) fclean
-	rm -rf $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
+	rm -rf $(NAME) $(BONUS)
 
 # Rule to recompile the project
 re: fclean all
+
+# Rule to execute prgm with valgrind
+val: 
+	valgrind $(VALARGS) ./$(NAME)
 
 # Phony rule
 .PHONY: all clean fclean re bonus
