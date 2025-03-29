@@ -12,6 +12,13 @@ To earn bonus points, the shell must handle:
 - Parentheses `()` for command grouping.
 - Wildcards `*` for filename expansion.
 
+### Minishell and Memory Leaks
+It is crucial to carefully handle memory leaks and file descriptor closures in a project like Minishell. The Makefile includes two options to help monitor leaks:
+
+**On macOS**: The compilation automatically uses the fsanitize tool. However, be aware that fsanitize is far less precise than valgrind.
+
+**On Linux**: The Makefile includes a make val rule that runs the program under valgrind, while ignoring leaks caused by the readline() function using the valgrind.sup suppression file.
+
 ## SOME COMMANDS YOU CAN USE:
 
 compile the program and suppress the .o files:
