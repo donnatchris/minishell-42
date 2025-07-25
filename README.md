@@ -1,6 +1,8 @@
 # PROJECT MINISHELL FOR 42
 By chdonnat (Christophe Donnat from 42 Perpignan, France)
 
+[🇫🇷 Voir la version française](README.fr.md)
+
 ## AIM OF THE PROJECT:
 
 The goal of the project is to create a simplified shell that closely mimics the behavior of `bash`. This includes handling parsing, redirections, pipes, signals, and executing commands via `execve()`, except for built-in commands, which must be directly coded into minishell.
