@@ -3,7 +3,7 @@ Par chdonnat (Christophe Donnat de 42 Perpignan, France)
 
 [🇬🇧 Go to English version](README.md)
 
-! [tests](images/test_minishell.png)
+![tests](images/test_minishell.png)
 
 ## BUT DU PROJET :
 
