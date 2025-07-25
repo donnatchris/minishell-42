@@ -1,6 +1,8 @@
 # PROJET MINISHELL POUR 42
 Par chdonnat (Christophe Donnat de 42 Perpignan, France)
 
+[🇬🇧 Go to English version](README.md)
+
 ## BUT DU PROJET :
 
 L'objectif du projet est de créer un shell simplifié qui imite fidèlement le comportement de `bash`. Cela inclut la gestion de l'analyse syntaxique, des redirections, des pipes, des signaux et de l'exécution des commandes via `execve()`, à l'exception des commandes intégrées (built-in), qui doivent être codées directement dans minishell.
