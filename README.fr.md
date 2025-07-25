@@ -14,7 +14,7 @@ L'objectif du projet est de créer un shell simplifié qui imite fidèlement le 
 Pour obtenir des points bonus, le shell doit gérer :
 - Les opérateurs logiques : `&&` (ET) et `||` (OU).
 - Les parenthèses `()` pour le groupement de commandes.
-- Les jokers `*` pour l'expansion des noms de fichiers.
+- Les wildcards `*` pour l'expansion des noms de fichiers.
 
 ### Minishell et les fuites de mémoire
 Il est crucial de gérer attentivement les fuites de mémoire et la fermeture des descripteurs de fichiers dans un projet comme Minishell. Le Makefile inclut deux options pour aider à surveiller les fuites :
@@ -74,7 +74,7 @@ Au démarrage, la structure alloue dynamiquement et stocke une copie des variabl
 #### **LEXER :**
 Une fois l'entrée utilisateur enregistrée, elle est divisée en différents tokens, stockés dans des structures (organisées en listes chaînées). Chaque token contient une partie de la chaîne de caractères de l'utilisateur, ainsi que des informations supplémentaires (par exemple, le type de token, s'il y a un espace après le token, s'il est entouré de guillemets simples ou doubles, et si la chaîne a été allouée dynamiquement).
 
-Pour les tokens, j'ai cherché à travailler uniquement avec des pointeurs référençant des parties de la chaîne d'entrée pour éviter d'allouer dynamiquement de la mémoire pour les fragments de chaîne stockés dans les tokens. Cependant, cet effort s'est avéré quelque peu inutile plus tard dans le programme. Plus précisément, lors de la gestion des jokers, je crée de nouveaux tokens avec des chaînes allouées dynamiquement, c'est pourquoi j'ai dû ajouter un drapeau pour déterminer quelles chaînes libérer plus tard. Néanmoins, cette approche reste intéressante pour ceux qui ne prévoient pas de mettre en œuvre les bonus du projet.
+Pour les tokens, j'ai cherché à travailler uniquement avec des pointeurs référençant des parties de la chaîne d'entrée pour éviter d'allouer dynamiquement de la mémoire pour les fragments de chaîne stockés dans les tokens. Cependant, cet effort s'est avéré quelque peu inutile plus tard dans le programme. Plus précisément, lors de la gestion des wildcards, je crée de nouveaux tokens avec des chaînes allouées dynamiquement, c'est pourquoi j'ai dû ajouter un drapeau pour déterminer quelles chaînes libérer plus tard. Néanmoins, cette approche reste intéressante pour ceux qui ne prévoient pas de mettre en œuvre les bonus du projet.
 
 Une fois la liste de tokens créée, sa syntaxe est validée dans la fonction `check_syntax`. Si l'entrée se termine par `||`, `&&` ou `|`, une invite supplémentaire est ouverte pour que l'utilisateur complète son entrée. Si la syntaxe de l'entrée est invalide, un message d'erreur est affiché.
 
@@ -101,7 +101,7 @@ Lors de la création du tableau d'arguments, les chaînes contenues dans les tok
 
 Dans le gestionnaire de dollar, j'ai également ajouté la prise en charge de `~` (qui n'est pas requise par le sujet) : si une chaîne ne contient que le symbole `~` ou commence par `~/`, ce caractère est remplacé par le chemin absolu du répertoire personnel de l'utilisateur (je stocke la valeur de la variable `HOME` dans la structure générale au démarrage de minishell, ce qui signifie que si cette valeur est modifiée avant de lancer minishell, `~` ne fonctionnera pas correctement).
 
-Le transformateur de texte comprend également des fonctions pour gérer les jokers : d'abord, un tableau de chaînes contenant les noms des fichiers et des répertoires du répertoire courant est créé. Ensuite, chaque entrée est comparée à l'entrée pour trouver des correspondances pour le joker, et un nouveau tableau de chaînes est créé avec chaque entrée correspondante. Sur la base de ce tableau, de nouveaux tokens sont créés et insérés dans la liste de tokens.
+Le transformateur de texte comprend également des fonctions pour gérer les wildcards : d'abord, un tableau de chaînes contenant les noms des fichiers et des répertoires du répertoire courant est créé. Ensuite, chaque entrée est comparée à l'entrée pour trouver des correspondances pour le joker, et un nouveau tableau de chaînes est créé avec chaque entrée correspondante. Sur la base de ce tableau, de nouveaux tokens sont créés et insérés dans la liste de tokens.
 
 Pour les redirections d'entrée ou de sortie, le programme vérifie d'abord si plus d'un nom de fichier ou de répertoire correspond au joker. Si c'est le cas, un message d'erreur est affiché.
 
